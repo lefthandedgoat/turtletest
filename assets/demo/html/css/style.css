@@ -1231,7 +1231,7 @@ input::-webkit-input-speech-button {
 }
 /*.sb-collapsed .cl-vnavigation li:hover ul{display: block !important;}
 	.sb-collapsed .cl-vnavigation li.ocult ul{display:none !important;}
-	
+
 */
 /*End Collapsed*/
 .cl-vnavigation li a i {
@@ -4588,6 +4588,9 @@ fieldset[disabled] .btn-primary.active {
 }
 .badge-danger {
   background-color: #ea6153 !important;
+}
+.badge-prusia {
+  background-color: #3d566d !important;
 }
 /*Nav Pills*/
 .nav-pills > li.active > a,
