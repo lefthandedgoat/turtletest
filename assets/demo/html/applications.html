@@ -78,8 +78,132 @@
 
   </div>
 
+  <div class="cl-mcont">
+    <div class="row">
+      <div class="col-md-12">
 
-	<div class="cl-mcont">
+        <div class="block-flat">
+          <div class="header">
+            <h3>Android</h3>
+          </div>
+          <div class="content">
+              <form class="form-horizontal" action="#" style="border-radius: 0px;">
+
+              <div class="form-group">
+                <label class="col-sm-2 control-label">Address</label>
+                <div class="col-sm-8">
+                  <div class="input-group">
+                    <input type="text" class="form-control" value="http://www.android.com">
+                    <span class="input-group-btn">
+                    <button class="btn btn-primary" type="button">Go!</button>
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-sm-2 control-label">Documentation</label>
+                <div class="col-sm-8">
+                  <div class="input-group">
+                    <input type="text" class="form-control" value="https://developer.android.com/guide/index.html">
+                    <span class="input-group-btn">
+                    <button class="btn btn-primary" type="button">Go!</button>
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="inputEmail3" class="col-sm-2 control-label">Owner</label>
+                <div class="col-sm-8">
+                  <input type="email" class="form-control" placeholder="Owner">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="inputEmail3" class="col-sm-2 control-label">Developers</label>
+                <div class="col-sm-8">
+                  <input class="form-control" placeholder="Developers" value="Alex Johnson, Susanne Billings, Tim Duncan">
+                </div>
+              </div>
+
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+	  <div class="row">
+	  	<div class="col-md-12">
+	  		<div class="block-flat">
+	  			<div class="header">
+	  				<h3>Suites</h3>
+	  			</div>
+	  			<div class="content">
+	  				<div class="table-responsive">
+	  					<table class="table table-bordered" id="datatable" >
+	  						<thead>
+	  							<tr>
+	  								<th>Rendering engine</th>
+	  								<th>Browser</th>
+	  								<th>Platform(s)</th>
+	  								<th>Engine version</th>
+	  								<th>CSS grade</th>
+	  							</tr>
+	  						</thead>
+	  						<tbody>
+	  							<tr class="gradeA">
+	  								<td>Gecko</td>
+	  								<td>Firefox 1.0</td>
+	  								<td>Win 98+ / OSX.2+</td>
+	  								<td class="center">1.7</td>
+	  								<td class="center">A</td>
+	  							</tr>
+	  							<tr class="gradeA">
+	  								<td>Gecko</td>
+	  								<td>Firefox 1.5</td>
+	  								<td>Win 98+ / OSX.2+</td>
+	  								<td class="center">1.8</td>
+	  								<td class="center">A</td>
+	  							</tr>
+	  							<tr class="gradeA">
+	  								<td>Gecko</td>
+	  								<td>Firefox 2.0</td>
+	  								<td>Win 98+ / OSX.2+</td>
+	  								<td class="center">1.8</td>
+	  								<td class="center">A</td>
+	  							</tr>
+	  							<tr class="gradeA">
+	  								<td>Gecko</td>
+	  								<td>Firefox 3.0</td>
+	  								<td>Win 2k+ / OSX.3+</td>
+	  								<td class="center">1.9</td>
+	  								<td class="center">A</td>
+	  							</tr>
+	  							<tr class="gradeA">
+	  								<td>Gecko</td>
+	  								<td>Camino 1.0</td>
+	  								<td>OSX.2+</td>
+	  								<td class="center">1.8</td>
+	  								<td class="center">A</td>
+	  							</tr>
+	  							<tr class="gradeA">
+	  								<td>Presto</td>
+	  								<td>Opera 9.5</td>
+	  								<td>Win 88+ / OSX.3+</td>
+	  								<td class="center">-</td>
+	  								<td class="center">A</td>
+	  							</tr>
+
+	  						</tbody>
+	  					</table>
+	  				</div>
+	  			</div>
+	  		</div>
+	  	</div>
+	  </div>
+
     <div class="row">
       <div class="col-md-12">
         <div class="block-flat">
@@ -128,6 +252,7 @@
       </div>
     </div>
 	</div>
+
 </div>
 
 	<script src="js/jquery.js"></script>
@@ -151,7 +276,33 @@
   <script src="js/jquery.vectormaps/jquery-jvectormap-1.2.2.min.js"></script>
   <script src="js/jquery.vectormaps/maps/jquery-jvectormap-world-mill-en.js"></script>
   <script src="js/behaviour/dashboard.js"></script>
+  <script src="js/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/jquery.ui/jquery-ui.js"></script>
+<script type="text/javascript" src="js/jquery.jeditable/jquery.jeditable.mini.js"></script>
+<script type="text/javascript" src="js/jquery.datatables/jquery.datatables.min.js"></script>
+<script type="text/javascript" src="js/jquery.datatables/bootstrap-adapter/js/datatables.js"></script>
 
+  <script type="text/javascript">
+      //Add dataTable Functions
+      var functions = $('<div class="btn-group"><button class="btn btn-default btn-xs" type="button">Actions</button><button data-toggle="dropdown" class="btn btn-xs btn-primary dropdown-toggle" type="button"><span class="caret"></span><span class="sr-only">Toggle Dropdown</span></button><ul role="menu" class="dropdown-menu"><li><a href="#">Edit</a></li><li><a href="#">Copy</a></li><li><a href="#">Details</a></li><li class="divider"></li><li><a href="#">Remove</a></li></ul></div>');
+      $("#datatable tbody tr td:last-child").each(function(){
+        $(this).html("");
+        functions.clone().appendTo(this);
+      });
+
+    $(document).ready(function(){
+      //initialize the javascript
+      //Basic Instance
+      $("#datatable").dataTable();
+
+      //Search input style
+      $('.dataTables_filter input').addClass('form-control').attr('placeholder','Search');
+      $('.dataTables_length select').addClass('form-control');
+
+      $('.dataTables_filter input').addClass('form-control').attr('placeholder','Search');
+      $('.dataTables_length select').addClass('form-control');
+    });
+</script>
 
 <script type="text/javascript" src="js/jquery.flot/jquery.flot.js"></script>
 <script type="text/javascript" src="js/jquery.flot/jquery.flot.pie.js"></script>
