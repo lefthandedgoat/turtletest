@@ -1,3 +1,5 @@
+module program
+
 open System
 
 open Suave
@@ -11,46 +13,34 @@ open Suave.State.CookieStateStore
 open Suave.Types
 open Suave.Web
 open Suave.Html
+open html_common
+open html_bootstrap
 
 let home' = "/"
-let divId id = divAttr ["id", id]
-let divClass c = divAttr ["class", c]
-let h1 xml = tag "h1" [] xml
-let h2 s = tag "h2" [] (text s)
-let aHref href = tag "a" ["href", href]
-let aHrefAttr href attr = tag "a" (("href", href) :: attr)
-let cssLink href = linkAttr [ "href", href; " rel", "stylesheet"; " type", "text/css" ]
-let ul xml = tag "ul" [] (flatten xml)
-let ulAttr attr xml = tag "ul" attr (flatten xml)
-let li = tag "li" []
-let imgSrc src = imgAttr [ "src", src ]
-let em s = tag "em" [] (text s)
-let strong s = tag "strong" [] (text s)
-
-let form x = tag "form" ["method", "POST"] (flatten x)
-let fieldset x = tag "fieldset" [] (flatten x)
-let legend txt = tag "legend" [] (text txt)
-let submitInput value = inputAttr ["type", "submit"; "value", value]
-
-let table x = tag "table" [] (flatten x)
-let th x = tag "th" [] (flatten x)
-let tr x = tag "tr" [] (flatten x)
-let td x = tag "td" [] (flatten x)
 
 let home'' () =
   html [
-    head [
-      title "turtle test"
-      cssLink "/style.css"
-    ]
-
+    head
     body [
-
-      divId "footer" [
-        text "built with "
-        aHref "http://fsharp.org" (text "F#")
-        text " and "
-        aHref "http://suave.io" (text "Suave.IO")
+      wrapper [
+        sidebar [
+          toggle [ icon "bars" ]
+          navblock [
+            menu_space [
+              content [
+                sidebar_logo [
+                  logo [ aHref "index2.html" [] ]
+                ]
+                vnavigation [
+                  side_link "/applications" "Applications" 4 "primary" "desktop"
+                  side_link "/suites" "Suites" 19 "success" "sitemap"
+                  side_link "/testcases" "Test Cases" 143 "prusia" "thumbs-up"
+                  side_link "/executions" "Executions" 71 "danger" "toggle-right"
+                ]
+              ]
+            ]
+          ]
+        ]
       ]
     ]
   ]
@@ -62,17 +52,10 @@ let webPart =
   choose [
 
     GET >>= choose [
-      path "/hello" >>= OK "Hello GET"
       path "/" >>= home
-      path "/goodbye" >>= OK "Good bye GET"
     ]
 
-    POST >>= choose [
-      path "/hello" >>= OK "Hello POST"
-      path "/goodbye" >>= OK "Good bye POST"
-    ]
-
-    pathRegex "(.*)\.(css|png|gif|js|ico)" >>= Files.browseHome
+    pathRegex "(.*)\.(css|png|gif|js|ico|woff|tff)" >>= Files.browseHome
   ]
 
 startWebServer defaultConfig webPart
