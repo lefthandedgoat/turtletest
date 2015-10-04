@@ -41,7 +41,7 @@ let home'' () =
   html [
     head [
       title "turtle test"
-      //cssLink "/Site.css"
+      cssLink "/style.css"
     ]
 
     body [
@@ -59,13 +59,20 @@ let home'' () =
 let home = OK (home'' ())
 
 let webPart =
-  choose
-    [ GET >>= choose
-        [ path "/hello" >>= OK "Hello GET"
-          path "/" >>= home
-          path "/goodbye" >>= OK "Good bye GET" ]
-      POST >>= choose
-        [ path "/hello" >>= OK "Hello POST"
-          path "/goodbye" >>= OK "Good bye POST" ] ]
+  choose [
+
+    GET >>= choose [
+      path "/hello" >>= OK "Hello GET"
+      path "/" >>= home
+      path "/goodbye" >>= OK "Good bye GET"
+    ]
+
+    POST >>= choose [
+      path "/hello" >>= OK "Hello POST"
+      path "/goodbye" >>= OK "Good bye POST"
+    ]
+
+    pathRegex "(.*)\.(css|png|gif|js|ico)" >>= Files.browseHome
+  ]
 
 startWebServer defaultConfig webPart
