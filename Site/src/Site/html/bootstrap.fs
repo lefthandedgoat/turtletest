@@ -28,6 +28,13 @@ let logo inner = divClass "logo" inner
 let vnavigation inner = ulAttr ["class", "cl-vnavigation"] inner
 let row inner = divClass "row" inner
 let m3sm6 inner = divClass "col-md-3 col-sm-6" inner
+let m12 inner = divClass "col-md-12" inner
+let block_flat inner = divClass "block-flat" inner
+let header inner = divClass "header" inner
+let labelX x inner = spanAttr ["class", (sprintf "label label-%s" x)] [inner]
+let tdColor color inner = tdAttr ["class", (sprintf "color-%s" color)] inner
+let table_responsive inner = divClass "table-responsive" inner
+let progress_bar type' percent inner = divAttr ["class", (sprintf "progress-bar progress-bar-%s") type'; "style",(sprintf "width: %s" percent) ] [inner]
 let tile color inner = divClass (sprintf "fd-tile detail clean tile-%s" color) inner
 
 let side_link link text' count style icon' =
@@ -64,7 +71,7 @@ let tileContainer link text' count color icon' =
     tile color [
       content [
         h1Class "text-left" (text (string count))
-        p (text text')
+        p [ (text text') ]
       ]
       divClass "icon" [ icon icon' ]
       aHrefAttr link ["class", "details"] [
@@ -72,6 +79,20 @@ let tileContainer link text' count color icon' =
         span [ icon "arrow-circle-right pull-right" ]
       ]
     ]
+  ]
+
+let executionRow suite name percent =
+  let color =
+    if percent >= 75 then "success"
+    else if percent >= 50 then "warning"
+    else "danger"
+  let percent = (string percent) + "%"
+
+  trClass "items" [
+    tdAttr [ "style","width: 10%;" ] [ labelX color (text "Execution") ]
+    td [ p [ strong suite ] ]
+    td [ p [ span [(text name) ] ] ]
+    tdColor color [ divClass "progress" [ progress_bar color percent (text percent) ]]
   ]
 
 let home_content =
@@ -83,5 +104,23 @@ let home_content =
       tileContainer "/executions" "Executions" 71 "red" "toggle-right"
     ]
     row [
+      m12 [
+        block_flat [
+          header [ h3 "Recent Executions" ]
+          content [
+            table_responsive [
+              tableClass "no-border hover list" [
+                tbodyClass "no-border-y" [
+                  executionRow "Android" "Week 14 Regression" 80
+                  executionRow "IOS" "JIRA #1043 critical bug fix for crash" 33
+                  executionRow "Website" "Sprint 32 Automated regression QA4 Environment" 59
+                  executionRow "Android" "Week 13 Regression" 93
+                  executionRow "Android" "Week 12 Regression" 55
+                ]
+              ]
+            ]
+          ]
+        ]
+      ]
     ]
   ]
