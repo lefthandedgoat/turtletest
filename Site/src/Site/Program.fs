@@ -19,32 +19,18 @@ open html_bootstrap
 let home' = "/"
 
 let home'' () =
-  html [
-    head
-    body [
-      wrapper [
-        sidebar [
-          toggle [ icon "bars" ]
-          navblock [
-            menu_space [
-              content [
-                sidebar_logo [
-                  logo [ aHref "index2.html" [] ]
-                ]
-                vnavigation [
-                  side_link "/applications" "Applications" 4 "primary" "desktop"
-                  side_link "/suites" "Suites" 19 "success" "sitemap"
-                  side_link "/testcases" "Test Cases" 143 "prusia" "thumbs-up"
-                  side_link "/executions" "Executions" 71 "danger" "toggle-right"
-                ]
-              ]
-            ]
-          ]
+  let html' =
+    html [
+      head
+      body [
+        wrapper [
+          left_sidebar
+          home_content
         ]
       ]
     ]
-  ]
-  |> xmlToString
+    |> xmlToString
+  sprintf "<!DOCTYPE html>%s" html'
 
 let home = OK (home'' ())
 
