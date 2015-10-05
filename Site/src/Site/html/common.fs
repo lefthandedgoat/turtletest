@@ -22,6 +22,7 @@ let divClass c = divAttr ["class", c]
 let h1 xml = tag "h1" [] xml
 let h1Class class' xml = tag "h1" ["class",class'] xml
 let h2 s = tag "h2" [] (text s)
+let h3 s = tag "h3" [] (text s)
 let aHref href inner = tag "a" ["href", href] (flatten inner)
 let aHrefAttr href attr inner = tag "a" (("href", href) :: attr) (flatten inner)
 let cssLink href = linkAttr [ "href", href; " rel", "stylesheet"; " type", "text/css" ]
@@ -35,17 +36,20 @@ let meta attr = tag "meta" attr empty
 let spanAttr attr inner = tag "span" attr (flatten inner)
 let span inner = spanAttr [] inner
 let italic attr inner = tag "i" attr inner
-let p inner = tag "p" [] inner
+let p inner = tag "p" [] (flatten inner)
 
 let form x = tag "form" ["method", "POST"] (flatten x)
 let fieldset x = tag "fieldset" [] (flatten x)
 let legend txt = tag "legend" [] (text txt)
 let submitInput value = inputAttr ["type", "submit"; "value", value]
 
-let table x = tag "table" [] (flatten x)
+let tableClass class' x = tag "table" ["class", class'] (flatten x)
+let tbodyClass class' x = tag "tbody" ["class", class'] (flatten x)
 let th x = tag "th" [] (flatten x)
 let tr x = tag "tr" [] (flatten x)
+let trClass class' x = tag "tr" ["class", class'] (flatten x)
 let td x = tag "td" [] (flatten x)
+let tdAttr attr x = tag "td" attr (flatten x)
 
 let head =
   head [
