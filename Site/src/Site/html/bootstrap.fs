@@ -124,3 +124,27 @@ let home_content =
       ]
     ]
   ]
+
+let applications_content =
+  mcontent [
+    row [
+      m12 [
+        block_flat [
+          header [ h3 "Recent Executions" ]
+          content [
+            table_responsive [
+              tableClass "no-border hover list" [
+                tbodyClass "no-border-y" [
+                  executionRow "Android" "Week 14 Regression" 80
+                  executionRow "Android" "JIRA #1043 critical bug fix for crash" 33
+                  executionRow "Android" "Sprint 32 Automated regression QA4 Environment" 59
+                  executionRow "Android" "Week 13 Regression" 93
+                  executionRow "Android" "Week 12 Regression" 55
+                ]
+              ]
+            ]
+          ]
+        ]
+      ]
+    ]
+  ]

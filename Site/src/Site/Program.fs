@@ -17,6 +17,7 @@ open html_common
 open html_bootstrap
 
 let home' = "/"
+let applications' = "/applications"
 
 let home'' () =
   let html' =
@@ -32,13 +33,29 @@ let home'' () =
     |> xmlToString
   sprintf "<!DOCTYPE html>%s" html'
 
+let applications'' () =
+  let html' =
+    html [
+      head
+      body [
+        wrapper [
+          left_sidebar
+          applications_content
+        ]
+      ]
+    ]
+    |> xmlToString
+  sprintf "<!DOCTYPE html>%s" html'
+
 let home = OK (home'' ())
+let applications = OK (applications'' ())
 
 let webPart =
   choose [
 
     GET >>= choose [
-      path "/" >>= home
+      path home' >>= home
+      path applications' >>= applications
     ]
 
     pathRegex "(.*)\.(css|png|gif|js|ico|woff|tff)" >>= Files.browseHome
