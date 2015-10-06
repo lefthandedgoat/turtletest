@@ -14,6 +14,7 @@ open Suave.Types
 open Suave.Web
 open Suave.Html
 open html_common
+open types
 
 let icon type' = italic ["class", (sprintf "fa fa-%s" type')] emptyText
 let wrapper inner = divId "cl-wrapper" inner
@@ -47,7 +48,7 @@ let side_link link text' count style icon' =
     ]
   ]
 
-let left_sidebar =
+let left_sidebar counts =
   sidebar [
     toggle [ icon "bars" ]
     navblock [
@@ -57,10 +58,10 @@ let left_sidebar =
             logo [ aHref "index2.html" [] ]
           ]
           vnavigation [
-            side_link "/applications" "Applications" 4 "primary" "desktop"
-            side_link "/suites" "Suites" 19 "success" "sitemap"
-            side_link "/testcases" "Test Cases" 143 "prusia" "thumbs-up"
-            side_link "/executions" "Executions" 71 "danger" "toggle-right"
+            side_link "/applications" "Applications" counts.Applications "primary" "desktop"
+            side_link "/suites" "Suites" counts.Suites "success" "sitemap"
+            side_link "/testcases" "Test Cases" counts.TestCases "prusia" "thumbs-up"
+            side_link "/executions" "Executions" counts.Executions "danger" "toggle-right"
           ]
         ]
       ]
@@ -96,13 +97,13 @@ let executionRow suite name percent =
     tdColor color [ divClass "progress" [ progress_bar color percent (text percent) ]]
   ]
 
-let home_content =
+let home_content counts executionRows =
   mcontent [
     row [
-      tileContainer "/applications" "Applications" 4 "purple" "desktop"
-      tileContainer "/suitse" "Suites" 19 "green" "sitemap"
-      tileContainer "/testcases" "Test Cases" 143 "prusia" "thumbs-up"
-      tileContainer "/executions" "Executions" 71 "red" "toggle-right"
+      tileContainer "/applications" "Applications" counts.Applications "purple" "desktop"
+      tileContainer "/suites" "Suites" counts.Suites "green" "sitemap"
+      tileContainer "/testcases" "Test Cases" counts.TestCases "prusia" "thumbs-up"
+      tileContainer "/executions" "Executions" counts.Executions "red" "toggle-right"
     ]
     row [
       m12 [
@@ -111,13 +112,7 @@ let home_content =
           content [
             table_responsive [
               tableClass "no-border hover list" [
-                tbodyClass "no-border-y" [
-                  executionRow "Android" "Week 14 Regression" 80
-                  executionRow "IOS" "JIRA #1043 critical bug fix for crash" 33
-                  executionRow "Website" "Sprint 32 Automated regression QA4 Environment" 59
-                  executionRow "Android" "Week 13 Regression" 93
-                  executionRow "Android" "Week 12 Regression" 55
-                ]
+                tbodyClass "no-border-y" (executionRows |> List.map (fun er -> executionRow er.Application er.Description er.Percent))
               ]
             ]
           ]
@@ -126,7 +121,7 @@ let home_content =
     ]
   ]
 
-let applications_content =
+let applications_content executionRows =
   mcontent [
     row [
       m12 [
@@ -135,13 +130,7 @@ let applications_content =
           content [
             table_responsive [
               tableClass "no-border hover list" [
-                tbodyClass "no-border-y" [
-                  executionRow "Android" "Week 14 Regression" 80
-                  executionRow "Android" "JIRA #1043 critical bug fix for crash" 33
-                  executionRow "Android" "Sprint 32 Automated regression QA4 Environment" 59
-                  executionRow "Android" "Week 13 Regression" 93
-                  executionRow "Android" "Week 12 Regression" 55
-                ]
+                tbodyClass "no-border-y" (executionRows |> List.map (fun er -> executionRow er.Application er.Description er.Percent))
               ]
             ]
           ]
