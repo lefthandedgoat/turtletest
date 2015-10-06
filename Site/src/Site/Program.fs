@@ -22,7 +22,7 @@ let applications' = "/applications"
 let home'' () =
   let html' =
     html [
-      head
+      head "home"
       body [
         wrapper [
           left_sidebar
@@ -36,7 +36,7 @@ let home'' () =
 let applications'' () =
   let html' =
     html [
-      head
+      head "applications"
       body [
         wrapper [
           left_sidebar

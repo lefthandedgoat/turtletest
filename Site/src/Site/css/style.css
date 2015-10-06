@@ -1022,6 +1022,9 @@ input::-webkit-input-speech-button {
 .cl-vnavigation li a:hover {
   color: #ffffff;
 }
+.sidebar-item {
+  padding-left: 3px;
+}
 .parent .sub-menu {
   padding: 10px 0;
 }
