@@ -43,6 +43,8 @@
   <ItemGroup>
     <None Include="paket.references" />
     <None Include="paket.template" />
+    <Compile Include="types/types.fs" />
+    <Compile Include="data/fake.fs" />
     <Compile Include="html/common.fs" />
     <Compile Include="html/bootstrap.fs" />
     <Compile Include="Program.fs" />

@@ -15,47 +15,49 @@ open Suave.Web
 open Suave.Html
 open html_common
 open html_bootstrap
+open types
 
 let home' = "/"
 let applications' = "/applications"
 
-let home'' () =
+let home'' = warbler (fun _ ->
+  let counts = fake.counts()
+  let executions = fake.executions 5 ["Android"; "IOS"; "Desktop"]
   let html' =
     html [
       head "home"
       body [
         wrapper [
-          left_sidebar
-          home_content
+          left_sidebar counts
+          home_content counts executions
         ]
       ]
     ]
     |> xmlToString
-  sprintf "<!DOCTYPE html>%s" html'
+  OK <| sprintf "<!DOCTYPE html>%s" html')
 
-let applications'' () =
+let applications'' = warbler (fun _ ->
+  let counts = fake.counts()
+  let executions = fake.executions 8 ["Android"]
   let html' =
     html [
       head "applications"
       body [
         wrapper [
-          left_sidebar
-          applications_content
+          left_sidebar counts
+          applications_content executions
         ]
       ]
     ]
     |> xmlToString
-  sprintf "<!DOCTYPE html>%s" html'
-
-let home = OK (home'' ())
-let applications = OK (applications'' ())
+  OK <| sprintf "<!DOCTYPE html>%s" html')
 
 let webPart =
   choose [
 
     GET >>= choose [
-      path home' >>= home
-      path applications' >>= applications
+      path home' >>= home''
+      path applications' >>= applications''
     ]
 
     pathRegex "(.*)\.(css|png|gif|js|ico|woff|tff)" >>= Files.browseHome
