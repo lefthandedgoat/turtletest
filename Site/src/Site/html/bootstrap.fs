@@ -36,12 +36,13 @@ let tdColor color inner = tdAttr ["class", (sprintf "color-%s" color)] inner
 let table_responsive inner = divClass "table-responsive" inner
 let progress_bar type' percent inner = divAttr ["class", (sprintf "progress-bar progress-bar-%s") type'; "style",(sprintf "width: %s" percent) ] [inner]
 let tile color inner = divClass (sprintf "fd-tile detail clean tile-%s" color) inner
+let sidebar_item inner = spanAttr ["class","sidebar-item"] inner
 
 let side_link link text' count style icon' =
   li [
     aHref link [
       icon icon'
-      span [text text']
+      sidebar_item [text text']
       spanAttr ["class", sprintf "badge badge-%s pull-right" style] [text (string count)]
     ]
   ]
