@@ -34,22 +34,27 @@ let em s = tag "em" [] (text s)
 let strong s = tag "strong" [] (text s)
 let meta attr = tag "meta" attr empty
 let spanAttr attr inner = tag "span" attr (flatten inner)
+let spanClass class' inner = spanAttr ["class", class'] inner
 let span inner = spanAttr [] inner
 let italic attr inner = tag "i" attr inner
 let p inner = tag "p" [] (flatten inner)
 
-let form x = tag "form" ["method", "POST"] (flatten x)
-let fieldset x = tag "fieldset" [] (flatten x)
+let form inner = tag "form" ["method", "POST"] (flatten inner)
+let formAttr attr inner = tag "form" (("method", "POST") :: attr) (flatten inner)
+let fieldset inner = tag "fieldset" [] (flatten inner)
 let legend txt = tag "legend" [] (text txt)
 let submitInput value = inputAttr ["type", "submit"; "value", value]
 
-let tableClass class' x = tag "table" ["class", class'] (flatten x)
-let tbodyClass class' x = tag "tbody" ["class", class'] (flatten x)
-let th x = tag "th" [] (flatten x)
-let tr x = tag "tr" [] (flatten x)
-let trClass class' x = tag "tr" ["class", class'] (flatten x)
-let td x = tag "td" [] (flatten x)
-let tdAttr attr x = tag "td" attr (flatten x)
+let tableClass class' inner = tag "table" ["class", class'] (flatten inner)
+let tbodyClass class' inner = tag "tbody" ["class", class'] (flatten inner)
+let th inner = tag "th" [] (flatten inner)
+let tr inner = tag "tr" [] (flatten inner)
+let trClass class' inner = tag "tr" ["class", class'] (flatten inner)
+let td inner = tag "td" [] (flatten inner)
+let tdAttr attr inner = tag "td" attr (flatten inner)
+let labelClass class' inner = tag "label" ["class", class'] (flatten inner)
+let buttonClass class' inner = tag "button" ["class", class'] (flatten inner)
+let inputClass class' value = tag "input" ["class", class'; "value", value] empty
 
 let head title' =
   head [
