@@ -14,3 +14,13 @@ type ExecutionRow =
     Description : string
     Percent : int
   }
+
+type Application =
+  {
+    Name : string;
+    Address : string;
+    Documentation : string;
+    Owners : string;
+    Developers : string;
+    Notes : string;
+  }
