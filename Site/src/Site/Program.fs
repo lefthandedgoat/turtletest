@@ -17,47 +17,22 @@ open html_common
 open html_bootstrap
 open types
 
-let home' = "/"
-let applications' = "/applications"
-
 let home'' = warbler (fun _ ->
   let counts = fake.counts()
   let executions = fake.executions 5 ["Android"; "IOS"; "Desktop"]
-  let html' =
-    html [
-      head "home"
-      body [
-        wrapper [
-          left_sidebar counts
-          home_content counts executions
-        ]
-      ]
-    ]
-    |> xmlToString
-  OK <| sprintf "<!DOCTYPE html>%s" html')
+  OK <| home.html counts executions)
 
 let applications'' = warbler (fun _ ->
   let counts = fake.counts()
   let executions = fake.executions 8 ["Android"]
-  let html' =
-    html [
-      head "applications"
-      body [
-        wrapper [
-          left_sidebar counts
-          applications_content executions
-        ]
-      ]
-    ]
-    |> xmlToString
-  OK <| sprintf "<!DOCTYPE html>%s" html')
+  OK <| applications.html counts executions)
 
 let webPart =
   choose [
 
     GET >>= choose [
-      path home' >>= home''
-      path applications' >>= applications''
+      path paths.home >>= home''
+      path paths.applications >>= applications''
     ]
 
     pathRegex "(.*)\.(css|png|gif|js|ico|woff|tff)" >>= Files.browseHome
