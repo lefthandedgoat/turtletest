@@ -25,7 +25,7 @@ let h2 s = tag "h2" [] (text s)
 let h3 s = tag "h3" [] (text s)
 let aHref href inner = tag "a" ["href", href] (flatten inner)
 let aHrefAttr href attr inner = tag "a" (("href", href) :: attr) (flatten inner)
-let cssLink href = linkAttr [ "href", href; " rel", "stylesheet"; " type", "text/css" ]
+let cssLink href = linkAttr [ "href", href; " rel", "stylesheet"; " type", "text/css"; "async", "async" ]
 let ul xml = tag "ul" [] (flatten xml)
 let ulAttr attr xml = tag "ul" attr (flatten xml)
 let li inner = tag "li" [] (flatten inner)
@@ -54,7 +54,8 @@ let td inner = tag "td" [] (flatten inner)
 let tdAttr attr inner = tag "td" attr (flatten inner)
 let labelClass class' inner = tag "label" ["class", class'] (flatten inner)
 let buttonClass class' inner = tag "button" ["class", class'] (flatten inner)
-let inputClass class' value = tag "input" ["class", class'; "value", value] empty
+let inputClassPlaceholder class' placeholder value = tag "input" ["class", class'; "placeholder", placeholder; "value", value] empty
+let textareaClassPlaceholder class' placeholder text' = tag "textarea" ["class", class'; "placeholder", placeholder; "rows", "4"] (text text')
 
 let head title' =
   head [

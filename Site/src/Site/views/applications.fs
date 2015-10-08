@@ -10,17 +10,11 @@ let applications_details (application : types.Application ) =
     header [ h3 application.Name ]
     content [
       form_horizontal [
-        form_group [
-          control_label [ text application.Name ]
-          sm8 [
-            input_group [
-              input_form_control application.Address
-              input_group_button [
-                button_primary [ text "Go!" ]
-              ]
-            ]
-          ]
-        ]
+        label_text_button "Address" application.Address "Go!"
+        label_text_button "Documentation" application.Documentation "Go!"
+        label_text "Owners" application.Owners
+        label_text "Developers" application.Developers
+        label_textarea "Notes" application.Notes
       ]
     ]
   ]

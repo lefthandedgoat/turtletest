@@ -32,7 +32,37 @@ let sidebar_item inner = spanAttr ["class","sidebar-item"] inner
 let form_horizontal inner = formAttr ["class","form-horizontal"] inner
 let form_group inner = divClass "form-group" inner
 let input_group inner = divClass "input-group" inner
-let input_form_control value = inputClass "form-control" value
+let input_form_control placeholder value = inputClassPlaceholder "form-control" placeholder value
+let textarea_form_control placeholder value = textareaClassPlaceholder "form-control" placeholder value
 let input_group_button inner = spanClass "input-group-btn" inner
 let control_label inner = labelClass "col-sm-2 control-label" inner
 let button_primary inner = buttonClass "btn btn-primary" inner
+
+let label_text_button label' text' button' =
+  form_group [
+    control_label [ text label' ]
+    sm8 [
+      input_group [
+        input_form_control label' text'
+        input_group_button [
+          button_primary [ text button' ]
+        ]
+      ]
+    ]
+  ]
+
+let label_text label' text' =
+  form_group [
+    control_label [ text label' ]
+    sm8 [
+      input_form_control label' text'
+    ]
+  ]
+
+let label_textarea label' text' =
+  form_group [
+    control_label [ text label' ]
+    sm8 [
+      textarea_form_control label' text'
+    ]
+  ]
