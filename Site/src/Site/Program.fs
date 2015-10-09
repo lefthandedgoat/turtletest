@@ -26,7 +26,8 @@ let applications'' = warbler (fun _ ->
   let counts = fake.counts()
   let executions = fake.executions 8 ["Android"]
   let application = fake.application
-  OK <| applications.html counts executions application)
+  let suites = fake.suites
+  OK <| applications.html counts executions application suites)
 
 let webPart =
   choose [

@@ -19,11 +19,32 @@ let applications_details (application : types.Application ) =
     ]
   ]
 
-let applications_content executionRows application =
+let applications_grid suites =
+  block_flat [
+    header [ h3 "Suites" ]
+    content [
+      table_bordered
+        [
+          "Rendering engine"
+          "Browser"
+          "Platform(s)"
+          "Engine version"
+          "CSS grade"
+        ]
+        suites
+    ]
+  ]
+
+let applications_content executionRows application suites =
   mcontent [
     row [
       m12 [
         applications_details application
+      ]
+    ]
+    row [
+      m12 [
+        applications_grid suites
       ]
     ]
     row [
@@ -34,14 +55,14 @@ let applications_content executionRows application =
 
   ]
 
-let html counts executions application =
+let html counts executions application suites =
   let html' =
     html [
       head "applications"
       body [
         wrapper [
           partial_sidebar.left_sidebar counts
-          applications_content executions application
+          applications_content executions application suites
         ]
       ]
     ]
