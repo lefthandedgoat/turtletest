@@ -66,3 +66,14 @@ let label_textarea label' text' =
       textarea_form_control label' text'
     ]
   ]
+
+let table_bordered ths rows =
+  let table_bordered inner = tableClass "table table-bordered" inner
+  table_responsive [
+    table_bordered [
+      thead [
+        tr (ths |> List.map (fun th' -> th [text th']))
+      ]
+      tbody (rows |> List.map (fun row' -> tr (row' |> List.map(fun cell' -> td [text cell']))))
+    ]
+  ]
