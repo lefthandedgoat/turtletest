@@ -55,13 +55,13 @@ let applications_content executionRows application suites =
 
   ]
 
-let html counts executions application suites =
+let html user counts executions application suites =
   let html' =
     html [
       head "applications"
       body [
         wrapper [
-          partial_sidebar.left_sidebar counts
+          partial_sidebar.left_sidebar user counts
           applications_content executions application suites
         ]
       ]

@@ -53,6 +53,9 @@
     <Compile Include="views/partial_tile.fs" />
     <Compile Include="views/home.fs" />
     <Compile Include="views/applications.fs" />
+    <Compile Include="views/suites.fs" />
+    <Compile Include="views/testcases.fs" />
+    <Compile Include="views/executions.fs" />
     <Compile Include="Program.fs" />
     <Content Include="css/*.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
