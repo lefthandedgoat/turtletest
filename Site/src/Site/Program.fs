@@ -17,24 +17,42 @@ open html_common
 open html_bootstrap
 open types
 
-let home'' = warbler (fun _ ->
+let home'' user = warbler (fun _ ->
   let counts = fake.counts()
   let executions = fake.executions 5 ["Android"; "IOS"; "Desktop"]
-  OK <| home.html counts executions)
+  OK <| home.html user counts executions)
 
-let applications'' = warbler (fun _ ->
+let applications'' user = warbler (fun _ ->
   let counts = fake.counts()
   let executions = fake.executions 8 ["Android"]
   let application = fake.application
   let suites = fake.suites
-  OK <| applications.html counts executions application suites)
+  OK <| applications.html user counts executions application suites)
+
+let suites'' user = warbler (fun _ ->
+  let counts = fake.counts()
+  OK <| suites.html user counts)
+
+let testcases'' user = warbler (fun _ ->
+  let counts = fake.counts()
+  OK <| testcases.html user counts)
+
+let executions'' user = warbler (fun _ ->
+  let counts = fake.counts()
+  OK <| executions.html user counts)
+
+let root'' = warbler (fun _ ->
+  OK <| "root")
 
 let webPart =
   choose [
-
     GET >>= choose [
-      path paths.home >>= home''
-      path paths.applications >>= applications''
+      pathScan paths.home home''
+      pathScan paths.applications applications''
+      pathScan paths.suites suites''
+      pathScan paths.testcases testcases''
+      pathScan paths.executions executions''
+      path     paths.root >>= root''
     ]
 
     pathRegex "(.*)\.(css|png|gif|js|ico|woff|tff)" >>= Files.browseHome

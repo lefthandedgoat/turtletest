@@ -69,7 +69,7 @@ let head title' =
     cssLink "http://fonts.googleapis.com/css?family=Raleway:300,200,100"
     link
     title (sprintf "turtle test - %s" title')
-    cssLink "css/bootstrap.min.css"
-    cssLink "css/style.css"
-    cssLink "css/font-awesome.min.css"
+    cssLink "/css/bootstrap.min.css"
+    cssLink "/css/style.css"
+    cssLink "/css/font-awesome.min.css"
   ]
