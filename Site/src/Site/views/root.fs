@@ -26,7 +26,7 @@ let html = """
     	<div class="row">
 			<header id="logo">
                 <div class="col-md-12 col-sm-12">
-                    <a href="#" title="turtle test">turtle test</a>
+                    <img src="/images/turtle-medium.png" alt="turtle test" />
                 </div><!--/12-->
 			</header>
 
@@ -40,11 +40,8 @@ let html = """
                 <div class="col-md-12 col-sm-12">
                 	<p class="social-text">
                         <span></span>
-                        <i>For more details leading up to our launch <br/>check us out on twitter!</i>
+                        <i>For more details leading up to our launch <br/>check us out on <a href="https://twitter.com/lefthandedgoat">twitter!</a></i>
                     </p>
-                    <div class="social-icons">
-                    	<a href="https://twitter.com/lefthandedgoat"><i class="icon-twitter-sign"></i></a>
-                    </div>
                     <small><i>&copy;2015 turtle test. All rights reserved.</i></small>
                 </div><!--/12-->
             </footer>
