@@ -42,7 +42,7 @@ let executions'' user = warbler (fun _ ->
   OK <| executions.html user counts)
 
 let root'' = warbler (fun _ ->
-  OK <| "root")
+  OK <| root.html)
 
 let webPart =
   choose [
