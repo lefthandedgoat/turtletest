@@ -48,6 +48,7 @@
     <Compile Include="data/fake.fs" />
     <Compile Include="html/common.fs" />
     <Compile Include="html/bootstrap.fs" />
+    <Compile Include="html/scripts.fs" />
     <Compile Include="views/partial_executions.fs" />
     <Compile Include="views/partial_sidebar.fs" />
     <Compile Include="views/partial_tile.fs" />
@@ -61,13 +62,16 @@
     <Content Include="css/*.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="js/*.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="fonts/*.*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="favicon.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="images/*.*">
+    <Content Include="images/*.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

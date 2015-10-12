@@ -64,6 +64,11 @@ let html user counts executions application suites =
           partial_sidebar.left_sidebar user counts
           applications_content executions application suites
         ]
+        (text scripts.jquery_1_11_3_min)
+        (text scripts.datatable_jquery_1_10_9_min)
+        (text scripts.datatable_min)
+        (text scripts.datatables_bootstrap_adapter)
+        (text scripts.applications_datatable)
       ]
     ]
     |> xmlToString
