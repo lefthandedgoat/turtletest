@@ -4,7 +4,7 @@ type StringPath = PrintfFormat<(string -> string),unit,string,string,string>
 
 let root = "/"
 let home : StringPath = "/%s/"
-let home_link user = sprintf "/%s" user
+let home_link user = sprintf "/%s/" user
 let applications : StringPath = "/%s/applications"
 let applications_link user = sprintf "/%s/applications" user
 let suites : StringPath = "/%s/suites"
