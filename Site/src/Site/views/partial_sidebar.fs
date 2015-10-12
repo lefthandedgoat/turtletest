@@ -20,8 +20,10 @@ let left_sidebar user counts =
     navblock [
       menu_space [
         content [
-          sidebar_logo [
-            logo [ aHref "/" [] ]
+          aHref (paths.home_link user) [
+            sidebar_logo [
+              logo [ emptyText ]
+            ]
           ]
           vnavigation [
             side_link (paths.applications_link user) "Applications" counts.Applications "primary" "desktop"
