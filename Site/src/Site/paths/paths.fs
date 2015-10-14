@@ -13,3 +13,5 @@ let testcases : StringPath = "/%s/testcases"
 let testcases_link user = sprintf "/%s/testcases" user
 let executions : StringPath = "/%s/executions"
 let executions_link user = sprintf "/%s/executions" user
+
+let main_page_email : StringPath = "/mainpageemail/%s"

@@ -41,6 +41,11 @@ let executions'' user = warbler (fun _ ->
   let counts = fake.counts()
   OK <| executions.html user counts)
 
+let main_page_email'' email = warbler (fun _ ->
+  main_page_emails.insertEmail email
+  OK <| "")
+
+
 let root'' = warbler (fun _ ->
   OK <| root.html)
 
@@ -52,6 +57,7 @@ let webPart =
       pathScan paths.suites suites''
       pathScan paths.testcases testcases''
       pathScan paths.executions executions''
+      pathScan paths.main_page_email main_page_email''
       path     paths.root >>= root''
     ]
 
