@@ -3,6 +3,7 @@ module program
 open System
 
 open Suave
+open Suave.Form
 open Suave.Cookie
 open Suave.Http
 open Suave.Http.Successful
@@ -41,18 +42,27 @@ let executions'' user = warbler (fun _ ->
   let counts = fake.counts()
   OK <| executions.html user counts)
 
-let root'' = warbler (fun _ ->
-  OK <| root.html)
+let bindToForm form handler =
+    bindReq (bindForm form) handler BAD_REQUEST
+
+let root'' =
+  choose [
+    GET >>= (OK <| root.html)
+    POST >>= bindToForm forms.interestedEmail (fun form ->
+      main_page_emails.insertEmail <| form.Email.ToString()
+      OK <| root.html)
+  ]
 
 let webPart =
   choose [
+    path paths.root >>= root''
+
     GET >>= choose [
       pathScan paths.home home''
       pathScan paths.applications applications''
       pathScan paths.suites suites''
       pathScan paths.testcases testcases''
       pathScan paths.executions executions''
-      path     paths.root >>= root''
     ]
 
     pathRegex "(.*)\.(css|png|gif|js|ico|woff|tff)" >>= Files.browseHome
