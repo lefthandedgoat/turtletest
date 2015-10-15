@@ -33,7 +33,21 @@ let html = """
             <section id="marketing-text">
                 <div class="col-md-12 col-sm-12">
                 	<h1>Stay tuned, we are launching very soon...</h1>
-                    <p>turtle test is working hard to launch a new site that's going to greatly improve the way you manage test cases. Leave us your email below, and we'll notify you the minute we open the doors (coming soon).</p>
+                    <p>turtle test is working hard to launch a new site that's going to greatly improve the way you manage test cases. Leave us your email below, and we'll notify you the minute we open the doors.</p>
+                    <form method="POST" class="form-horizontal">
+                       <div class="form-group">
+                          <div class="col-sm-3"></div>
+                          <div class="col-sm-6">
+                            <div class="input-group">
+                              <input class="form-control" name="Email" placeholder="Email Address" value="">
+                                <span class="input-group-btn">
+                                  <input type="submit" class="btn btn-primary" style="background-color:#7761a7">I'm Interested!</input>
+                                </span>
+                            </div>
+                          </div>
+                          <div class="col-sm-3"></div>
+                       </div>
+                    </form>
                 </div><!--12-->
             </section><!--/marketing-text-->
 			<footer>
