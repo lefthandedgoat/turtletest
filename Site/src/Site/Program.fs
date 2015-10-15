@@ -42,10 +42,6 @@ let executions'' user = warbler (fun _ ->
   let counts = fake.counts()
   OK <| executions.html user counts)
 
-let main_page_email'' email = warbler (fun _ ->
-  main_page_emails.insertEmail email
-  OK <| "")
-
 let bindToForm form handler =
     bindReq (bindForm form) handler BAD_REQUEST
 
