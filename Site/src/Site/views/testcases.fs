@@ -8,11 +8,11 @@ open types
 let html user counts =
   let html' =
     html [
-      head "test cases"
+      base_head "test cases"
       body [
         wrapper [
           partial_sidebar.left_sidebar user counts
-          h1 (text "Coming Soon")
+          h1 "Coming Soon"
         ]
       ]
     ]
