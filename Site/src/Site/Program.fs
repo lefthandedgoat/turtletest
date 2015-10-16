@@ -47,10 +47,10 @@ let bindToForm form handler =
 
 let root'' =
   choose [
-    GET >>= (OK <| root.html)
+    GET >>= (OK <| root.html Get)
     POST >>= bindToForm forms.interestedEmail (fun form ->
       main_page_emails.insertEmail <| form.Email.ToString()
-      OK <| root.html)
+      OK <| root.html Success)
   ]
 
 let webPart =
