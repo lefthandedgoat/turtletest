@@ -58,7 +58,7 @@ let applications_content executionRows application suites =
 let html user counts executions application suites =
   let html' =
     html [
-      head "applications"
+      base_head "applications"
       body [
         wrapper [
           partial_sidebar.left_sidebar user counts
