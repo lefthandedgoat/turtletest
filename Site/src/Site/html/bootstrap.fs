@@ -13,6 +13,7 @@ let toggle inner = divClass "cl-toggle" inner
 let navblock inner = divClass "cl-navblock" inner
 let menu_space inner = divClass "menu-space" inner
 let content inner = divClass "content" inner
+let container inner = divClass "container" inner
 let mcontent inner = divClass "cl-mcont" inner
 let sidebar_logo inner = divClass "sidebar-logo" inner
 let logo inner = divClass "logo" inner
@@ -21,6 +22,8 @@ let row inner = divClass "row" inner
 let m3sm6 inner = divClass "col-md-3 col-sm-6" inner
 let m12 inner = divClass "col-md-12" inner
 let sm8 inner = divClass "col-sm-8" inner
+let sm6 inner = divClass "col-sm-6" inner
+let sm3 inner = divClass "col-sm-3" inner
 let block_flat inner = divClass "block-flat" inner
 let header inner = divClass "header" inner
 let labelX x inner = spanAttr ["class", (sprintf "label label-%s" x)] [inner]
@@ -32,7 +35,8 @@ let sidebar_item inner = spanAttr ["class","sidebar-item"] inner
 let form_horizontal inner = formAttr ["class","form-horizontal"] inner
 let form_group inner = divClass "form-group" inner
 let input_group inner = divClass "input-group" inner
-let input_form_control placeholder value = inputClassPlaceholder "form-control" placeholder value
+let input_form_control placeholder name value = inputClassPlaceholderName "form-control" placeholder name value [empty]
+let input_form_control_inner placeholder name value inner = inputClassPlaceholderName "form-control" placeholder name value inner
 let textarea_form_control placeholder value = textareaClassPlaceholder "form-control" placeholder value
 let input_group_button inner = spanClass "input-group-btn" inner
 let control_label inner = labelClass "col-sm-2 control-label" inner
@@ -43,7 +47,7 @@ let label_text_button label' text' button' =
     control_label [ text label' ]
     sm8 [
       input_group [
-        input_form_control label' text'
+        input_form_control label' label' text'
         input_group_button [
           button_primary [ text button' ]
         ]
@@ -55,7 +59,7 @@ let label_text label' text' =
   form_group [
     control_label [ text label' ]
     sm8 [
-      input_form_control label' text'
+      input_form_control label' label' text'
     ]
   ]
 
