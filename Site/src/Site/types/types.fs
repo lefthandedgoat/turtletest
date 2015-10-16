@@ -24,3 +24,7 @@ type Application =
     Developers : string;
     Notes : string;
   }
+
+type RootResponse =
+  | Get
+  | Success

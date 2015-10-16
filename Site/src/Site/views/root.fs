@@ -3,6 +3,7 @@ module root
 open Suave.Html
 open html_common
 open html_bootstrap
+open types
 
 let head =
   head [
@@ -20,7 +21,21 @@ let head =
     cssLink "/css/root-theme-turtle-purple.css"
   ]
 
-let html =
+let private handleResponse (rootResponse : RootResponse) =
+  match rootResponse with
+    | Get ->
+        sm6 [
+          input_group [
+            input_form_control_inner "Email Address" "Email" "" [
+              input_group_button [
+                inputAttr [ "value","I'm Interested!"; "type","submit"; "class","btn btn-primary"; "style","background-color:#7761a7" ]
+              ]
+            ]
+          ]
+        ]
+    | Success -> sm6 [ h1 "Thanks!" ]
+
+let html (rootResponse : RootResponse) =
   let html' =
     html [
       head
@@ -39,15 +54,7 @@ let html =
                 form_horizontal [
                   form_group [
                     sm3 [ emptyText ]
-                    sm6 [
-                      input_group [
-                        input_form_control_inner "Email Address" "Email" "" [
-                          input_group_button [
-                            inputAttr [ "value","I'm Interested!"; "type","submit"; "class","btn btn-primary"; "style","background-color:#7761a7" ]
-                          ]
-                        ]
-                      ]
-                    ]
+                    handleResponse rootResponse
                     sm3 [ emptyText ]
                   ]
                 ]
