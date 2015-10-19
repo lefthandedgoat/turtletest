@@ -66,6 +66,7 @@ let inputAttrInner attr inner = tag "input" attr (flatten inner)
 let inputClassPlaceholderName class' placeholder name value inner =
   tag "input" ["class", class'; "placeholder", placeholder; "name", name; "value", value] (flatten inner)
 let textareaClassPlaceholder class' placeholder text' = tag "textarea" ["class", class'; "placeholder", placeholder; "rows", "4"] (text text')
+let textareaClassPlaceholderName class' name placeholder text' = tag "textarea" ["class", class'; "name", name; "placeholder", placeholder; "rows", "4"] (text text')
 let sectionId id inner = tag "section" ["id", id] (flatten inner)
 
 let base_head title' =

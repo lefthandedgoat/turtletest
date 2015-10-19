@@ -21,9 +21,10 @@ let vnavigation inner = ulAttr ["class", "cl-vnavigation"] inner
 let row inner = divClass "row" inner
 let m3sm6 inner = divClass "col-md-3 col-sm-6" inner
 let m12 inner = divClass "col-md-12" inner
-let sm8 inner = divClass "col-sm-8" inner
-let sm6 inner = divClass "col-sm-6" inner
 let sm3 inner = divClass "col-sm-3" inner
+let sm6 inner = divClass "col-sm-6" inner
+let sm8 inner = divClass "col-sm-8" inner
+let sm10 inner = divClass "col-sm-10" inner
 let block_flat inner = divClass "block-flat" inner
 let header inner = divClass "header" inner
 let labelX x inner = spanAttr ["class", (sprintf "label label-%s" x)] [inner]
@@ -37,10 +38,12 @@ let form_group inner = divClass "form-group" inner
 let input_group inner = divClass "input-group" inner
 let input_form_control placeholder name value = inputClassPlaceholderName "form-control" placeholder name value [empty]
 let input_form_control_inner placeholder name value inner = inputClassPlaceholderName "form-control" placeholder name value inner
-let textarea_form_control placeholder value = textareaClassPlaceholder "form-control" placeholder value
+let textarea_form_control placeholder name value = textareaClassPlaceholderName "form-control" name placeholder value
 let input_group_button inner = spanClass "input-group-btn" inner
 let control_label inner = labelClass "col-sm-2 control-label" inner
 let button_primary href inner = aHrefAttr href ["class", "btn btn-primary"] inner
+let button_success href inner = aHrefAttr href ["class", "btn btn-success"] inner
+let button_save = inputAttr [ "value","Save"; "type","submit"; "class","btn btn-success pull-right"; ]
 
 let label_text_ahref_button label' text' button' =
   form_group [
@@ -67,7 +70,7 @@ let label_textarea label' text' =
   form_group [
     control_label [ text label' ]
     sm8 [
-      textarea_form_control label' text'
+      textarea_form_control label' label' text'
     ]
   ]
 

@@ -6,6 +6,7 @@ open Suave
 open Suave.Form
 open Suave.Cookie
 open Suave.Http
+open Suave.Http.Redirection
 open Suave.Http.Successful
 open Suave.Http.RequestErrors
 open Suave.Http.Applicatives
@@ -17,6 +18,9 @@ open Suave.Html
 open html_common
 open html_bootstrap
 open types
+
+let bindToForm form handler =
+    bindReq (bindForm form) handler BAD_REQUEST
 
 let home'' user = warbler (fun _ ->
   let counts = fake.counts()
@@ -30,6 +34,16 @@ let applications'' user = warbler (fun _ ->
   let suites = fake.suites
   OK <| applications.html user counts executions application suites)
 
+let applicationsCreate'' user =
+  let counts = fake.counts()
+  choose [
+    GET >>= warbler (fun _ ->
+      OK <| applicationsCreate.html user counts)
+    POST >>= bindToForm forms.newApplication (fun form ->
+      printfn "%A" form
+      FOUND <| paths.applications_link user)
+  ]
+
 let suites'' user = warbler (fun _ ->
   let counts = fake.counts()
   OK <| suites.html user counts)
@@ -42,9 +56,6 @@ let executions'' user = warbler (fun _ ->
   let counts = fake.counts()
   OK <| executions.html user counts)
 
-let bindToForm form handler =
-    bindReq (bindForm form) handler BAD_REQUEST
-
 let root'' =
   choose [
     GET >>= (OK <| root.html Get)
@@ -56,6 +67,7 @@ let root'' =
 let webPart =
   choose [
     path paths.root >>= root''
+    pathScan paths.applicationsCreate applicationsCreate''
 
     GET >>= choose [
       pathScan paths.home home''
