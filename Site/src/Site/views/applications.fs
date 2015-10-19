@@ -10,8 +10,8 @@ let applications_details (application : types.Application ) =
     header [ h3 application.Name ]
     content [
       form_horizontal [
-        label_text_button "Address" application.Address "Go!"
-        label_text_button "Documentation" application.Documentation "Go!"
+        label_text_ahref_button "Address" application.Address "Go!"
+        label_text_ahref_button "Documentation" application.Documentation "Go!"
         label_text "Owners" application.Owners
         label_text "Developers" application.Developers
         label_textarea "Notes" application.Notes
