@@ -5,6 +5,9 @@ open html_common
 open html_bootstrap
 open types
 
+let application_create_button user =
+  button_success (paths.applicationsCreate_link user) [ text "Create"]
+
 let applications_details (application : types.Application ) =
   block_flat [
     header [ h3 application.Name ]
@@ -35,8 +38,13 @@ let applications_grid suites =
     ]
   ]
 
-let applications_content executionRows application suites =
+let applications_content user executionRows application suites =
   mcontent [
+    row [
+      m12 [
+        application_create_button user
+      ]
+    ]
     row [
       m12 [
         applications_details application
@@ -62,7 +70,7 @@ let html user counts executions application suites =
       body [
         wrapper [
           partial_sidebar.left_sidebar user counts
-          applications_content executions application suites
+          applications_content user executions application suites
         ]
         (text scripts.jquery_1_11_3_min)
         (text scripts.datatable_jquery_1_10_9_min)
