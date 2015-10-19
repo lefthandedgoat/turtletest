@@ -40,16 +40,16 @@ let input_form_control_inner placeholder name value inner = inputClassPlaceholde
 let textarea_form_control placeholder value = textareaClassPlaceholder "form-control" placeholder value
 let input_group_button inner = spanClass "input-group-btn" inner
 let control_label inner = labelClass "col-sm-2 control-label" inner
-let button_primary inner = buttonClass "btn btn-primary" inner
+let button_primary href inner = aHrefAttr href ["class", "btn btn-primary"] inner
 
-let label_text_button label' text' button' =
+let label_text_ahref_button label' text' button' =
   form_group [
     control_label [ text label' ]
     sm8 [
       input_group [
         input_form_control label' label' text'
         input_group_button [
-          button_primary [ text button' ]
+          button_primary text' [ text button' ]
         ]
       ]
     ]
