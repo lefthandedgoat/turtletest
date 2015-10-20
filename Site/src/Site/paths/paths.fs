@@ -11,6 +11,7 @@ let applications_link user = sprintf "/%s/applications" user
 let applicationsCreate_link user = sprintf "/%s/applications/create" user
 let suites : StringPath = "/%s/suites"
 let suites_link user = sprintf "/%s/suites" user
+let suitesCreate_link user = sprintf "/%s/suites/create" user
 let testcases : StringPath = "/%s/testcases"
 let testcases_link user = sprintf "/%s/testcases" user
 let executions : StringPath = "/%s/executions"

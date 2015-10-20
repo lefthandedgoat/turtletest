@@ -25,6 +25,15 @@ type Application =
     Notes : string;
   }
 
+type Suite =
+  {
+    ApplicationName : string;
+    Name : string;
+    Version : string;
+    Owners : string;
+    Notes : string;
+  }
+
 type RootResponse =
   | Get
   | Success
