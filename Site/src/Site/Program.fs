@@ -46,7 +46,9 @@ let applicationsCreate'' user =
 
 let suites'' user = warbler (fun _ ->
   let counts = fake.counts()
-  OK <| suites.html user counts)
+  let suite = fake.suite
+  let testcases = fake.testcases
+  OK <| suites.html user suite testcases counts)
 
 let testcases'' user = warbler (fun _ ->
   let counts = fake.counts()

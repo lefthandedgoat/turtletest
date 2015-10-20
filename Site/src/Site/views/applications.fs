@@ -22,7 +22,7 @@ let applications_details (application : types.Application ) =
     ]
   ]
 
-let applications_grid suites =
+let grid suites =
   block_flat [
     header [ h3 "Suites" ]
     content [
@@ -52,7 +52,7 @@ let applications_content user executionRows application suites =
     ]
     row [
       m12 [
-        applications_grid suites
+        grid suites
       ]
     ]
     row [
