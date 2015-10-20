@@ -6,7 +6,7 @@ open html_bootstrap
 open types
 
 let application_create_button user =
-  button_success (paths.applicationsCreate_link user) [ text "Create"]
+  button_create (paths.applicationsCreate_link user) [ text "Create"]
 
 let applications_details (application : types.Application ) =
   block_flat [
@@ -40,7 +40,7 @@ let applications_grid suites =
 
 let applications_content user executionRows application suites =
   mcontent [
-    row [
+    row_nomargin [
       m12 [
         application_create_button user
       ]

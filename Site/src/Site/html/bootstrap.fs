@@ -19,6 +19,7 @@ let sidebar_logo inner = divClass "sidebar-logo" inner
 let logo inner = divClass "logo" inner
 let vnavigation inner = ulAttr ["class", "cl-vnavigation"] inner
 let row inner = divClass "row" inner
+let row_nomargin inner = divClass "row no-margin-top" inner
 let m3sm6 inner = divClass "col-md-3 col-sm-6" inner
 let m12 inner = divClass "col-md-12" inner
 let sm3 inner = divClass "col-sm-3" inner
@@ -44,6 +45,7 @@ let control_label inner = labelClass "col-sm-2 control-label" inner
 let button_primary href inner = aHrefAttr href ["class", "btn btn-primary"] inner
 let button_success href inner = aHrefAttr href ["class", "btn btn-success"] inner
 let button_save = inputAttr [ "value","Save"; "type","submit"; "class","btn btn-success pull-right"; ]
+let button_create href inner = aHrefAttr href ["class", "btn btn-success pull-right"] inner
 
 let label_text_ahref_button label' text' button' =
   form_group [
