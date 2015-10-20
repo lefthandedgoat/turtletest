@@ -18,3 +18,13 @@ type NewApplication = {
 }
 
 let newApplication : Form<NewApplication> = Form ([],[])
+
+type NewSuite = {
+  Application : string;
+  Name : string;
+  Version : string;
+  Owners : string;
+  Notes : string;
+}
+
+let newSuite : Form<NewSuite> = Form ([],[])

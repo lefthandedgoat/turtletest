@@ -10,6 +10,7 @@ let applicationsCreate : StringPath = "/%s/applications/create"
 let applications_link user = sprintf "/%s/applications" user
 let applicationsCreate_link user = sprintf "/%s/applications/create" user
 let suites : StringPath = "/%s/suites"
+let suitesCreate : StringPath = "/%s/suites/create"
 let suites_link user = sprintf "/%s/suites" user
 let suitesCreate_link user = sprintf "/%s/suites/create" user
 let testcases : StringPath = "/%s/testcases"

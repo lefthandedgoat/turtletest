@@ -50,6 +50,16 @@ let suites'' user = warbler (fun _ ->
   let testcases = fake.testcases
   OK <| suites.html user suite testcases counts)
 
+let suitesCreate'' user =
+  let counts = fake.counts()
+  choose [
+    GET >>= warbler (fun _ ->
+      OK <| suitesCreate.html user counts)
+    POST >>= bindToForm forms.newSuite (fun form ->
+      printfn "%A" form
+      FOUND <| paths.suites_link user)
+  ]
+
 let testcases'' user = warbler (fun _ ->
   let counts = fake.counts()
   OK <| testcases.html user counts)
@@ -70,6 +80,7 @@ let webPart =
   choose [
     path paths.root >>= root''
     pathScan paths.applicationsCreate applicationsCreate''
+    pathScan paths.suitesCreate suitesCreate''
 
     GET >>= choose [
       pathScan paths.home home''
