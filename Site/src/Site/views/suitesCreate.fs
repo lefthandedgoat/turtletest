@@ -1,30 +1,30 @@
-module applicationsCreate
+module suitesCreate
 
 open Suave.Html
 open html_common
 open html_bootstrap
 open types
 
-let applications_details =
+let suite_details =
   block_flat [
-    header [ h3 "Create Application" ]
+    header [ h3 "Create Suite" ]
     content [
       form_horizontal [
-        label_text "Address" ""
-        label_text "Documentation" ""
+        label_text "Application" ""
+        label_text "Name" ""
+        label_text "Version" ""
         label_text "Owners" ""
-        label_text "Developers" ""
         label_textarea "Notes" ""
         form_group [ sm10 [ button_save ] ]
       ]
     ]
   ]
 
-let applications_content =
+let suite_content =
   mcontent [
     row [
       m12 [
-        applications_details
+        suite_details
       ]
     ]
   ]
@@ -32,11 +32,11 @@ let applications_content =
 let html user counts =
   let html' =
     html [
-      base_head "create application"
+      base_head "create suite"
       body [
         wrapper [
           partial_sidebar.left_sidebar user counts
-          applications_content
+          suite_content
         ]
       ]
     ]
