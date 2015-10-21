@@ -61,6 +61,7 @@
     <Compile Include="views/suites.fs" />
     <Compile Include="views/suitesCreate.fs" />
     <Compile Include="views/testcases.fs" />
+    <Compile Include="views/testcasesCreate.fs" />
     <Compile Include="views/executions.fs" />
     <Compile Include="views/root.fs" />
     <Compile Include="Program.fs" />

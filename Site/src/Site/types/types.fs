@@ -34,6 +34,21 @@ type Suite =
     Notes : string;
   }
 
+type TestCase =
+  {
+    ApplicationName : string;
+    SuiteName : string;
+    Name : string;
+    Version : string;
+    Owners : string;
+    Notes : string;
+    Requirements : string;
+    Steps : string;
+    Expected : string;
+    History : string;
+    Attachments : string;
+  }
+
 type RootResponse =
   | Get
   | Success
