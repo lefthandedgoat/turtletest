@@ -28,3 +28,18 @@ type NewSuite = {
 }
 
 let newSuite : Form<NewSuite> = Form ([],[])
+
+type NewTestCase = {
+  Application : string;
+  Name : string;
+  Version : string;
+  Owners : string;
+  Notes : string;
+  Requirements : string;
+  Steps : string;
+  Expected : string;
+  History : string;
+  Attachments : string;
+}
+
+let newTestCase : Form<NewTestCase> = Form ([],[])
