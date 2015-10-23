@@ -71,3 +71,7 @@ let testcases =
     ["Trident"; "Internet Explorer 6.0"; "XP";      "6"; "Deprecated"]
     ["Trident"; "Internet Explorer 7.0"; "Vista";   "7"; "Deprecated"]
   ]
+
+let applicationsOptions = [1,"Android"; 2,"IOS"; 3,"Desktop"]
+
+let suitesOptions = [1,"Android Login"; 2,"IOS Login"; 3,"Desktop Login"]

@@ -5,13 +5,13 @@ open html_common
 open html_bootstrap
 open types
 
-let testcase_details =
+let testcase_details applications suites =
   block_flat [
     header [ h3 "Create Test Case" ]
     content [
       form_horizontal [
-        label_text "Application" ""
-        label_text "Suite" ""
+        label_select "Application" applications
+        label_select "Suite" suites
         label_text "Name" ""
         label_text "Version" ""
         label_text "Owners" ""
@@ -26,23 +26,23 @@ let testcase_details =
     ]
   ]
 
-let testcase_content =
+let testcase_content applications suites =
   mcontent [
     row [
       m12 [
-        testcase_details
+        testcase_details applications suites
       ]
     ]
   ]
 
-let html user counts =
+let html user counts applications suites =
   let html' =
     html [
       base_head "create test case"
       body [
         wrapper [
           partial_sidebar.left_sidebar user counts
-          testcase_content
+          testcase_content applications suites
         ]
       ]
     ]
