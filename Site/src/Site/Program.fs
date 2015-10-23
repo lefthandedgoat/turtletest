@@ -52,9 +52,10 @@ let suites'' user = warbler (fun _ ->
 
 let suitesCreate'' user =
   let counts = fake.counts()
+  let applications = fake.applicationsOptions
   choose [
     GET >>= warbler (fun _ ->
-      OK <| suitesCreate.html user counts)
+      OK <| suitesCreate.html user counts applications)
     POST >>= bindToForm forms.newSuite (fun form ->
       printfn "%A" form
       FOUND <| paths.suites_link user)
@@ -67,9 +68,11 @@ let testcases'' user = warbler (fun _ ->
 
 let testcasesCreate'' user =
   let counts = fake.counts()
+  let applications = fake.applicationsOptions
+  let suites = fake.suitesOptions
   choose [
     GET >>= warbler (fun _ ->
-      OK <| testcasesCreate.html user counts)
+      OK <| testcasesCreate.html user counts applications suites)
     POST >>= bindToForm forms.newTestCase (fun form ->
       printfn "%A" form
       FOUND <| paths.testcases_link user)

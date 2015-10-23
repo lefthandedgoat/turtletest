@@ -5,12 +5,12 @@ open html_common
 open html_bootstrap
 open types
 
-let suite_details =
+let suite_details applications =
   block_flat [
     header [ h3 "Create Suite" ]
     content [
       form_horizontal [
-        label_text "Application" ""
+        label_select "Application" applications
         label_text "Name" ""
         label_text "Version" ""
         label_text "Owners" ""
@@ -20,23 +20,23 @@ let suite_details =
     ]
   ]
 
-let suite_content =
+let suite_content applications =
   mcontent [
     row [
       m12 [
-        suite_details
+        suite_details applications
       ]
     ]
   ]
 
-let html user counts =
+let html user counts applications =
   let html' =
     html [
       base_head "create suite"
       body [
         wrapper [
           partial_sidebar.left_sidebar user counts
-          suite_content
+          suite_content applications
         ]
       ]
     ]

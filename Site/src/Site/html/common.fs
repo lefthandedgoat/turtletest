@@ -42,6 +42,8 @@ let span inner = spanAttr [] inner
 let italic attr inner = tag "i" attr inner
 let p inner = tag "p" [] (flatten inner)
 let pClass class' inner = tag "p" ["class", class'] (flatten inner)
+let selectClassName class' name inner = tag "select" ["class", class'; "name", name] (flatten inner)
+let option value innertext = tag "option" ["value", value] (text innertext)
 
 let form inner = tag "form" ["method", "POST"] (flatten inner)
 let formAttr attr inner = tag "form" (("method", "POST") :: attr) (flatten inner)

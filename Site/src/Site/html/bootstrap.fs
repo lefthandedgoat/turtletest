@@ -40,6 +40,7 @@ let input_group inner = divClass "input-group" inner
 let input_form_control placeholder name value = inputClassPlaceholderName "form-control" placeholder name value [empty]
 let input_form_control_inner placeholder name value inner = inputClassPlaceholderName "form-control" placeholder name value inner
 let textarea_form_control placeholder name value = textareaClassPlaceholderName "form-control" name placeholder value
+let select_form_control name inner = selectClassName "form-control" name inner
 let input_group_button inner = spanClass "input-group-btn" inner
 let control_label inner = labelClass "col-sm-2 control-label" inner
 let button_primary href inner = aHrefAttr href ["class", "btn btn-primary"] inner
@@ -73,6 +74,14 @@ let label_textarea label' text' =
     control_label [ text label' ]
     sm8 [
       textarea_form_control label' label' text'
+    ]
+  ]
+
+let label_select label' (options : (int * string) list) =
+  form_group [
+    control_label [ text label' ]
+    sm8 [
+      select_form_control label' (options |> List.map (fun (id, value) -> option (string id) value))
     ]
   ]
 
