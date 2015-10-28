@@ -30,7 +30,7 @@ let home'' user = warbler (fun _ ->
 let applications'' user = warbler (fun _ ->
   let counts = fake.counts()
   let executions = fake.executions 8 ["Android"]
-  let application = fake.application
+  let application = data_applications.getById 1
   let suites = fake.suites
   OK <| applications.html user counts executions application suites)
 

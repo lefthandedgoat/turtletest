@@ -18,20 +18,20 @@ type ExecutionRow =
 type Application =
   {
     Name : string;
-    Address : string;
-    Documentation : string;
-    Owners : string;
-    Developers : string;
-    Notes : string;
+    Address : string option;
+    Documentation : string option;
+    Owners : string option;
+    Developers : string  option;
+    Notes : string option;
   }
 
 type Suite =
   {
     ApplicationName : string;
     Name : string;
-    Version : string;
-    Owners : string;
-    Notes : string;
+    Version : string option;
+    Owners : string option;
+    Notes : string option;
   }
 
 type TestCase =
@@ -39,14 +39,14 @@ type TestCase =
     ApplicationName : string;
     SuiteName : string;
     Name : string;
-    Version : string;
-    Owners : string;
-    Notes : string;
-    Requirements : string;
-    Steps : string;
-    Expected : string;
-    History : string;
-    Attachments : string;
+    Version : string option;
+    Owners : string option;
+    Notes : string option;
+    Requirements : string option;
+    Steps : string option;
+    Expected : string option;
+    History : string option;
+    Attachments : string option;
   }
 
 type RootResponse =
