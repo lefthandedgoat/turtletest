@@ -13,8 +13,8 @@ let suite_details (suite : types.Suite ) =
     header [ h3 suite.Name ]
     content [
       form_horizontal [
-        label_text "Application" suite.ApplicationName
-        label_text "Name" suite.Name
+        label_text "Application" (Some suite.ApplicationName)
+        label_text "Name" (Some suite.Name)
         label_text "Version" suite.Version
         label_text "Owners" suite.Owners
         label_textarea "Notes" suite.Notes

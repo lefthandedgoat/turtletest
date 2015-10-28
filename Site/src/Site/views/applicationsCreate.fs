@@ -10,11 +10,11 @@ let applications_details =
     header [ h3 "Create Application" ]
     content [
       form_horizontal [
-        label_text "Address" ""
-        label_text "Documentation" ""
-        label_text "Owners" ""
-        label_text "Developers" ""
-        label_textarea "Notes" ""
+        label_text "Address" None
+        label_text "Documentation" None
+        label_text "Owners" None
+        label_text "Developers" None
+        label_textarea "Notes" None
         form_group [ sm10 [ button_save ] ]
       ]
     ]

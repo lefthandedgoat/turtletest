@@ -11,10 +11,10 @@ let suite_details applications =
     content [
       form_horizontal [
         label_select "Application" applications
-        label_text "Name" ""
-        label_text "Version" ""
-        label_text "Owners" ""
-        label_textarea "Notes" ""
+        label_text "Name" None
+        label_text "Version" None
+        label_text "Owners" None
+        label_textarea "Notes" None
         form_group [ sm10 [ button_save ] ]
       ]
     ]
