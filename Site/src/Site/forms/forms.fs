@@ -10,6 +10,7 @@ type InterestedEmail = {
 let interestedEmail : Form<InterestedEmail> = Form ([],[])
 
 type NewApplication = {
+  Name : string;
   Address : string;
   Documentation : string;
   Owners : string;

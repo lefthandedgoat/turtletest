@@ -6,7 +6,7 @@ open html_bootstrap
 open types
 
 let application_create_button user =
-  button_create (paths.applicationsCreate_link user) [ text "Create"]
+  button_create (paths.applicationCreate_link user) [ text "Create"]
 
 let applications_details (application : types.Application ) =
   block_flat [

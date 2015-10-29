@@ -2,6 +2,7 @@ module data_applications
 
 open System
 open Npgsql
+open forms
 open types
 
 let firstOrNone s = s |> Seq.tryFind (fun _ -> true)
@@ -19,7 +20,7 @@ let nonQuery sql =
   use command = new NpgsqlCommand(sql, connection)
   command.ExecuteNonQuery() |> ignore
 
-let toApplication (reader : NpgsqlDataReader) =
+let toApplication (reader : NpgsqlDataReader) : Application list =
   [ while reader.Read() do
     yield {
       Name = reader.GetString(reader.GetOrdinal("name"))
@@ -32,10 +33,36 @@ let toApplication (reader : NpgsqlDataReader) =
     }
   ]
 
-let insertEmail email =
-  sprintf "INSERT INTO main_page (email)
-  VALUES ('%s')" email
-  |> nonQuery
+let insert (application : NewApplication) =
+  let sql = """
+INSERT INTO turtletest.Applications
+  (application_id
+   ,name
+   ,address
+   ,documentation
+   ,owners
+   ,developers
+   ,notes
+  ) VALUES (
+   DEFAULT
+   ,:name
+   ,:address
+   ,:documentation
+   ,:owners
+   ,:developers
+   ,:notes
+ ) RETURNING application_id;
+"""
+  use connection = new NpgsqlConnection("Server=127.0.0.1;User Id=turtletest; Password=taconacho;Database=turtletest;")
+  connection.Open()
+  use command = new NpgsqlCommand(sql, connection)
+  command.Parameters.AddWithValue("name", application.Name) |> ignore
+  command.Parameters.AddWithValue("address", application.Address) |> ignore
+  command.Parameters.AddWithValue("documentation", application.Documentation) |> ignore
+  command.Parameters.AddWithValue("owners", application.Owners) |> ignore
+  command.Parameters.AddWithValue("developers", application.Developers) |> ignore
+  command.Parameters.AddWithValue("notes", application.Notes) |> ignore
+  command.ExecuteScalar() |> string |> int
 
 let getById id =
   sprintf "SELECT * FROM turtletest.applications
