@@ -10,6 +10,7 @@ let applications_details =
     header [ h3 "Create Application" ]
     content [
       form_horizontal [
+        label_text "Name" None
         label_text "Address" None
         label_text "Documentation" None
         label_text "Owners" None

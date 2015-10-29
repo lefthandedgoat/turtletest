@@ -27,21 +27,22 @@ let home'' user = warbler (fun _ ->
   let executions = fake.executions 5 ["Android"; "IOS"; "Desktop"]
   OK <| home.html user counts executions)
 
-let applications'' user = warbler (fun _ ->
+let application'' (user, id) = warbler (fun _ ->
   let counts = fake.counts()
-  let executions = fake.executions 8 ["Android"]
-  let application = data_applications.getById 1
+  let application = data_applications.getById id
+  let executions = fake.executions 8 [application.Name]
   let suites = fake.suites
   OK <| applications.html user counts executions application suites)
 
-let applicationsCreate'' user =
+let applicationCreate'' user =
   let counts = fake.counts()
   choose [
     GET >>= warbler (fun _ ->
       OK <| applicationsCreate.html user counts)
     POST >>= bindToForm forms.newApplication (fun form ->
       printfn "%A" form
-      FOUND <| paths.applications_link user)
+      let id = data_applications.insert form
+      FOUND <| paths.application_link user id)
   ]
 
 let suites'' user = warbler (fun _ ->
@@ -93,13 +94,13 @@ let root'' =
 let webPart =
   choose [
     path paths.root >>= root''
-    pathScan paths.applicationsCreate applicationsCreate''
+    pathScan paths.applicationCreate applicationCreate''
     pathScan paths.suitesCreate suitesCreate''
     pathScan paths.testcasesCreate testcasesCreate''
 
     GET >>= choose [
       pathScan paths.home home''
-      pathScan paths.applications applications''
+      pathScan paths.application application''
       pathScan paths.suites suites''
       pathScan paths.testcases testcases''
       pathScan paths.executions executions''
