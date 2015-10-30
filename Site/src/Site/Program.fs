@@ -23,9 +23,13 @@ let bindToForm form handler =
     bindReq (bindForm form) handler BAD_REQUEST
 
 let home'' user = warbler (fun _ ->
-  let counts = fake.counts()
-  let executions = fake.executions 5 ["Android"; "IOS"; "Desktop"]
-  OK <| home.html user counts executions)
+  let user' = data_users.tryByName user
+  match user' with
+    | Some(user) ->
+      let counts = fake.counts()
+      let executions = fake.executions 5 ["Android"; "IOS"; "Desktop"]
+      OK <| home.html user.Name counts executions
+    | None -> Suave.Http.RequestErrors.NOT_FOUND "Page not found")
 
 let application'' (user, id) = warbler (fun _ ->
   let counts = fake.counts()
@@ -98,15 +102,15 @@ let webPart =
     pathScan paths.suitesCreate suitesCreate''
     pathScan paths.testcasesCreate testcasesCreate''
 
+    pathRegex "(.*)\.(css|png|gif|js|ico|woff|tff)" >>= Files.browseHome
+
     GET >>= choose [
-      pathScan paths.home home''
       pathScan paths.application application''
       pathScan paths.suites suites''
       pathScan paths.testcases testcases''
       pathScan paths.executions executions''
+      pathScan paths.home home''
     ]
-
-    pathRegex "(.*)\.(css|png|gif|js|ico|woff|tff)" >>= Files.browseHome
   ]
 
 startWebServer defaultConfig webPart

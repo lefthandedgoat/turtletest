@@ -9,6 +9,13 @@ type InterestedEmail = {
 
 let interestedEmail : Form<InterestedEmail> = Form ([],[])
 
+type NewUser = {
+  Name : string;
+  Email : string;
+}
+
+let newUser : Form<NewUser> = Form ([],[])
+
 type NewApplication = {
   Name : string;
   Address : string;
