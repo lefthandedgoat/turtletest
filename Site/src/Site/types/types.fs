@@ -15,6 +15,13 @@ type ExecutionRow =
     Percent : int
   }
 
+type User =
+  {
+    Id : int;
+    Name : string;
+    Email : string;
+  }
+
 type Application =
   {
     Name : string;
