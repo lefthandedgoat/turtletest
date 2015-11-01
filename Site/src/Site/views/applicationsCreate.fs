@@ -5,17 +5,19 @@ open html_common
 open html_bootstrap
 open types
 
+let empty = ""
+
 let applications_details =
   block_flat [
     header [ h3 "Create Application" ]
     content [
       form_horizontal [
-        label_text "Name" None
-        label_text "Address" None
-        label_text "Documentation" None
-        label_text "Owners" None
-        label_text "Developers" None
-        label_textarea "Notes" None
+        label_text "Name" empty
+        label_text "Address" empty
+        label_text "Documentation" empty
+        label_text "Owners" empty
+        label_text "Developers" empty
+        label_textarea "Notes" empty
         form_group [ sm10 [ button_save ] ]
       ]
     ]

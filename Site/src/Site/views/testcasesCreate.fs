@@ -5,6 +5,8 @@ open html_common
 open html_bootstrap
 open types
 
+let empty = ""
+
 let testcase_details applications suites =
   block_flat [
     header [ h3 "Create Test Case" ]
@@ -12,15 +14,15 @@ let testcase_details applications suites =
       form_horizontal [
         label_select "Application" applications
         label_select "Suite" suites
-        label_text "Name" None
-        label_text "Version" None
-        label_text "Owners" None
-        label_textarea "Notes" None
-        label_text "Requirements" None
-        label_text "Steps" None
-        label_text "Expected" None
-        label_text "History" None
-        label_text "Attachments" None
+        label_text "Name" empty
+        label_text "Version" empty
+        label_text "Owners" empty
+        label_textarea "Notes" empty
+        label_text "Requirements" empty
+        label_text "Steps" empty
+        label_text "Expected" empty
+        label_text "History" empty
+        label_text "Attachments" empty
         form_group [ sm10 [ button_save ] ]
       ]
     ]

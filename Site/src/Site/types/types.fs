@@ -17,43 +17,44 @@ type ExecutionRow =
 
 type User =
   {
-    Id : int;
-    Name : string;
-    Email : string;
+    Id : int
+    Name : string
+    Email : string
   }
 
 type Application =
   {
-    Name : string;
-    Address : string option;
-    Documentation : string option;
-    Owners : string option;
-    Developers : string  option;
-    Notes : string option;
+    Id : int
+    Name : string
+    Address : string
+    Documentation : string
+    Owners : string
+    Developers : string
+    Notes : string
   }
 
 type Suite =
   {
-    ApplicationName : string;
-    Name : string;
-    Version : string option;
-    Owners : string option;
-    Notes : string option;
+    ApplicationName : string
+    Name : string
+    Version : string
+    Owners : string
+    Notes : string
   }
 
 type TestCase =
   {
-    ApplicationName : string;
-    SuiteName : string;
-    Name : string;
-    Version : string option;
-    Owners : string option;
-    Notes : string option;
-    Requirements : string option;
-    Steps : string option;
-    Expected : string option;
-    History : string option;
-    Attachments : string option;
+    ApplicationName : string
+    SuiteName : string
+    Name : string
+    Version : string
+    Owners : string
+    Notes : string
+    Requirements : string
+    Steps : string
+    Expected : string
+    History : string
+    Attachments : string
   }
 
 type RootResponse =

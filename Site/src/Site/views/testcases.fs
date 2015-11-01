@@ -13,9 +13,9 @@ let testcase_details (testcase : types.TestCase ) =
     header [ h3 testcase.Name ]
     content [
       form_horizontal [
-        label_text "Application" (Some testcase.ApplicationName)
-        label_text "Suite" (Some testcase.SuiteName)
-        label_text "Name" (Some testcase.Name)
+        label_text "Application" testcase.ApplicationName
+        label_text "Suite" testcase.SuiteName
+        label_text "Name" testcase.Name
         label_text "Version" testcase.Version
         label_text "Owners" testcase.Owners
         label_textarea "Notes" testcase.Notes

@@ -19,3 +19,12 @@ let applications_datatable = """
   });
 </script>
 """
+
+let applications_bundle =
+  [
+    jquery_1_11_3_min
+    datatable_jquery_1_10_9_min
+    datatable_min
+    datatables_bootstrap_adapter
+    applications_datatable
+  ]
