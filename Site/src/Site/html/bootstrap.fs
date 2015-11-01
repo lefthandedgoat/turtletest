@@ -50,7 +50,6 @@ let button_create href inner = aHrefAttr href ["class", "btn btn-success pull-ri
 
 let textEmtpyForNone text' = match text' with Some(t) -> t | None -> ""
 let label_text_ahref_button label' text' button' =
-  let text' = textEmtpyForNone text'
   form_group [
     control_label [ text label' ]
     sm8 [
@@ -64,7 +63,6 @@ let label_text_ahref_button label' text' button' =
   ]
 
 let label_text label' text' =
-  let text' = textEmtpyForNone text'
   form_group [
     control_label [ text label' ]
     sm8 [
@@ -73,7 +71,6 @@ let label_text label' text' =
   ]
 
 let label_textarea label' text' =
-  let text' = textEmtpyForNone text'
   form_group [
     control_label [ text label' ]
     sm8 [

@@ -36,7 +36,7 @@ let application'' (user, id) = warbler (fun _ ->
   let application = data_applications.getById id
   let executions = fake.executions 8 [application.Name]
   let suites = fake.suites
-  OK <| applications.html user counts executions application suites)
+  OK <| applications.details user counts executions application suites)
 
 let applicationCreate'' user =
   let counts = fake.counts()
@@ -44,10 +44,22 @@ let applicationCreate'' user =
     GET >>= warbler (fun _ ->
       OK <| applicationsCreate.html user counts)
     POST >>= bindToForm forms.newApplication (fun form ->
-      printfn "%A" form
-      let id = data_applications.insert form
-      FOUND <| paths.application_link user id)
+      let user' = data_users.tryByName user
+      match user' with
+      | Some(user) ->
+        let id = data_applications.insert user.Id form
+        FOUND <| paths.application_link user.Name id
+      | None -> Suave.Http.RequestErrors.NOT_FOUND "Page not found")
   ]
+
+let applications'' user = warbler (fun _ ->
+  let user' = data_users.tryByName user
+  match user' with
+    | Some(user) ->
+      let counts = fake.counts()
+      let applications' = data_applications.getByUserId user.Id
+      OK <| applications.list user.Name counts applications'
+    | None -> Suave.Http.RequestErrors.NOT_FOUND "Page not found")
 
 let suites'' user = warbler (fun _ ->
   let counts = fake.counts()
@@ -106,6 +118,7 @@ let webPart =
 
     GET >>= choose [
       pathScan paths.application application''
+      pathScan paths.applications applications''
       pathScan paths.suites suites''
       pathScan paths.testcases testcases''
       pathScan paths.executions executions''

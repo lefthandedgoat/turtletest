@@ -13,8 +13,8 @@ let suite_details (suite : types.Suite ) =
     header [ h3 suite.Name ]
     content [
       form_horizontal [
-        label_text "Application" (Some suite.ApplicationName)
-        label_text "Name" (Some suite.Name)
+        label_text "Application" suite.ApplicationName
+        label_text "Name" suite.Name
         label_text "Version" suite.Version
         label_text "Owners" suite.Owners
         label_textarea "Notes" suite.Notes
@@ -40,21 +40,9 @@ let grid testcases =
 
 let suites_content user suite testcases =
   mcontent [
-    row_nomargin [
-      m12 [
-        suite_create_button user
-      ]
-    ]
-    row [
-      m12 [
-        suite_details suite
-      ]
-    ]
-    row [
-      m12 [
-        grid testcases
-      ]
-    ]
+    row_nomargin [ m12 [ suite_create_button user ] ]
+    row [ m12 [ suite_details suite ] ]
+    row [ m12 [ grid testcases ] ]
   ]
 
 let html user suite testcases counts =
@@ -66,11 +54,7 @@ let html user suite testcases counts =
           partial_sidebar.left_sidebar user counts
           suites_content user suite testcases
         ]
-        (text scripts.jquery_1_11_3_min)
-        (text scripts.datatable_jquery_1_10_9_min)
-        (text scripts.datatable_min)
-        (text scripts.datatables_bootstrap_adapter)
-        (text scripts.applications_datatable)
+        scripts.applications_bundle |> List.map (fun script -> text script) |> flatten
       ]
     ]
     |> xmlToString
