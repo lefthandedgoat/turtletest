@@ -6,6 +6,8 @@ open Suave.Html
 open html_common
 open types
 
+let removeSpace (value : string) = value.Replace(" ", "")
+
 let icon type' = italic ["class", (sprintf "fa fa-%s" type')] emptyText
 let wrapper inner = divId "cl-wrapper" inner
 let sidebar inner = divClass "cl-sidebar" inner
@@ -37,8 +39,9 @@ let sidebar_item inner = spanAttr ["class","sidebar-item"] inner
 let form_horizontal inner = formAttr ["class","form-horizontal"] inner
 let form_group inner = divClass "form-group" inner
 let input_group inner = divClass "input-group" inner
-let input_form_control placeholder name value = inputClassPlaceholderName "form-control" placeholder name value [empty]
-let input_form_control_inner placeholder name value inner = inputClassPlaceholderName "form-control" placeholder name value inner
+let input_form_control placeholder name value = inputClassPlaceholderNameType "form-control" placeholder (removeSpace name) "text" value [empty]
+let password_form_control placeholder name value = inputClassPlaceholderNameType "form-control" placeholder (removeSpace name) "password" value [empty]
+let input_form_control_inner placeholder name value inner = inputClassPlaceholderNameType "form-control" placeholder (removeSpace name) "text" value inner
 let textarea_form_control placeholder name value = textareaClassPlaceholderName "form-control" name placeholder value
 let select_form_control name inner = selectClassName "form-control" name inner
 let input_group_button inner = spanClass "input-group-btn" inner
@@ -46,6 +49,7 @@ let control_label inner = labelClass "col-sm-2 control-label" inner
 let button_primary href inner = aHrefAttr href ["class", "btn btn-primary"] inner
 let button_success href inner = aHrefAttr href ["class", "btn btn-success"] inner
 let button_save = inputAttr [ "value","Save"; "type","submit"; "class","btn btn-success pull-right"; ]
+let button_submit = inputAttr [ "value","Submit"; "type","submit"; "class","btn btn-success pull-right"; ]
 let button_create href inner = aHrefAttr href ["class", "btn btn-success pull-right"] inner
 
 let textEmtpyForNone text' = match text' with Some(t) -> t | None -> ""
@@ -67,6 +71,14 @@ let label_text label' text' =
     control_label [ text label' ]
     sm8 [
       input_form_control label' label' text'
+    ]
+  ]
+
+let label_password label' text' =
+  form_group [
+    control_label [ text label' ]
+    sm8 [
+      password_form_control label' label' text'
     ]
   ]
 

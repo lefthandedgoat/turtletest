@@ -12,6 +12,8 @@ let interestedEmail : Form<InterestedEmail> = Form ([],[])
 type NewUser = {
   Name : string;
   Email : string;
+  Password : string;
+  RepeatPassword : string;
 }
 
 let newUser : Form<NewUser> = Form ([],[])

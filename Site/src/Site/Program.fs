@@ -22,6 +22,15 @@ open types
 let bindToForm form handler =
     bindReq (bindForm form) handler BAD_REQUEST
 
+let register'' =
+  choose [
+    GET >>= warbler (fun _ ->
+      OK register.html)
+    POST >>= bindToForm forms.newUser (fun form ->
+      data_users.insert form |> ignore //ignore for now, in future return success/failure (duplicate username etc)
+      FOUND <| paths.home_link form.Name)
+  ]
+
 let home'' user = warbler (fun _ ->
   let user' = data_users.tryByName user
   match user' with
@@ -110,6 +119,7 @@ let root'' =
 let webPart =
   choose [
     path paths.root >>= root''
+    path paths.register >>= register''
     pathScan paths.applicationCreate applicationCreate''
     pathScan paths.suitesCreate suitesCreate''
     pathScan paths.testcasesCreate testcasesCreate''
