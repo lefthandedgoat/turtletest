@@ -23,6 +23,7 @@ let application_details (application : types.Application ) =
   ]
 
 let suites_grid suites =
+  let toTd row = row |> List.map(fun cell' -> td [text cell'])
   block_flat [
     header [ h3 "Suites" ]
     content [
@@ -34,14 +35,18 @@ let suites_grid suites =
           "Engine version"
           "CSS grade"
         ]
-        suites
+        suites toTd
     ]
   ]
 
-let grid applications =
-  let applications =
-    applications
-    |> List.map (fun application -> [string application.Id; application.Name; application.Owners; application.Developers])
+let grid user applications =
+  let toTd (app : Application) =
+    [
+      td [ aHref (paths.application_link user app.Id) [ text (string app.Id) ] ]
+      td [ text (string app.Name) ]
+      td [ text (string app.Owners) ]
+      td [ text (string app.Developers) ]
+    ]
   block_flat [
     header [ h3 "Applications" ]
     content [
@@ -52,7 +57,7 @@ let grid applications =
           "Owners"
           "Developers"
         ]
-        applications
+        applications toTd
     ]
   ]
 
@@ -67,7 +72,7 @@ let application_content user executionRows application suites =
 let applications_content user applications =
   mcontent [
     row_nomargin [ m12 [ application_create_button user ] ]
-    row [ m12 [ grid applications ] ]
+    row [ m12 [ grid user applications ] ]
   ]
 
 let details user counts executions application suites =

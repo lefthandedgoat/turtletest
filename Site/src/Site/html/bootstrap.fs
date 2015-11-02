@@ -98,13 +98,13 @@ let label_select label' (options : (int * string) list) =
     ]
   ]
 
-let table_bordered ths rows =
+let table_bordered ths (rows : 'a list) (toTd : 'a -> Xml list) =
   let table_bordered inner = tableClass "table table-bordered" inner
   table_responsive [
     table_bordered [
       thead [
         tr (ths |> List.map (fun th' -> th [text th']))
       ]
-      tbody (rows |> List.map (fun row' -> tr (row' |> List.map(fun cell' -> td [text cell']))))
+      tbody (rows |> List.map (fun row' -> tr (toTd row')))
     ]
   ]
