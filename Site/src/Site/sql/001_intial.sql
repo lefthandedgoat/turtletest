@@ -13,9 +13,9 @@ GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA turtletest TO turtletest;
 GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA turtletest TO turtletest;
 
 CREATE TABLE turtletest.Applications(
-  application_id SERIAL PRIMARY KEY NOT NULL,
-  user_id       integer NOT NULL REFERENCES turtletest.Users (user_id),
-  name          varchar(1024),
+  application_id SERIAL       PRIMARY KEY NOT NULL,
+  user_id       integer       NOT NULL REFERENCES turtletest.Users (user_id),
+  name          varchar(1024) NOT NULL,
   address       varchar(1024) NULL,
   documentation varchar(1024) NULL,
   owners        varchar(1024) NULL,
@@ -25,18 +25,11 @@ CREATE TABLE turtletest.Applications(
 CREATE INDEX applications_fk_users ON turtletest.Applications (user_id);
 
 CREATE TABLE turtletest.Users(
-  user_id SERIAL PRIMARY KEY NOT NULL,
-  name          varchar(256),
-  email         varchar(256));
-
-INSERT INTO turtletest.Users
-  (user_id
-   ,name
-   ,email
-  ) VALUES (
-   DEFAULT
-   ,'tony'
-   ,'tony@null.dev'
-  );
+  user_id       SERIAL       PRIMARY KEY NOT NULL,
+  name          varchar(256) NOT NULL UNIQUE,
+  email         varchar(256) NOT NULL,
+  password      varchar(60)  NOT NULL,
+  salt          char(22)     NOT NULL,
+  scheme        smallint     NOT NULL);
 
 CREATE INDEX users_name ON turtletest.Users (name);

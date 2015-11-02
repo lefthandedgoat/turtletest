@@ -65,8 +65,8 @@ let tdAttr attr inner = tag "td" attr (flatten inner)
 let labelClass class' inner = tag "label" ["class", class'] (flatten inner)
 let buttonClass class' inner = tag "button" ["class", class'] (flatten inner)
 let inputAttrInner attr inner = tag "input" attr (flatten inner)
-let inputClassPlaceholderName class' placeholder name value inner =
-  tag "input" ["class", class'; "placeholder", placeholder; "name", name; "value", value] (flatten inner)
+let inputClassPlaceholderNameType class' placeholder name type' value inner =
+  tag "input" ["class", class'; "placeholder", placeholder; "name", name; "value", value; "type", type'] (flatten inner)
 let textareaClassPlaceholder class' placeholder text' = tag "textarea" ["class", class'; "placeholder", placeholder; "rows", "4"] (text text')
 let textareaClassPlaceholderName class' name placeholder text' = tag "textarea" ["class", class'; "name", name; "placeholder", placeholder; "rows", "4"] (text text')
 let sectionId id inner = tag "section" ["id", id] (flatten inner)

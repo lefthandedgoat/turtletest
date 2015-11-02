@@ -35,10 +35,16 @@ INSERT INTO turtletest.Users
   (user_id
    ,name
    ,email
+   ,password
+   ,salt
+   ,scheme
   ) VALUES (
    DEFAULT
    ,:name
    ,:email
+   ,:password
+   ,:salt
+   ,:scheme
  ) RETURNING user_id;
 """
   use connection = new NpgsqlConnection("Server=127.0.0.1;User Id=turtletest; Password=taconacho;Database=turtletest;")
@@ -46,6 +52,9 @@ INSERT INTO turtletest.Users
   use command = new NpgsqlCommand(sql, connection)
   command.Parameters.AddWithValue("name", user.Name) |> ignore
   command.Parameters.AddWithValue("email", user.Email) |> ignore
+  command.Parameters.AddWithValue("password", user.Password) |> ignore
+  command.Parameters.AddWithValue("salt", "TODO ADD SALT.........") |> ignore
+  command.Parameters.AddWithValue("scheme", 1) |> ignore //TODO add scheme and all that
   command.ExecuteScalar() |> string |> int
 
 //todo : paramaterize to prevent sql injection

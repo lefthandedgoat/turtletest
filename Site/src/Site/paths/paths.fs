@@ -5,6 +5,8 @@ type StringIntPath = PrintfFormat<(string -> int -> string),unit,string,string,s
 
 let root = "/"
 
+let register = "/register"
+
 let home : StringPath = "/%s"
 let home_link user = sprintf "/%s" user
 
