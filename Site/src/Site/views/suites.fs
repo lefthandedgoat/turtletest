@@ -23,6 +23,7 @@ let suite_details (suite : types.Suite ) =
   ]
 
 let grid testcases =
+  let toTd row = row |> List.map(fun cell' -> td [text cell'])
   block_flat [
     header [ h3 "Test Cases" ]
     content [
@@ -34,7 +35,7 @@ let grid testcases =
           "Column 4"
           "Column 5"
         ]
-        testcases
+        testcases toTd
     ]
   ]
 
