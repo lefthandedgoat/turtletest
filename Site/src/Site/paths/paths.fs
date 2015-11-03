@@ -7,6 +7,9 @@ let root = "/"
 
 let register = "/register"
 
+let login = "/login"
+let logout = "/logout"
+
 let home : StringPath = "/%s"
 let home_link user = sprintf "/%s" user
 

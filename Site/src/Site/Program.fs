@@ -31,6 +31,17 @@ let register'' =
       FOUND <| paths.home_link form.Name)
   ]
 
+let login'' =
+  choose [
+    GET >>= warbler (fun _ ->
+      OK <| login.html false "")
+    POST >>= bindToForm forms.loginAttempt (fun form ->
+      let user = data_users.authenticate form.Email form.Password
+      match user with
+        | Some(u) -> FOUND <| paths.home_link u.Name
+        | None -> OK <| login.html true form.Email)
+  ]
+
 let home'' user = warbler (fun _ ->
   let user' = data_users.tryByName user
   match user' with
@@ -119,6 +130,7 @@ let root'' =
 let webPart =
   choose [
     path paths.root >>= root''
+    path paths.login >>= login''
     path paths.register >>= register''
     pathScan paths.applicationCreate applicationCreate''
     pathScan paths.suitesCreate suitesCreate''

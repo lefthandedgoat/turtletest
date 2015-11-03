@@ -58,6 +58,7 @@
     <Compile Include="views/partial_sidebar.fs" />
     <Compile Include="views/partial_tile.fs" />
     <Compile Include="views/register.fs" />
+    <Compile Include="views/login.fs" />
     <Compile Include="views/home.fs" />
     <Compile Include="views/applications.fs" />
     <Compile Include="views/applicationsCreate.fs" />

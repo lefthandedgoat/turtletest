@@ -6,6 +6,13 @@ open System
 open System.Text.RegularExpressions
 open System.Net.Mail
 
+type LoginAttempt = {
+  Email : string
+  Password : string
+}
+
+let loginAttempt : Form<LoginAttempt> = Form ([],[])
+
 type InterestedEmail = {
   Email : MailAddress
 }
