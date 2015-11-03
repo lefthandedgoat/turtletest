@@ -22,6 +22,11 @@ open types
 let bindToForm form handler =
     bindReq (bindForm form) handler BAD_REQUEST
 
+let sessionStore setF = context (fun x ->
+    match HttpContext.state x with
+    | Some state -> setF state
+    | None -> never)
+
 let register'' =
   choose [
     GET >>= warbler (fun _ ->
@@ -38,7 +43,11 @@ let login'' =
     POST >>= bindToForm forms.loginAttempt (fun form ->
       let user = data_users.authenticate form.Email form.Password
       match user with
-        | Some(u) -> FOUND <| paths.home_link u.Name
+        | Some(u) ->
+          Auth.authenticated Cookie.CookieLife.Session false
+          >>= statefulForSession
+          >>= sessionStore (fun store -> store.set "user_id" u.Id)
+          >>= request (fun _ -> FOUND <| paths.home_link u.Name)
         | None -> OK <| login.html true form.Email)
   ]
 
