@@ -24,6 +24,7 @@ let row inner = divClass "row" inner
 let row_nomargin inner = divClass "row no-margin-top" inner
 let m3sm6 inner = divClass "col-md-3 col-sm-6" inner
 let m12 inner = divClass "col-md-12" inner
+let sm2 inner = divClass "col-sm-2" inner
 let sm3 inner = divClass "col-sm-3" inner
 let sm6 inner = divClass "col-sm-6" inner
 let sm8 inner = divClass "col-sm-8" inner
@@ -107,4 +108,10 @@ let table_bordered ths (rows : 'a list) (toTd : 'a -> Xml list) =
       ]
       tbody (rows |> List.map (fun row' -> tr (toTd row')))
     ]
+  ]
+
+let stand_alone_error text' =
+  form_group [
+    sm2 [ emptyText ]
+    sm8 [ ulClass "parsley-errors-list" [ li [ text text'] ] ]
   ]

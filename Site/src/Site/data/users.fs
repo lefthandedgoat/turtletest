@@ -62,3 +62,11 @@ let tryByName name =
   sprintf "SELECT * FROM turtletest.users
   WHERE name = '%s'" name
   |> read toUser |> firstOrNone
+
+//todo all the salting and hashing blah blah
+//todo : paramaterize to prevent sql injection
+let authenticate email password =
+  sprintf "SELECT * FROM turtletest.users
+  WHERE email = '%s'
+  AND password = '%s'" email password
+  |> read toUser |> firstOrNone
