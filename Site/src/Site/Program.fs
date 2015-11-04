@@ -20,7 +20,8 @@ open html_bootstrap
 open types
 
 let bindToForm form handler =
-    bindReq (bindForm form) handler BAD_REQUEST
+  //todo since we manually handle errors, make bad request log errors and send you too an oops page
+  bindReq (bindForm form) handler BAD_REQUEST
 
 let sessionStore setF = context (fun x ->
     match HttpContext.state x with
@@ -31,24 +32,28 @@ let register'' =
   choose [
     GET >>= warbler (fun _ ->
       OK register.html)
-    POST >>= bindToForm forms.newUser (fun form ->
-      data_users.insert form |> ignore //ignore for now, in future return success/failure (duplicate username etc)
-      FOUND <| paths.home_link form.Name)
+    POST >>= bindToForm forms.newUser (fun newUser ->
+      let errors = forms.newUserValidation newUser
+      if errors.Length > 0
+      then BAD_REQUEST (sprintf "%A" errors)
+      else
+        data_users.insert newUser |> ignore //ignore for now, in future return success/failure (duplicate username etc)
+        FOUND <| paths.home_link newUser.Name)
   ]
 
 let login'' =
   choose [
     GET >>= warbler (fun _ ->
       OK <| login.html false "")
-    POST >>= bindToForm forms.loginAttempt (fun form ->
-      let user = data_users.authenticate form.Email form.Password
+    POST >>= bindToForm forms.loginAttempt (fun loginAttempt ->
+      let user = data_users.authenticate loginAttempt.Email loginAttempt.Password
       match user with
         | Some(u) ->
           Auth.authenticated Cookie.CookieLife.Session false
           >>= statefulForSession
           >>= sessionStore (fun store -> store.set "user_id" u.Id)
           >>= request (fun _ -> FOUND <| paths.home_link u.Name)
-        | None -> OK <| login.html true form.Email)
+        | None -> OK <| login.html true loginAttempt.Email)
   ]
 
 let home'' user = warbler (fun _ ->
@@ -72,11 +77,11 @@ let applicationCreate'' user =
   choose [
     GET >>= warbler (fun _ ->
       OK <| applicationsCreate.html user counts)
-    POST >>= bindToForm forms.newApplication (fun form ->
+    POST >>= bindToForm forms.newApplication (fun newApplication ->
       let user' = data_users.tryByName user
       match user' with
       | Some(user) ->
-        let id = data_applications.insert user.Id form
+        let id = data_applications.insert user.Id newApplication
         FOUND <| paths.application_link user.Name id
       | None -> Suave.Http.RequestErrors.NOT_FOUND "Page not found")
   ]
@@ -131,8 +136,8 @@ let executions'' user = warbler (fun _ ->
 let root'' =
   choose [
     GET >>= (OK <| root.html Get)
-    POST >>= bindToForm forms.interestedEmail (fun form ->
-      main_page_emails.insertEmail <| form.Email.ToString()
+    POST >>= bindToForm forms.interestedEmail (fun interestedEmail ->
+      main_page_emails.insertEmail <| interestedEmail.Email.ToString()
       OK <| root.html Success)
   ]
 
