@@ -32,15 +32,10 @@ let suite_content applications =
   ]
 
 let html user counts applications =
-  let html' =
-    html [
-      base_head "create suite"
-      body [
-        wrapper [
-          partial_sidebar.left_sidebar user counts
-          suite_content applications
-        ]
-      ]
+  base_html
+    "create suite"
+    [
+      partial_sidebar.left_sidebar user counts
+      suite_content applications
     ]
-    |> xmlToString
-  sprintf "<!DOCTYPE html>%s" html'
+    scripts.none
