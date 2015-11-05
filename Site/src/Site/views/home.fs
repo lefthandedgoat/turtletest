@@ -23,15 +23,10 @@ let home_content user counts executionRows =
   ]
 
 let html user counts executions =
-  let html' =
-    html [
-      base_head "home"
-      body [
-        wrapper [
-          partial_sidebar.left_sidebar user counts
-          home_content user counts executions
-        ]
-      ]
+  base_html
+    "home"
+    [
+      partial_sidebar.left_sidebar user counts
+      home_content user counts executions
     ]
-    |> xmlToString
-  sprintf "<!DOCTYPE html>%s" html'
+    scripts.none

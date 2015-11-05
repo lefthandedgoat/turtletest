@@ -55,15 +55,14 @@ let button_create href inner = aHrefAttr href ["class", "btn btn-success pull-ri
 
 let textEmtpyForNone text' = match text' with Some(t) -> t | None -> ""
 
-let base_html title content =
+let base_html title content scripts =
   let html' =
     html [
       base_head title
       body [
-        wrapper [
-          content
-        ]
+        wrapper content
       ]
+      scripts
     ]
     |> xmlToString
   sprintf "<!DOCTYPE html>%s" html'

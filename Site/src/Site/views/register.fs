@@ -30,7 +30,11 @@ let register_content =
     ]
   ]
 
-let html = base_html "register" register_content
+let html =
+  base_html
+    "register"
+    [register_content]
+    scripts.none
 
 let errored_user_details errors (newUser : forms.NewUser)=
   block_flat [
@@ -55,4 +59,8 @@ let error_register_content errors newUser =
     ]
   ]
 
-let error_html errors newUser = base_html "register" (error_register_content errors newUser)
+let error_html errors newUser =
+  base_html
+    "register"
+    [error_register_content errors newUser]
+    scripts.none
