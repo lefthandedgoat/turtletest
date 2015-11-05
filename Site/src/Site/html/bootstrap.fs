@@ -54,6 +54,20 @@ let button_submit = inputAttr [ "value","Submit"; "type","submit"; "class","btn 
 let button_create href inner = aHrefAttr href ["class", "btn btn-success pull-right"] inner
 
 let textEmtpyForNone text' = match text' with Some(t) -> t | None -> ""
+
+let base_html title content =
+  let html' =
+    html [
+      base_head title
+      body [
+        wrapper [
+          content
+        ]
+      ]
+    ]
+    |> xmlToString
+  sprintf "<!DOCTYPE html>%s" html'
+
 let label_text_ahref_button label' text' button' =
   form_group [
     control_label [ text label' ]
@@ -114,4 +128,30 @@ let stand_alone_error text' =
   form_group [
     sm2 [ emptyText ]
     sm8 [ ulClass "parsley-errors-list" [ li [ text text'] ] ]
+  ]
+
+let errorsOrEmptyText label errors =
+  let errors = errors |> List.filter (fun (prop, _) -> prop = (removeSpace label))
+  match errors with
+  | [] -> emptyText
+  | _ ->
+    errors |> List.map (fun (_, errorMessage) -> li [ text errorMessage])
+    |> ulClass "parsley-errors-list"
+
+let errored_label_text label' text' errors =
+  form_group [
+    control_label [ text label' ]
+    sm8 [
+      input_form_control label' label' text'
+      errorsOrEmptyText label' errors
+    ]
+  ]
+
+let errored_label_password label' text' errors =
+  form_group [
+    control_label [ text label' ]
+    sm8 [
+      password_form_control label' label' text'
+      errorsOrEmptyText label' errors
+    ]
   ]

@@ -35,7 +35,7 @@ let register'' =
     POST >>= bindToForm forms.newUser (fun newUser ->
       let errors = forms.newUserValidation newUser
       if errors.Length > 0
-      then BAD_REQUEST (sprintf "%A" errors)
+      then OK <| register.error_html errors newUser
       else
         data_users.insert newUser |> ignore //ignore for now, in future return success/failure (duplicate username etc)
         FOUND <| paths.home_link newUser.Name)
