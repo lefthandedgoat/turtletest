@@ -43,15 +43,10 @@ let testcase_content user testcase =
   ]
 
 let html user testcase counts =
-  let html' =
-    html [
-      base_head "suites"
-      body [
-        wrapper [
-          partial_sidebar.left_sidebar user counts
-          testcase_content user testcase
-        ]
-      ]
+  base_html
+    "test case"
+    [
+      partial_sidebar.left_sidebar user counts
+      testcase_content user testcase
     ]
-    |> xmlToString
-  sprintf "<!DOCTYPE html>%s" html'
+    scripts.none

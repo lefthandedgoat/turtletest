@@ -38,15 +38,10 @@ let testcase_content applications suites =
   ]
 
 let html user counts applications suites =
-  let html' =
-    html [
-      base_head "create test case"
-      body [
-        wrapper [
-          partial_sidebar.left_sidebar user counts
-          testcase_content applications suites
-        ]
-      ]
+  base_html
+    "create test case"
+    [
+      partial_sidebar.left_sidebar user counts
+      testcase_content applications suites
     ]
-    |> xmlToString
-  sprintf "<!DOCTYPE html>%s" html'
+    scripts.none
