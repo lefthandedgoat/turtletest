@@ -47,16 +47,10 @@ let suites_content user suite testcases =
   ]
 
 let html user suite testcases counts =
-  let html' =
-    html [
-      base_head "suites"
-      body [
-        wrapper [
-          partial_sidebar.left_sidebar user counts
-          suites_content user suite testcases
-        ]
-        scripts.applications_bundle |> List.map (fun script -> text script) |> flatten
-      ]
+  base_html
+    "suites"
+    [
+      partial_sidebar.left_sidebar user counts
+      suites_content user suite testcases
     ]
-    |> xmlToString
-  sprintf "<!DOCTYPE html>%s" html'
+    scripts.applications_bundle

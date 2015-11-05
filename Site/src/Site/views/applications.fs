@@ -76,31 +76,19 @@ let applications_content user applications =
   ]
 
 let details user counts executions application suites =
-  let html' =
-    html [
-      base_head "application - details"
-      body [
-        wrapper [
-          partial_sidebar.left_sidebar user counts
-          application_content user executions application suites
-        ]
-        scripts.applications_bundle |> List.map (fun script -> text script) |> flatten
-      ]
+  base_html
+    "application - details"
+    [
+      partial_sidebar.left_sidebar user counts
+      application_content user executions application suites
     ]
-    |> xmlToString
-  sprintf "<!DOCTYPE html>%s" html'
+    scripts.applications_bundle
 
 let list user counts (applications : Application list) =
-  let html' =
-    html [
-      base_head "applications"
-      body [
-        wrapper [
-          partial_sidebar.left_sidebar user counts
-          applications_content user applications
-        ]
-        scripts.applications_bundle |> List.map (fun script -> text script) |> flatten
-      ]
+  base_html
+    "applications"
+    [
+      partial_sidebar.left_sidebar user counts
+      applications_content user applications
     ]
-    |> xmlToString
-  sprintf "<!DOCTYPE html>%s" html'
+    scripts.applications_bundle

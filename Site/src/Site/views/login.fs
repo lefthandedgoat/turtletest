@@ -36,14 +36,7 @@ let login_content error email =
   ]
 
 let html error email =
-  let html' =
-    html [
-      base_head "login"
-      body [
-        wrapper [
-          login_content error email
-        ]
-      ]
-    ]
-    |> xmlToString
-  sprintf "<!DOCTYPE html>%s" html'
+  base_html
+    "register"
+    [login_content error email]
+    scripts.none
