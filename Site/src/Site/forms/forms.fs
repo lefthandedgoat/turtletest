@@ -36,13 +36,13 @@ type NewUser = {
   RepeatPassword : string;
 }
 
-let pattern = @"(\w){6,100}"
+let passwordPattern = @"(\w){6,100}"
 let nameRequired = (fun f -> String.IsNullOrWhiteSpace f.Name |> not), "Name", "Name is required"
 let nameMaxLength = (fun f -> f.Name.Length <= 64 ), "Name", "Name must be 64 characters or less"
 let emailValid = (fun f -> try MailAddress(f.Email)|> ignore; true with | _ -> false), "Email", "Email not valid"
 let passwordsMatch = (fun f -> f.Password = f.RepeatPassword), "Password", "Passwords must match"
 let passwordRegexMatch =
-  (fun f -> Regex(pattern).IsMatch(f.Password) && Regex(pattern).IsMatch(f.RepeatPassword)),
+  (fun f -> Regex(passwordPattern).IsMatch(f.Password) && Regex(passwordPattern).IsMatch(f.RepeatPassword)),
   "Password",
   "Password must between 6 and 100 characters"
 
@@ -67,6 +67,13 @@ type NewApplication = {
 }
 
 let newApplication : Form<NewApplication> = form
+
+let applicationNameRequired = (fun (app : NewApplication) -> String.IsNullOrWhiteSpace app.Name |> not), "Name", "Name is required"
+
+let newApplicationValidation newApplication =
+  [
+    applicationNameRequired
+  ] |> applyValidations newApplication
 
 type NewSuite = {
   Application : string;

@@ -78,12 +78,16 @@ let applicationCreate'' user =
     GET >>= warbler (fun _ ->
       OK <| applicationsCreate.html user counts)
     POST >>= bindToForm forms.newApplication (fun newApplication ->
-      let user' = data_users.tryByName user
-      match user' with
-      | Some(user) ->
-        let id = data_applications.insert user.Id newApplication
-        FOUND <| paths.application_link user.Name id
-      | None -> Suave.Http.RequestErrors.NOT_FOUND "Page not found")
+      let errors = forms.newApplicationValidation newApplication
+      if errors.Length > 0
+      then OK <| applicationsCreate.error_html user counts errors newApplication
+      else
+        let user' = data_users.tryByName user
+        match user' with
+        | Some(user) ->
+          let id = data_applications.insert user.Id newApplication
+          FOUND <| paths.application_link user.Name id
+        | None -> Suave.Http.RequestErrors.NOT_FOUND "Page not found")
   ]
 
 let applications'' user = warbler (fun _ ->
