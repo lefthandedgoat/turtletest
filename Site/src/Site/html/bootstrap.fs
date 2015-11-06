@@ -104,11 +104,11 @@ let label_textarea label' text' =
     ]
   ]
 
-let label_select label' (options : (int * string) list) =
+let label_select label' (options : (string * string) list) =
   form_group [
     control_label [ text label' ]
     sm8 [
-      select_form_control label' (options |> List.map (fun (id, value) -> option (string id) value))
+      select_form_control label' (options |> List.map (fun (id, value) -> option id value))
     ]
   ]
 
@@ -151,6 +151,19 @@ let errored_label_password label' text' errors =
     control_label [ text label' ]
     sm8 [
       password_form_control label' label' text'
+      errorsOrEmptyText label' errors
+    ]
+  ]
+
+let errored_label_select label' (options : (string * string) list) selected errors =
+  form_group [
+    control_label [ text label' ]
+    sm8 [
+      select_form_control label'
+        (options |> List.map (fun (id, value) ->
+                              if id = selected
+                              then selectedOption id value
+                              else option id value))
       errorsOrEmptyText label' errors
     ]
   ]

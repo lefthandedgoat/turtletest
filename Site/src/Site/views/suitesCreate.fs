@@ -39,3 +39,36 @@ let html user counts applications =
       suite_content applications
     ]
     scripts.none
+
+let error_suite_details applications errors (newSuite : forms.NewSuite) =
+  block_flat [
+    header [ h3 "Create Suite" ]
+    content [
+      form_horizontal [
+        errored_label_select "Application" applications newSuite.Application errors
+        errored_label_text "Name" newSuite.Name errors
+        errored_label_text "Version" newSuite.Version errors
+        errored_label_text "Owners" newSuite.Owners errors
+        label_textarea "Notes" empty
+        form_group [ sm10 [ button_save ] ]
+      ]
+    ]
+  ]
+
+let error_suite_content applications errors newSuite =
+  mcontent [
+    row [
+      m12 [
+        error_suite_details applications errors newSuite
+      ]
+    ]
+  ]
+
+let error_html user counts applications errors newSuite =
+  base_html
+    "create suite"
+    [
+      partial_sidebar.left_sidebar user counts
+      error_suite_content applications errors newSuite
+    ]
+    scripts.none

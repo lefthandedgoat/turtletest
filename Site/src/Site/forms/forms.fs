@@ -85,6 +85,15 @@ type NewSuite = {
 
 let newSuite : Form<NewSuite> = form
 
+let applicationRequired = (fun (suite : NewSuite) -> String.IsNullOrWhiteSpace suite.Application |> not), "Application", "Application is required"
+let suiteNameRequired = (fun (suite : NewSuite) -> String.IsNullOrWhiteSpace suite.Name |> not), "Name", "Name is required"
+
+let newSuiteValidation newSuite =
+  [
+    applicationRequired
+    suiteNameRequired
+  ] |> applyValidations newSuite
+
 type NewTestCase = {
   Application : string;
   Name : string;
