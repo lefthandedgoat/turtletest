@@ -131,9 +131,11 @@ let testcasesCreate'' user =
     GET >>= warbler (fun _ ->
       OK <| testcasesCreate.html user counts applications suites)
     //newSuiteValidation
-    POST >>= bindToForm forms.newTestCase (fun form ->
-      printfn "%A" form
-      FOUND <| paths.testcases_link user)
+    POST >>= bindToForm forms.newTestCase (fun newTestCase ->
+      let errors = forms.newTestCaseValidation newTestCase
+      if errors.Length > 0
+      then OK <| testcasesCreate.error_html user counts applications suites errors newTestCase
+      else FOUND <| paths.testcases_link user)
   ]
 
 let executions'' user = warbler (fun _ ->

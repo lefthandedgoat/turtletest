@@ -96,6 +96,7 @@ let newSuiteValidation newSuite =
 
 type NewTestCase = {
   Application : string;
+  Suite : string;
   Name : string;
   Version : string;
   Owners : string;
@@ -108,3 +109,14 @@ type NewTestCase = {
 }
 
 let newTestCase : Form<NewTestCase> = form
+
+let testCaseApplicationRequired = (fun (testCase : NewTestCase) -> String.IsNullOrWhiteSpace testCase.Application |> not), "Application", "Application is required"
+let testCaseSuiteRequired = (fun (testCase : NewTestCase) -> String.IsNullOrWhiteSpace testCase.Suite |> not), "Suite", "Suite is required"
+let testCaseNameRequired = (fun (testCase : NewTestCase) -> String.IsNullOrWhiteSpace testCase.Name |> not), "Name", "Name is required"
+
+let newTestCaseValidation newTestCase =
+  [
+    testCaseApplicationRequired
+    testCaseSuiteRequired
+    testCaseNameRequired
+  ] |> applyValidations newTestCase
