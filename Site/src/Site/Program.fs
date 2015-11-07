@@ -128,12 +128,17 @@ let applications'' user = warbler (fun _ ->
 
 let suite'' (user, id) = warbler (fun _ ->
   let counts = fake.counts()
-  let suite' = data_suites.getById id
-  match suite' with
-    | Some(suite') ->
-      let testcases = fake.testcases
-      OK <| suites.details user suite' testcases counts
-    | None -> Suave.Http.RequestErrors.NOT_FOUND "Page not found")
+  let user' = data_users.tryByName user
+  match user' with
+    | None -> Suave.Http.RequestErrors.NOT_FOUND "Page not found"
+    | Some(user) ->
+      let suite' = data_suites.getById id
+      match suite' with
+        | Some(suite') ->
+          let testcases = fake.testcases
+          let applications = data_applications.getByUserId user.Id
+          OK <| suites.details user.Name suite' testcases applications counts
+        | None -> Suave.Http.RequestErrors.NOT_FOUND "Page not found")
 
 let suiteCreate'' user =
   let counts = fake.counts()
@@ -156,6 +161,29 @@ let suiteCreate'' user =
               let id = data_suites.insert application.Id newSuite
               FOUND <| paths.suite_link user.Name id
             | None -> Suave.Http.RequestErrors.NOT_FOUND "Page not found")
+      ]
+
+let suiteEdit'' (user, id) =
+  let counts = fake.counts()
+  let user' = data_users.tryByName user
+  match user' with
+    | None -> Suave.Http.RequestErrors.NOT_FOUND "Page not found"
+    | Some(user) ->
+      let applications = data_applications.getByUserId user.Id
+      choose [
+        GET >>= warbler (fun _ ->
+          let suite' = data_suites.getById id
+          match suite' with
+          | Some(suite) ->
+            OK <| suiteEdit.html user.Name counts applications suite
+          | None -> Suave.Http.RequestErrors.NOT_FOUND "Page not found")
+        POST >>= bindToForm forms.editSuite (fun editSuite ->
+          let errors = forms.editSuiteValidation editSuite
+          if errors.Length > 0
+          then OK <| suiteEdit.error_html user.Name counts errors applications editSuite
+          else
+            data_suites.update id editSuite
+            FOUND <| paths.suite_link user.Name id)
       ]
 
 let suites'' user = warbler (fun _ ->
@@ -209,6 +237,7 @@ let webPart =
     pathScan paths.applicationCreate applicationCreate''
     pathScan paths.applicationEdit applicationEdit''
     pathScan paths.suiteCreate suiteCreate''
+    pathScan paths.suiteEdit suiteEdit''
     pathScan paths.testcasesCreate testcasesCreate''
 
     pathRegex "(.*)\.(css|png|gif|js|ico|woff|tff)" >>= Files.browseHome

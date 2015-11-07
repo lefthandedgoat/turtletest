@@ -49,7 +49,7 @@ INSERT INTO turtletest.Suites
   |> executeScalar
   |> string |> int
 
-let update (editSuite : forms.EditSuite) =
+let update suite_id (editSuite : forms.EditSuite) =
   let sql = """
 UPDATE turtletest.Suites
 SET
@@ -68,6 +68,7 @@ WHERE suite_id = :suite_id;
   |> param "version" editSuite.Version
   |> param "owners" editSuite.Owners
   |> param "notes" editSuite.Notes
+  |> param "suite_id" suite_id
   |> executeNonQuery
 
 let getById id =
