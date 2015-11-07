@@ -56,7 +56,7 @@ let error_testcase_details applications suites errors (newTestCase : forms.NewTe
         errored_label_text "Name" newTestCase.Name errors
         errored_label_text "Version" newTestCase.Version errors
         errored_label_text "Owners" newTestCase.Owners errors
-        label_textarea "Notes" newTestCase.Notes
+        errored_label_textarea "Notes" newTestCase.Notes errors
         errored_label_text "Requirements" newTestCase.Requirements errors
         errored_label_text "Steps" newTestCase.Steps errors
         errored_label_text "Expected" newTestCase.Expected errors
