@@ -52,6 +52,7 @@ let button_success href inner = aHrefAttr href ["class", "btn btn-success"] inne
 let button_save = inputAttr [ "value","Save"; "type","submit"; "class","btn btn-success pull-right"; ]
 let button_submit = inputAttr [ "value","Submit"; "type","submit"; "class","btn btn-success pull-right"; ]
 let button_create href inner = aHrefAttr href ["class", "btn btn-success pull-right"] inner
+let button_edit href inner = aHrefAttr href ["class", "btn btn-danger"] inner
 
 let textEmtpyForNone text' = match text' with Some(t) -> t | None -> ""
 
@@ -137,6 +138,20 @@ let errorsOrEmptyText label errors =
     errors |> List.map (fun (_, errorMessage) -> li [ text errorMessage])
     |> ulClass "parsley-errors-list"
 
+let errored_label_text_ahref_button label' text' button' errors =
+  form_group [
+    control_label [ text label' ]
+    sm8 [
+      input_group [
+        input_form_control label' label' text'
+        input_group_button [
+          button_primary text' [ text button' ]
+        ]
+      ]
+      errorsOrEmptyText label' errors
+    ]
+  ]
+
 let errored_label_text label' text' errors =
   form_group [
     control_label [ text label' ]
@@ -151,6 +166,15 @@ let errored_label_password label' text' errors =
     control_label [ text label' ]
     sm8 [
       password_form_control label' label' text'
+      errorsOrEmptyText label' errors
+    ]
+  ]
+
+let errored_label_textarea label' text' errors =
+  form_group [
+    control_label [ text label' ]
+    sm8 [
+      textarea_form_control label' label' text'
       errorsOrEmptyText label' errors
     ]
   ]

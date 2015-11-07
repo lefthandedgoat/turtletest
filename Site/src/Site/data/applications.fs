@@ -67,6 +67,30 @@ INSERT INTO turtletest.Applications
   command.Parameters.AddWithValue("notes", application.Notes) |> ignore
   command.ExecuteScalar() |> string |> int
 
+let update application_id (editApplication : forms.EditApplication) =
+  let sql = """
+UPDATE turtletest.Applications
+SET
+  name = :name
+  ,address = :address
+  ,documentation = :documentation
+  ,owners = :owners
+  ,developers = :developers
+  ,notes = :notes
+WHERE application_id = :application_id;
+"""
+  use connection = new NpgsqlConnection("Server=127.0.0.1;User Id=turtletest; Password=taconacho;Database=turtletest;")
+  connection.Open()
+  use command = new NpgsqlCommand(sql, connection)
+  command.Parameters.AddWithValue("name", editApplication.Name) |> ignore
+  command.Parameters.AddWithValue("address", editApplication.Address) |> ignore
+  command.Parameters.AddWithValue("documentation", editApplication.Documentation) |> ignore
+  command.Parameters.AddWithValue("owners", editApplication.Owners) |> ignore
+  command.Parameters.AddWithValue("developers", editApplication.Developers) |> ignore
+  command.Parameters.AddWithValue("notes", editApplication.Notes) |> ignore
+  command.Parameters.AddWithValue("application_id", application_id) |> ignore
+  command.ExecuteNonQuery() |> ignore
+
 let getById id =
   sprintf "SELECT * FROM turtletest.applications
   WHERE application_id = %i" id

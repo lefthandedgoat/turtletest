@@ -120,3 +120,21 @@ let newTestCaseValidation newTestCase =
     testCaseSuiteRequired
     testCaseNameRequired
   ] |> applyValidations newTestCase
+
+type EditApplication = {
+  Name : string;
+  Address : string;
+  Documentation : string;
+  Owners : string;
+  Developers : string;
+  Notes : string;
+}
+
+let editApplication : Form<EditApplication> = form
+
+let editApplicationNameRequired = (fun (app : EditApplication) -> String.IsNullOrWhiteSpace app.Name |> not), "Name", "Name is required"
+
+let editApplicationValidation editApplication =
+  [
+    editApplicationNameRequired
+  ] |> applyValidations editApplication

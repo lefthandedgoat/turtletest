@@ -90,6 +90,25 @@ let applicationCreate'' user =
         | None -> Suave.Http.RequestErrors.NOT_FOUND "Page not found")
   ]
 
+let applicationEdit'' (user, id) =
+  let counts = fake.counts()
+  choose [
+    GET >>= warbler (fun _ ->
+      let application = data_applications.getById id
+      OK <| applicationsEdit.html user counts application)
+    POST >>= bindToForm forms.editApplication (fun editApplication ->
+      let errors = forms.editApplicationValidation editApplication
+      if errors.Length > 0
+      then OK <| applicationsEdit.error_html user counts errors editApplication
+      else
+        let user' = data_users.tryByName user
+        match user' with
+        | Some(user) ->
+          data_applications.update id editApplication
+          FOUND <| paths.application_link user.Name id
+        | None -> Suave.Http.RequestErrors.NOT_FOUND "Page not found")
+  ]
+
 let applications'' user = warbler (fun _ ->
   let user' = data_users.tryByName user
   match user' with
@@ -158,6 +177,7 @@ let webPart =
     path paths.login >>= login''
     path paths.register >>= register''
     pathScan paths.applicationCreate applicationCreate''
+    pathScan paths.applicationEdit applicationEdit''
     pathScan paths.suitesCreate suitesCreate''
     pathScan paths.testcasesCreate testcasesCreate''
 

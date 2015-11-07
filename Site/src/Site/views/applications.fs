@@ -8,6 +8,9 @@ open types
 let application_create_button user =
   button_create (paths.applicationCreate_link user) [ text "Create"]
 
+let application_edit_button user id =
+  button_edit (paths.applicationEdit_link user id) [ text "Edit"]
+
 let application_details (application : types.Application ) =
   block_flat [
     header [ h3 application.Name ]
@@ -63,7 +66,7 @@ let grid user applications =
 
 let application_content user executionRows application suites =
   mcontent [
-    row_nomargin [ m12 [ application_create_button user ] ]
+    row_nomargin [ m12 [ application_edit_button user application.Id; application_create_button user ] ]
     row [ m12 [ application_details application ] ]
     row [ m12 [ suites_grid suites ] ]
     row [ m12 [ partial_executions.execution executionRows ] ]

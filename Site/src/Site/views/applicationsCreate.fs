@@ -41,7 +41,7 @@ let html user counts =
     ]
     scripts.none
 
-let error_applications_details errors (newApplication : forms.NewApplication )=
+let error_applications_details errors (newApplication : forms.NewApplication) =
   block_flat [
     header [ h3 "Create Application" ]
     content [
@@ -51,7 +51,7 @@ let error_applications_details errors (newApplication : forms.NewApplication )=
         errored_label_text "Documentation" newApplication.Documentation errors
         errored_label_text "Owners" newApplication.Owners errors
         errored_label_text "Developers" newApplication.Developers errors
-        label_textarea "Notes" newApplication.Notes
+        errored_label_textarea "Notes" newApplication.Notes errors
         form_group [ sm10 [ button_save ] ]
       ]
     ]
