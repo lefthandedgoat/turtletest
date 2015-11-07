@@ -96,7 +96,9 @@ let applications'' user = warbler (fun _ ->
     | Some(user) ->
       let counts = fake.counts()
       let applications' = data_applications.getByUserId user.Id
-      OK <| applications.list user.Name counts applications'
+      if applications'.Length = 0
+      then FOUND <| paths.applicationCreate_link user.Name
+      else OK <| applications.list user.Name counts applications'
     | None -> Suave.Http.RequestErrors.NOT_FOUND "Page not found")
 
 let suites'' user = warbler (fun _ ->
