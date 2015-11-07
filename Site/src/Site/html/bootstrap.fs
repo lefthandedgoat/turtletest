@@ -68,50 +68,64 @@ let base_html title content scripts =
     |> xmlToString
   sprintf "<!DOCTYPE html>%s" html'
 
-let label_text_ahref_button label' text' button' =
+let form_group_control_label_sm8 label' inner =
   form_group [
     control_label [ text label' ]
-    sm8 [
-      input_group [
-        input_form_control label' label' text'
-        input_group_button [
-          button_primary text' [ text button' ]
-        ]
+    sm8 inner
+  ]
+
+let private errorsOrEmptyText label errors =
+  let errors = errors |> List.filter (fun (prop, _) -> prop = (removeSpace label))
+  match errors with
+  | [] -> emptyText
+  | _ ->
+    errors |> List.map (fun (_, errorMessage) -> li [ text errorMessage])
+    |> ulClass "parsley-errors-list"
+
+let private base_label_text_ahref_button label' text' button' errors =
+  form_group_control_label_sm8 label' [
+    input_group [
+      input_form_control label' label' text'
+      input_group_button [
+        button_primary text' [ text button' ]
       ]
     ]
+    errorsOrEmptyText label' errors
   ]
 
-let label_text label' text' =
-  form_group [
-    control_label [ text label' ]
-    sm8 [
-      input_form_control label' label' text'
-    ]
+let private base_label_text label' text' errors =
+  form_group_control_label_sm8 label' [
+    input_form_control label' label' text'
+    errorsOrEmptyText label' errors
   ]
 
-let label_password label' text' =
-  form_group [
-    control_label [ text label' ]
-    sm8 [
-      password_form_control label' label' text'
-    ]
+let private base_label_password label' text' errors =
+  form_group_control_label_sm8 label' [
+    password_form_control label' label' text'
+    errorsOrEmptyText label' errors
   ]
 
-let label_textarea label' text' =
-  form_group [
-    control_label [ text label' ]
-    sm8 [
-      textarea_form_control label' label' text'
-    ]
+let private base_label_textarea label' text' errors =
+  form_group_control_label_sm8 label' [
+    textarea_form_control label' label' text'
+    errorsOrEmptyText label' errors
   ]
 
-let label_select label' (options : (string * string) list) =
-  form_group [
-    control_label [ text label' ]
-    sm8 [
-      select_form_control label' (options |> List.map (fun (id, value) -> option id value))
-    ]
+let base_label_select label' (options : (string * string) list) selected errors =
+  form_group_control_label_sm8 label' [
+    select_form_control label'
+      (options |> List.map (fun (id, value) ->
+                            if id = selected
+                            then selectedOption id value
+                            else option id value))
+    errorsOrEmptyText label' errors
   ]
+
+let label_text_ahref_button label' text' button' = base_label_text_ahref_button label' text' button' []
+let label_text label' text' = base_label_text label' text' []
+let label_password label' text' = base_label_password label' text' []
+let label_textarea label' text' = base_label_textarea label' text' []
+let label_select label' options = base_label_select label' options "" []
 
 let table_bordered ths (rows : 'a list) (toTd : 'a -> Xml list) =
   let table_bordered inner = tableClass "table table-bordered" inner
@@ -130,64 +144,8 @@ let stand_alone_error text' =
     sm8 [ ulClass "parsley-errors-list" [ li [ text text'] ] ]
   ]
 
-let errorsOrEmptyText label errors =
-  let errors = errors |> List.filter (fun (prop, _) -> prop = (removeSpace label))
-  match errors with
-  | [] -> emptyText
-  | _ ->
-    errors |> List.map (fun (_, errorMessage) -> li [ text errorMessage])
-    |> ulClass "parsley-errors-list"
-
-let errored_label_text_ahref_button label' text' button' errors =
-  form_group [
-    control_label [ text label' ]
-    sm8 [
-      input_group [
-        input_form_control label' label' text'
-        input_group_button [
-          button_primary text' [ text button' ]
-        ]
-      ]
-      errorsOrEmptyText label' errors
-    ]
-  ]
-
-let errored_label_text label' text' errors =
-  form_group [
-    control_label [ text label' ]
-    sm8 [
-      input_form_control label' label' text'
-      errorsOrEmptyText label' errors
-    ]
-  ]
-
-let errored_label_password label' text' errors =
-  form_group [
-    control_label [ text label' ]
-    sm8 [
-      password_form_control label' label' text'
-      errorsOrEmptyText label' errors
-    ]
-  ]
-
-let errored_label_textarea label' text' errors =
-  form_group [
-    control_label [ text label' ]
-    sm8 [
-      textarea_form_control label' label' text'
-      errorsOrEmptyText label' errors
-    ]
-  ]
-
-let errored_label_select label' (options : (string * string) list) selected errors =
-  form_group [
-    control_label [ text label' ]
-    sm8 [
-      select_form_control label'
-        (options |> List.map (fun (id, value) ->
-                              if id = selected
-                              then selectedOption id value
-                              else option id value))
-      errorsOrEmptyText label' errors
-    ]
-  ]
+let errored_label_text_ahref_button label' text' button' errors = base_label_text_ahref_button label' text' button' errors
+let errored_label_text label' text' errors = base_label_text label' text' errors
+let errored_label_password label' text' errors = base_label_password label' text' errors
+let errored_label_textarea label' text' errors = base_label_textarea label' text' errors
+let errored_label_select label' options selected errors = base_label_select label' options selected errors

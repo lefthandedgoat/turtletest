@@ -49,7 +49,7 @@ let error_suite_details applications errors (newSuite : forms.NewSuite) =
         errored_label_text "Name" newSuite.Name errors
         errored_label_text "Version" newSuite.Version errors
         errored_label_text "Owners" newSuite.Owners errors
-        label_textarea "Notes" empty
+        errored_label_textarea "Notes" newSuite.Notes errors
         form_group [ sm10 [ button_save ] ]
       ]
     ]
