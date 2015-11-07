@@ -64,7 +64,7 @@ let grid user applications =
     ]
   ]
 
-let application_content user executionRows application suites =
+let application_content user executionRows (application : types.Application) suites =
   mcontent [
     row_nomargin [ m12 [ application_edit_button user application.Id; application_create_button user ] ]
     row [ m12 [ application_details application ] ]

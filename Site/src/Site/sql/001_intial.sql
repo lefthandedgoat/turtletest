@@ -27,7 +27,6 @@ CREATE TABLE turtletest.Users(
   name          varchar(64)  NOT NULL UNIQUE,
   email         varchar(256) NOT NULL,
   password      varchar(60)  NOT NULL,
-  salt          char(22)     NOT NULL,
   scheme        smallint     NOT NULL);
 
 CREATE INDEX users_name ON turtletest.Users (name);

@@ -20,6 +20,8 @@ type User =
     Id : int
     Name : string
     Email : string
+    Password : string
+    Scheme : int
   }
 
 type Application =
@@ -55,6 +57,12 @@ type TestCase =
     Expected : string
     History : string
     Attachments : string
+  }
+
+type BCryptScheme =
+  {
+    Id : int
+    WorkFactor : int
   }
 
 type RootResponse =

@@ -5,8 +5,13 @@ open Npgsql
 open adohelper
 open forms
 open types
+open BCrypt.Net
 
 let connectionString = "Server=127.0.0.1;User Id=turtletest; Password=taconacho;Database=turtletest;"
+
+let bCryptSchemes : BCryptScheme list = [ { Id = 1; WorkFactor = 8; } ]
+let getBCryptScheme id = bCryptSchemes |> List.find (fun scheme -> scheme.Id = id)
+let currentBCryptScheme = 1
 
 let toUser (reader : NpgsqlDataReader) : types.User list =
   [ while reader.Read() do
@@ -14,6 +19,8 @@ let toUser (reader : NpgsqlDataReader) : types.User list =
       Id = getInt32 "user_id" reader
       Name = getString "name" reader
       Email = getString "email" reader
+      Password = getString "Password" reader
+      Scheme = getInt32 "scheme" reader
     }
   ]
 
@@ -24,29 +31,29 @@ INSERT INTO turtletest.Users
    ,name
    ,email
    ,password
-   ,salt
    ,scheme
   ) VALUES (
    DEFAULT
    ,:name
    ,:email
    ,:password
-   ,:salt
    ,:scheme
  ) RETURNING user_id;
 """
+  let bCryptScheme = getBCryptScheme currentBCryptScheme
+  let salt = BCrypt.GenerateSalt(bCryptScheme.WorkFactor)
+  let password = BCrypt.HashPassword(user.Password, salt)
+
   use connection = connection connectionString
   use command = command connection sql
   command
   |> param "name" user.Name
   |> param "email" user.Email
-  |> param "password" user.Password
-  |> param "salt" "TODO ADD SALT........."
-  |> param "scheme" 1 //TODO add scheme and all that
+  |> param "password" password
+  |> param "scheme" bCryptScheme.Id
   |> executeScalar
   |> string |> int
 
-//todo : paramaterize to prevent sql injection
 let tryByName name =
   let sql = """
 SELECT * FROM turtletest.users
@@ -59,18 +66,22 @@ WHERE name = :name
   |> read toUser
   |> firstOrNone
 
-//todo all the salting and hashing blah blah
-//todo : paramaterize to prevent sql injection
 let authenticate email password =
   let sql = """
 SELECT * FROM turtletest.users
 WHERE email = :email
-AND password = :password
 """
   use connection = connection connectionString
   use command = command connection sql
-  command
-  |> param "email" email
-  |> param "password" password
-  |> read toUser
-  |> firstOrNone
+  let user =
+    command
+    |> param "email" email
+    |> read toUser
+    |> firstOrNone
+  match user with
+    | None -> None
+    | Some(user) ->
+      let verified = BCrypt.Verify(password, user.Password)
+      if verified
+      then Some(user)
+      else None
