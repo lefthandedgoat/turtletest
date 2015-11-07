@@ -2,30 +2,18 @@ module data_users
 
 open System
 open Npgsql
+open adohelper
 open forms
 open types
 
-let firstOrNone s = s |> Seq.tryFind (fun _ -> true)
-
-let read toFunc sql =
-  use connection = new NpgsqlConnection("Server=127.0.0.1;User Id=turtletest; Password=taconacho;Database=turtletest;")
-  connection.Open()
-  use command = new NpgsqlCommand(sql, connection)
-  use reader = command.ExecuteReader()
-  toFunc reader
-
-let nonQuery sql =
-  use connection = new NpgsqlConnection("Server=127.0.0.1;User Id=turtletest; Password=taconacho;Database=turtletest;")
-  connection.Open()
-  use command = new NpgsqlCommand(sql, connection)
-  command.ExecuteNonQuery() |> ignore
+let connectionString = "Server=127.0.0.1;User Id=turtletest; Password=taconacho;Database=turtletest;"
 
 let toUser (reader : NpgsqlDataReader) : types.User list =
   [ while reader.Read() do
     yield {
-      Id = reader.GetInt32(reader.GetOrdinal("user_id"))
-      Name = reader.GetString(reader.GetOrdinal("name"))
-      Email = reader.GetString(reader.GetOrdinal("email"))
+      Id = getInt32 "user_id" reader
+      Name = getString "name" reader
+      Email = getString "email" reader
     }
   ]
 
@@ -47,26 +35,42 @@ INSERT INTO turtletest.Users
    ,:scheme
  ) RETURNING user_id;
 """
-  use connection = new NpgsqlConnection("Server=127.0.0.1;User Id=turtletest; Password=taconacho;Database=turtletest;")
-  connection.Open()
-  use command = new NpgsqlCommand(sql, connection)
-  command.Parameters.AddWithValue("name", user.Name) |> ignore
-  command.Parameters.AddWithValue("email", user.Email) |> ignore
-  command.Parameters.AddWithValue("password", user.Password) |> ignore
-  command.Parameters.AddWithValue("salt", "TODO ADD SALT.........") |> ignore
-  command.Parameters.AddWithValue("scheme", 1) |> ignore //TODO add scheme and all that
-  command.ExecuteScalar() |> string |> int
+  use connection = connection connectionString
+  use command = command connection sql
+  command
+  |> param "name" user.Name
+  |> param "email" user.Email
+  |> param "password" user.Password
+  |> param "salt" "TODO ADD SALT........."
+  |> param "scheme" 1 //TODO add scheme and all that
+  |> executeScalar
+  |> string |> int
 
 //todo : paramaterize to prevent sql injection
 let tryByName name =
-  sprintf "SELECT * FROM turtletest.users
-  WHERE name = '%s'" name
-  |> read toUser |> firstOrNone
+  let sql = """
+SELECT * FROM turtletest.users
+WHERE name = :name
+"""
+  use connection = connection connectionString
+  use command = command connection sql
+  command
+  |> param "name" name
+  |> read toUser
+  |> firstOrNone
 
 //todo all the salting and hashing blah blah
 //todo : paramaterize to prevent sql injection
 let authenticate email password =
-  sprintf "SELECT * FROM turtletest.users
-  WHERE email = '%s'
-  AND password = '%s'" email password
-  |> read toUser |> firstOrNone
+  let sql = """
+SELECT * FROM turtletest.users
+WHERE email = :email
+AND password = :password
+"""
+  use connection = connection connectionString
+  use command = command connection sql
+  command
+  |> param "email" email
+  |> param "password" password
+  |> read toUser
+  |> firstOrNone
