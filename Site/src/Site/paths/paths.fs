@@ -25,11 +25,14 @@ let applicationCreate_link user = sprintf "/%s/application/create" user
 let applicationEdit : StringIntPath = "/%s/application/edit/%i"
 let applicationEdit_link user id = sprintf "/%s/application/edit/%i" user id
 
+let suite : StringIntPath = "/%s/suite/%i"
+let suite_link user id = sprintf "/%s/suite/%i" user id
+
 let suites : StringPath = "/%s/suites"
 let suites_link user = sprintf "/%s/suites" user
 
-let suitesCreate : StringPath = "/%s/suites/create"
-let suitesCreate_link user = sprintf "/%s/suites/create" user
+let suiteCreate : StringPath = "/%s/suite/create"
+let suiteCreate_link user = sprintf "/%s/suite/create" user
 
 let testcases : StringPath = "/%s/testcases"
 let testcases_link user = sprintf "/%s/testcases" user

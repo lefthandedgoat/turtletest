@@ -36,7 +36,8 @@ let application : Application =
 
 let suite : Suite =
   {
-    ApplicationName = "Android"
+    Id = 1
+    ApplicationId = 1
     Name = "Android Login"
     Version = "1.1"
     Owners = empty

@@ -67,10 +67,13 @@ let home'' user = warbler (fun _ ->
 
 let application'' (user, id) = warbler (fun _ ->
   let counts = fake.counts()
-  let application = data_applications.getById id
-  let executions = fake.executions 8 [application.Name]
-  let suites = fake.suites
-  OK <| applications.details user counts executions application suites)
+  let application' = data_applications.getById id
+  match application' with
+    | Some(application) ->
+      let executions = fake.executions 8 [application.Name]
+      let suites = data_suites.getByApplicationId application.Id
+      OK <| applications.details user counts executions application suites
+    | None -> Suave.Http.RequestErrors.NOT_FOUND "Page not found")
 
 let applicationCreate'' user =
   let counts = fake.counts()
@@ -94,8 +97,11 @@ let applicationEdit'' (user, id) =
   let counts = fake.counts()
   choose [
     GET >>= warbler (fun _ ->
-      let application = data_applications.getById id
-      OK <| applicationsEdit.html user counts application)
+      let application' = data_applications.getById id
+      match application' with
+      | Some(application) ->
+        OK <| applicationsEdit.html user counts application
+      | None -> Suave.Http.RequestErrors.NOT_FOUND "Page not found")
     POST >>= bindToForm forms.editApplication (fun editApplication ->
       let errors = forms.editApplicationValidation editApplication
       if errors.Length > 0
@@ -120,24 +126,48 @@ let applications'' user = warbler (fun _ ->
       else OK <| applications.list user.Name counts applications'
     | None -> Suave.Http.RequestErrors.NOT_FOUND "Page not found")
 
-let suites'' user = warbler (fun _ ->
+let suite'' (user, id) = warbler (fun _ ->
   let counts = fake.counts()
-  let suite = fake.suite
-  let testcases = fake.testcases
-  OK <| suites.html user suite testcases counts)
+  let suite' = data_suites.getById id
+  match suite' with
+    | Some(suite') ->
+      let testcases = fake.testcases
+      OK <| suites.details user suite' testcases counts
+    | None -> Suave.Http.RequestErrors.NOT_FOUND "Page not found")
 
-let suitesCreate'' user =
+let suiteCreate'' user =
   let counts = fake.counts()
-  let applications = fake.applicationsOptions
-  choose [
-    GET >>= warbler (fun _ ->
-      OK <| suitesCreate.html user counts applications)
-    POST >>= bindToForm forms.newSuite (fun newSuite ->
-      let errors = forms.newSuiteValidation newSuite
-      if errors.Length > 0
-      then OK <| suitesCreate.error_html user counts applications errors newSuite
-      else FOUND <| paths.suites_link user)
-  ]
+  let user' = data_users.tryByName user
+  match user' with
+    | None -> Suave.Http.RequestErrors.NOT_FOUND "Page not found"
+    | Some(user) ->
+      let applications = data_applications.getByUserId user.Id
+      choose [
+        GET >>= warbler (fun _ ->
+          OK <| suitesCreate.html user.Name counts applications)
+        POST >>= bindToForm forms.newSuite (fun newSuite ->
+          let errors = forms.newSuiteValidation newSuite
+          if errors.Length > 0
+          then OK <| suitesCreate.error_html user.Name counts applications errors newSuite
+          else
+            let application' = data_applications.getById (int newSuite.Application)
+            match application' with
+            | Some(application) ->
+              let id = data_suites.insert application.Id newSuite
+              FOUND <| paths.suite_link user.Name id
+            | None -> Suave.Http.RequestErrors.NOT_FOUND "Page not found")
+      ]
+
+let suites'' user = warbler (fun _ ->
+  let user' = data_users.tryByName user
+  match user' with
+    | Some(user) ->
+      let counts = fake.counts()
+      let suites' = data_suites.getByUserId user.Id
+      if suites'.Length = 0
+      then FOUND <| paths.suiteCreate_link user.Name
+      else OK <| suites.list user.Name counts suites'
+    | None -> Suave.Http.RequestErrors.NOT_FOUND "Page not found")
 
 let testcases'' user = warbler (fun _ ->
   let counts = fake.counts()
@@ -178,7 +208,7 @@ let webPart =
     path paths.register >>= register''
     pathScan paths.applicationCreate applicationCreate''
     pathScan paths.applicationEdit applicationEdit''
-    pathScan paths.suitesCreate suitesCreate''
+    pathScan paths.suiteCreate suiteCreate''
     pathScan paths.testcasesCreate testcasesCreate''
 
     pathRegex "(.*)\.(css|png|gif|js|ico|woff|tff)" >>= Files.browseHome
@@ -186,6 +216,7 @@ let webPart =
     GET >>= choose [
       pathScan paths.application application''
       pathScan paths.applications applications''
+      pathScan paths.suite suite''
       pathScan paths.suites suites''
       pathScan paths.testcases testcases''
       pathScan paths.executions executions''

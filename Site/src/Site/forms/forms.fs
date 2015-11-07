@@ -138,3 +138,29 @@ let editApplicationValidation editApplication =
   [
     editApplicationNameRequired
   ] |> applyValidations editApplication
+
+type EditSuite = {
+  Application : string;
+  Name : string;
+  Version : string;
+  Owners : string;
+  Notes : string;
+}
+
+let editSuite : Form<EditSuite> = form
+
+let editSuiteNameRequired = (fun (suite : EditSuite) -> String.IsNullOrWhiteSpace suite.Name |> not), "Name", "Name is required"
+let editSuiteApplicationRequired = (fun (suite : EditSuite) -> String.IsNullOrWhiteSpace suite.Name |> not), "Application", "Application is required"
+let editSuiteApplicationNumeric =
+  (fun (suite : EditSuite) ->
+    let canParse, _ = System.Int32.TryParse(suite.Application)
+    canParse)
+  ,"Application"
+  ,"Application is not a valid number"
+
+let editSuiteValidation editSuite =
+  [
+    editSuiteNameRequired
+    editSuiteApplicationRequired
+    editSuiteApplicationNumeric
+  ] |> applyValidations editSuite

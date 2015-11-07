@@ -90,7 +90,7 @@ WHERE application_id = :application_id
   command
   |> param "application_id" id
   |> read toApplication
-  |> List.head
+  |> firstOrNone
 
 let getByUserId user_id =
   let sql = """
