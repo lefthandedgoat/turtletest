@@ -126,6 +126,7 @@ let label_text label' text' = base_label_text label' text' []
 let label_password label' text' = base_label_password label' text' []
 let label_textarea label' text' = base_label_textarea label' text' []
 let label_select label' options = base_label_select label' options "" []
+let label_select_selected label' options selected = base_label_select label' options selected []
 
 let table_bordered ths (rows : 'a list) (toTd : 'a -> Xml list) =
   let table_bordered inner = tableClass "table table-bordered" inner

@@ -7,17 +7,12 @@ open types
 
 let empty = ""
 
-let applicationsToSelect applications =
-  applications
-  |> List.map (fun (app : Application) -> string app.Id, app.Name)
-  |> List.sortBy (fun (_, name) -> name)
-
 let suite_details applications =
   block_flat [
     header [ h3 "Create Suite" ]
     content [
       form_horizontal [
-        label_select "Application" (applicationsToSelect applications)
+        label_select "Application" (suites.applicationsToSelect applications)
         label_text "Name" empty
         label_text "Version" empty
         label_text "Owners" empty
@@ -50,7 +45,7 @@ let error_suite_details applications errors (newSuite : forms.NewSuite) =
     header [ h3 "Create Suite" ]
     content [
       form_horizontal [
-        errored_label_select "Application" (applicationsToSelect applications) newSuite.Application errors
+        errored_label_select "Application" (suites.applicationsToSelect applications) newSuite.Application errors
         errored_label_text "Name" newSuite.Name errors
         errored_label_text "Version" newSuite.Version errors
         errored_label_text "Owners" newSuite.Owners errors
