@@ -25,18 +25,23 @@ let application_details (application : types.Application ) =
     ]
   ]
 
-let suites_grid suites =
-  let toTd row = row |> List.map(fun cell' -> td [text cell'])
+let suites_grid user suites =
+  let toTd (suite : Suite) =
+    [
+      td [ aHref (paths.suite_link user suite.Id) [ text (string suite.Id) ] ]
+      td [ text (string suite.Name) ]
+      td [ text (string suite.Version) ]
+      td [ text (string suite.Owners) ]
+    ]
   block_flat [
     header [ h3 "Suites" ]
     content [
       table_bordered
         [
-          "Rendering engine"
-          "Browser"
-          "Platform(s)"
-          "Engine version"
-          "CSS grade"
+          "Id"
+          "Name"
+          "Version"
+          "Owners"
         ]
         suites toTd
     ]
@@ -68,7 +73,7 @@ let application_content user executionRows (application : types.Application) sui
   mcontent [
     row_nomargin [ m12 [ application_edit_button user application.Id; application_create_button user ] ]
     row [ m12 [ application_details application ] ]
-    row [ m12 [ suites_grid suites ] ]
+    row [ m12 [ suites_grid user suites ] ]
     row [ m12 [ partial_executions.execution executionRows ] ]
   ]
 

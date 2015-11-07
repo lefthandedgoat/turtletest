@@ -1,5 +1,11 @@
 module types
 
+type BCryptScheme =
+  {
+    Id : int
+    WorkFactor : int
+  }
+
 type Counts =
   {
     Applications : int
@@ -37,7 +43,8 @@ type Application =
 
 type Suite =
   {
-    ApplicationName : string
+    Id : int
+    ApplicationId : int
     Name : string
     Version : string
     Owners : string
@@ -57,12 +64,6 @@ type TestCase =
     Expected : string
     History : string
     Attachments : string
-  }
-
-type BCryptScheme =
-  {
-    Id : int
-    WorkFactor : int
   }
 
 type RootResponse =
