@@ -2,34 +2,22 @@ module data_applications
 
 open System
 open Npgsql
+open adohelper
 open forms
 open types
 
-let firstOrNone s = s |> Seq.tryFind (fun _ -> true)
-
-let read toFunc sql =
-  use connection = new NpgsqlConnection("Server=127.0.0.1;User Id=turtletest; Password=taconacho;Database=turtletest;")
-  connection.Open()
-  use command = new NpgsqlCommand(sql, connection)
-  use reader = command.ExecuteReader()
-  toFunc reader
-
-let nonQuery sql =
-  use connection = new NpgsqlConnection("Server=127.0.0.1;User Id=turtletest; Password=taconacho;Database=turtletest;")
-  connection.Open()
-  use command = new NpgsqlCommand(sql, connection)
-  command.ExecuteNonQuery() |> ignore
+let connectionString = "Server=127.0.0.1;User Id=turtletest; Password=taconacho;Database=turtletest;"
 
 let toApplication (reader : NpgsqlDataReader) : Application list =
   [ while reader.Read() do
     yield {
-      Id = reader.GetInt32(reader.GetOrdinal("application_id"))
-      Name = reader.GetString(reader.GetOrdinal("name"))
-      Address = reader.GetString(reader.GetOrdinal("address"))
-      Documentation = reader.GetString(reader.GetOrdinal("documentation"))
-      Owners = reader.GetString(reader.GetOrdinal("owners"))
-      Developers = reader.GetString(reader.GetOrdinal("developers"))
-      Notes = reader.GetString(reader.GetOrdinal("notes"))
+      Id = getInt32 "application_id" reader
+      Name = getString "name" reader
+      Address = getString "address" reader
+      Documentation = getString "documentation" reader
+      Owners = getString "owners" reader
+      Developers = getString "developers" reader
+      Notes = getString "notes" reader
     }
   ]
 
@@ -55,17 +43,18 @@ INSERT INTO turtletest.Applications
    ,:notes
  ) RETURNING application_id;
 """
-  use connection = new NpgsqlConnection("Server=127.0.0.1;User Id=turtletest; Password=taconacho;Database=turtletest;")
-  connection.Open()
-  use command = new NpgsqlCommand(sql, connection)
-  command.Parameters.AddWithValue("name", application.Name) |> ignore
-  command.Parameters.AddWithValue("user_id", user_id) |> ignore
-  command.Parameters.AddWithValue("address", application.Address) |> ignore
-  command.Parameters.AddWithValue("documentation", application.Documentation) |> ignore
-  command.Parameters.AddWithValue("owners", application.Owners) |> ignore
-  command.Parameters.AddWithValue("developers", application.Developers) |> ignore
-  command.Parameters.AddWithValue("notes", application.Notes) |> ignore
-  command.ExecuteScalar() |> string |> int
+  use connection = connection connectionString
+  use command = command connection sql
+  command
+  |> param "name" application.Name
+  |> param "user_id" user_id
+  |> param "address" application.Address
+  |> param "documentation" application.Documentation
+  |> param "owners" application.Owners
+  |> param "developers" application.Developers
+  |> param "notes" application.Notes
+  |> executeScalar
+  |> string |> int
 
 let update application_id (editApplication : forms.EditApplication) =
   let sql = """
@@ -79,24 +68,37 @@ SET
   ,notes = :notes
 WHERE application_id = :application_id;
 """
-  use connection = new NpgsqlConnection("Server=127.0.0.1;User Id=turtletest; Password=taconacho;Database=turtletest;")
-  connection.Open()
-  use command = new NpgsqlCommand(sql, connection)
-  command.Parameters.AddWithValue("name", editApplication.Name) |> ignore
-  command.Parameters.AddWithValue("address", editApplication.Address) |> ignore
-  command.Parameters.AddWithValue("documentation", editApplication.Documentation) |> ignore
-  command.Parameters.AddWithValue("owners", editApplication.Owners) |> ignore
-  command.Parameters.AddWithValue("developers", editApplication.Developers) |> ignore
-  command.Parameters.AddWithValue("notes", editApplication.Notes) |> ignore
-  command.Parameters.AddWithValue("application_id", application_id) |> ignore
-  command.ExecuteNonQuery() |> ignore
+  use connection = connection connectionString
+  use command = command connection sql
+  command
+  |> param "name" editApplication.Name
+  |> param "address" editApplication.Address
+  |> param "documentation" editApplication.Documentation
+  |> param "owners" editApplication.Owners
+  |> param "developers" editApplication.Developers
+  |> param "notes" editApplication.Notes
+  |> param "application_id" application_id
+  |> executeNonQuery
 
 let getById id =
-  sprintf "SELECT * FROM turtletest.applications
-  WHERE application_id = %i" id
-  |> read toApplication |> List.head
+  let sql = """
+SELECT * FROM turtletest.applications
+WHERE application_id = :application_id
+"""
+  use connection = connection connectionString
+  use command = command connection sql
+  command
+  |> param "application_id" id
+  |> read toApplication
+  |> List.head
 
 let getByUserId user_id =
-  sprintf "SELECT * FROM turtletest.applications
-  WHERE user_id = %i" user_id
+  let sql = """
+SELECT * FROM turtletest.applications
+WHERE user_id = :user_id
+"""
+  use connection = connection connectionString
+  use command = command connection sql
+  command
+  |> param "user_id" user_id
   |> read toApplication

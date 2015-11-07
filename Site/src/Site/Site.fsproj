@@ -48,6 +48,7 @@
     <Compile Include="types/types.fs" />
     <Compile Include="forms/forms.fs" />
     <Compile Include="data/fake.fs" />
+    <Compile Include="data/adohelper.fs" />
     <Compile Include="data/main_page_emails.fs" />
     <Compile Include="data/applications.fs" />
     <Compile Include="data/users.fs" />
