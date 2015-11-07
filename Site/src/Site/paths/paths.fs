@@ -22,6 +22,9 @@ let applications_link user = sprintf "/%s/applications" user
 let applicationCreate : StringPath = "/%s/application/create"
 let applicationCreate_link user = sprintf "/%s/application/create" user
 
+let applicationEdit : StringIntPath = "/%s/application/edit/%i"
+let applicationEdit_link user id = sprintf "/%s/application/edit/%i" user id
+
 let suites : StringPath = "/%s/suites"
 let suites_link user = sprintf "/%s/suites" user
 
