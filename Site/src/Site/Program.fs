@@ -2,18 +2,14 @@ module program
 
 open System
 open Suave
-open Suave.Form
-open Suave.Cookie
 open Suave.Http
 open Suave.Http.Redirection
 open Suave.Http.Successful
 open Suave.Http.RequestErrors
 open Suave.Http.Applicatives
-open Suave.Model.Binding
 open Suave.State.CookieStateStore
 open Suave.Types
 open Suave.Web
-open Suave.Html
 open html_common
 open html_bootstrap
 open sausage_factory
