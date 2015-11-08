@@ -22,6 +22,7 @@ CREATE INDEX users_name ON turtletest.Users (name);
 CREATE TABLE turtletest.Applications(
   application_id SERIAL       PRIMARY KEY NOT NULL,
   user_id       integer       NOT NULL REFERENCES turtletest.Users (user_id),
+  private       boolean       NOT NULL,
   name          varchar(1024) NOT NULL,
   address       varchar(1024) NULL,
   documentation varchar(1024) NULL,

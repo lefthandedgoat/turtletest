@@ -5,6 +5,8 @@ open html_common
 open html_bootstrap
 open types
 
+let privateOptions = ["True","Yes"; "False","No"]
+
 let application_create_button user =
   button_create (paths.applicationCreate_link user) [ text "Create"]
 
@@ -21,6 +23,7 @@ let application_details (application : types.Application ) =
         label_text "Owners" application.Owners
         label_text "Developers" application.Developers
         label_textarea "Notes" application.Notes
+        label_select_selected "Private" privateOptions (string application.Private)
       ]
     ]
   ]
