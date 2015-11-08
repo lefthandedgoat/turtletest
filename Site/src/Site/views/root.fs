@@ -3,7 +3,7 @@ module root
 open Suave.Html
 open html_common
 open html_bootstrap
-open types
+open types.response
 
 let head =
   head [

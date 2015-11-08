@@ -3,12 +3,18 @@ module applications
 open Suave.Html
 open html_common
 open html_bootstrap
-open types
+open types.read
+open types.permissions
+
+let privateOptions = ["True","Yes"; "False","No"]
 
 let application_create_button user =
-  button_create (paths.applicationsCreate_link user) [ text "Create"]
+  button_create (paths.applicationCreate_link user) [ text "Create"]
 
-let applications_details (application : types.Application ) =
+let application_edit_button user id =
+  button_edit (paths.applicationEdit_link user id) [ text "Edit"]
+
+let application_details (application : Application ) =
   block_flat [
     header [ h3 application.Name ]
     content [
@@ -18,66 +24,93 @@ let applications_details (application : types.Application ) =
         label_text "Owners" application.Owners
         label_text "Developers" application.Developers
         label_textarea "Notes" application.Notes
+        label_select_selected "Private" privateOptions (string application.Private)
       ]
     ]
   ]
 
-let grid suites =
+let suites_grid user suites =
+  let toTd (suite : Suite) =
+    [
+      td [ aHref (paths.suite_link user suite.Id) [ text (string suite.Id) ] ]
+      td [ text (string suite.Name) ]
+      td [ text (string suite.Version) ]
+      td [ text (string suite.Owners) ]
+    ]
   block_flat [
     header [ h3 "Suites" ]
     content [
       table_bordered
         [
-          "Rendering engine"
-          "Browser"
-          "Platform(s)"
-          "Engine version"
-          "CSS grade"
+          "Id"
+          "Name"
+          "Version"
+          "Owners"
         ]
-        suites
+        suites toTd
     ]
   ]
 
-let applications_content user executionRows application suites =
+let grid user applications =
+  let toTd (app : Application) =
+    [
+      td [ aHref (paths.application_link user app.Id) [ text (string app.Id) ] ]
+      td [ text (string app.Name) ]
+      td [ text (string app.Owners) ]
+      td [ text (string app.Developers) ]
+    ]
+  block_flat [
+    header [ h3 "Applications" ]
+    content [
+      table_bordered
+        [
+          "Id"
+          "Name"
+          "Owners"
+          "Developers"
+        ]
+        applications toTd
+    ]
+  ]
+
+let application_content permission user executionRows (application : Application) suites =
+  let edit_and_create_buttons =
+    if ownerOrContributor permission
+    then row_nomargin [ m12 [ application_edit_button user application.Id; application_create_button user ] ]
+    else emptyText
+
   mcontent [
-    row_nomargin [
-      m12 [
-        application_create_button user
-      ]
-    ]
-    row [
-      m12 [
-        applications_details application
-      ]
-    ]
-    row [
-      m12 [
-        grid suites
-      ]
-    ]
-    row [
-      m12 [
-        partial_executions.execution executionRows
-      ]
-    ]
-
+    edit_and_create_buttons
+    row [ m12 [ application_details application ] ]
+    row [ m12 [ suites_grid user suites ] ]
+    row [ m12 [ partial_executions.execution executionRows ] ]
   ]
 
-let html user counts executions application suites =
-  let html' =
-    html [
-      base_head "applications"
-      body [
-        wrapper [
-          partial_sidebar.left_sidebar user counts
-          applications_content user executions application suites
-        ]
-        (text scripts.jquery_1_11_3_min)
-        (text scripts.datatable_jquery_1_10_9_min)
-        (text scripts.datatable_min)
-        (text scripts.datatables_bootstrap_adapter)
-        (text scripts.applications_datatable)
-      ]
+let applications_content permission user applications =
+  let create_button =
+    if ownerOrContributor permission
+    then row_nomargin [ m12 [ application_create_button user ] ]
+    else emptyText
+
+  mcontent [
+    create_button
+    row [ m12 [ grid user applications ] ]
+  ]
+
+let details permission user counts executions application suites =
+  base_html
+    "application - details"
+    [
+      partial_sidebar.left_sidebar user counts
+      application_content permission user executions application suites
     ]
-    |> xmlToString
-  sprintf "<!DOCTYPE html>%s" html'
+    scripts.applications_bundle
+
+let list permission user counts (applications : Application list) =
+  base_html
+    "applications"
+    [
+      partial_sidebar.left_sidebar user counts
+      applications_content permission user applications
+    ]
+    scripts.applications_bundle

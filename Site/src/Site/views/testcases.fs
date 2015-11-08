@@ -3,12 +3,12 @@ module testcases
 open Suave.Html
 open html_common
 open html_bootstrap
-open types
+open types.read
 
 let testcase_create_button user =
   button_create (paths.testcasesCreate_link user) [ text "Create"]
 
-let testcase_details (testcase : types.TestCase ) =
+let testcase_details (testcase : TestCase ) =
   block_flat [
     header [ h3 testcase.Name ]
     content [
@@ -43,15 +43,10 @@ let testcase_content user testcase =
   ]
 
 let html user testcase counts =
-  let html' =
-    html [
-      base_head "suites"
-      body [
-        wrapper [
-          partial_sidebar.left_sidebar user counts
-          testcase_content user testcase
-        ]
-      ]
+  base_html
+    "test case"
+    [
+      partial_sidebar.left_sidebar user counts
+      testcase_content user testcase
     ]
-    |> xmlToString
-  sprintf "<!DOCTYPE html>%s" html'
+    scripts.none

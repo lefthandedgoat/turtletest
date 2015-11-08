@@ -1,24 +1,48 @@
 module paths
 
 type StringPath = PrintfFormat<(string -> string),unit,string,string,string>
+type StringIntPath = PrintfFormat<(string -> int -> string),unit,string,string,string * int>
+
+let withParam (key,value) path = sprintf "%s?%s=%s" path key value
 
 let root = "/"
-let home : StringPath = "/%s/"
-let home_link user = sprintf "/%s/" user
+
+let register = "/register"
+
+let login = "/login"
+let logout = "/logout"
+
+let home : StringPath = "/%s"
+let home_link user = sprintf "/%s" user
+
+let application : StringIntPath = "/%s/application/%i"
+let application_link user id = sprintf "/%s/application/%i" user id
 
 let applications : StringPath = "/%s/applications"
-let applicationsCreate : StringPath = "/%s/applications/create"
 let applications_link user = sprintf "/%s/applications" user
-let applicationsCreate_link user = sprintf "/%s/applications/create" user
+
+let applicationCreate : StringPath = "/%s/application/create"
+let applicationCreate_link user = sprintf "/%s/application/create" user
+
+let applicationEdit : StringIntPath = "/%s/application/edit/%i"
+let applicationEdit_link user id = sprintf "/%s/application/edit/%i" user id
+
+let suite : StringIntPath = "/%s/suite/%i"
+let suite_link user id = sprintf "/%s/suite/%i" user id
 
 let suites : StringPath = "/%s/suites"
-let suitesCreate : StringPath = "/%s/suites/create"
 let suites_link user = sprintf "/%s/suites" user
-let suitesCreate_link user = sprintf "/%s/suites/create" user
+
+let suiteCreate : StringPath = "/%s/suite/create"
+let suiteCreate_link user = sprintf "/%s/suite/create" user
+
+let suiteEdit : StringIntPath = "/%s/suite/edit/%i"
+let suiteEdit_link user id = sprintf "/%s/suite/edit/%i" user id
 
 let testcases : StringPath = "/%s/testcases"
-let testcasesCreate : StringPath = "/%s/testcases/create"
 let testcases_link user = sprintf "/%s/testcases" user
+
+let testcasesCreate : StringPath = "/%s/testcases/create"
 let testcasesCreate_link user = sprintf "/%s/testcases/create" user
 
 let executions : StringPath = "/%s/executions"

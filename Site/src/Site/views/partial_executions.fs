@@ -3,7 +3,7 @@ module partial_executions
 open Suave.Html
 open html_common
 open html_bootstrap
-open types
+open types.read
 
 let executionRow suite name percent =
   let color =

@@ -1,4 +1,5 @@
 module scripts
+open Suave.Html
 
 //todo combine and minify this stuff
 let jquery_1_11_3_min = """<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>"""
@@ -19,3 +20,15 @@ let applications_datatable = """
   });
 </script>
 """
+
+let applications_bundle =
+  [
+    jquery_1_11_3_min
+    datatable_jquery_1_10_9_min
+    datatable_min
+    datatables_bootstrap_adapter
+    applications_datatable
+  ]
+  |> List.map (fun script -> text script) |> flatten
+
+let none = html_common.emptyText

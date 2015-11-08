@@ -48,22 +48,32 @@
     <Compile Include="types/types.fs" />
     <Compile Include="forms/forms.fs" />
     <Compile Include="data/fake.fs" />
+    <Compile Include="data/adohelper.fs" />
     <Compile Include="data/main_page_emails.fs" />
+    <Compile Include="data/users.fs" />
+    <Compile Include="data/applications.fs" />
+    <Compile Include="data/permissions.fs" />
+    <Compile Include="data/suites.fs" />
     <Compile Include="html/common.fs" />
     <Compile Include="html/bootstrap.fs" />
     <Compile Include="html/scripts.fs" />
     <Compile Include="views/partial_executions.fs" />
     <Compile Include="views/partial_sidebar.fs" />
     <Compile Include="views/partial_tile.fs" />
+    <Compile Include="views/register.fs" />
+    <Compile Include="views/login.fs" />
     <Compile Include="views/home.fs" />
     <Compile Include="views/applications.fs" />
     <Compile Include="views/applicationsCreate.fs" />
+    <Compile Include="views/applicationsEdit.fs" />
     <Compile Include="views/suites.fs" />
     <Compile Include="views/suitesCreate.fs" />
+    <Compile Include="views/suiteEdit.fs" />
     <Compile Include="views/testcases.fs" />
     <Compile Include="views/testcasesCreate.fs" />
     <Compile Include="views/executions.fs" />
     <Compile Include="views/root.fs" />
+    <Compile Include="sausage_factory.fs" />
     <Compile Include="Program.fs" />
     <Content Include="css/*.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -105,6 +115,13 @@
   </Target>
   -->
   <Import Project="..\..\.paket\paket.targets" />
+  <ItemGroup>
+    <Reference Include="BCrypt.Net">
+      <HintPath>..\..\packages\BCrypt-Official\lib\BCrypt.Net.dll</HintPath>
+      <Private>True</Private>
+      <Paket>True</Paket>
+    </Reference>
+  </ItemGroup>
   <Choose>
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v3.5'">
       <ItemGroup>

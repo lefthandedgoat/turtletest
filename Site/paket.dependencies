@@ -7,3 +7,4 @@ nuget SourceLink.Fake
 nuget Suave
 nuget Suave.Experimental
 nuget Npgsql
+nuget BCrypt-Official

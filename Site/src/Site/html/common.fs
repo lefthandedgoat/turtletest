@@ -29,8 +29,9 @@ let h6 s = tag "h6" [] (text s)
 let aHref href inner = tag "a" ["href", href] (flatten inner)
 let aHrefAttr href attr inner = tag "a" (("href", href) :: attr) (flatten inner)
 let cssLink href = linkAttr [ "href", href; " rel", "stylesheet"; " type", "text/css";  ]
-let ul xml = tag "ul" [] (flatten xml)
-let ulAttr attr xml = tag "ul" attr (flatten xml)
+let ul inner = tag "ul" [] (flatten inner)
+let ulAttr attr inner = tag "ul" attr (flatten inner)
+let ulClass class' inner = ulAttr ["class", class'] inner
 let li inner = tag "li" [] (flatten inner)
 let imgSrc src = imgAttr [ "src", src ]
 let em s = tag "em" [] (text s)
@@ -43,7 +44,8 @@ let italic attr inner = tag "i" attr inner
 let p inner = tag "p" [] (flatten inner)
 let pClass class' inner = tag "p" ["class", class'] (flatten inner)
 let selectClassName class' name inner = tag "select" ["class", class'; "name", name] (flatten inner)
-let option value innertext = tag "option" ["value", value] (text innertext)
+let option (value : obj) innertext = tag "option" ["value", (string value)] (text innertext)
+let selectedOption (value : obj) innertext = tag "option" ["value", (string value); "selected", ""] (text innertext)
 
 let form inner = tag "form" ["method", "POST"] (flatten inner)
 let formAttr attr inner = tag "form" (("method", "POST") :: attr) (flatten inner)
@@ -65,8 +67,8 @@ let tdAttr attr inner = tag "td" attr (flatten inner)
 let labelClass class' inner = tag "label" ["class", class'] (flatten inner)
 let buttonClass class' inner = tag "button" ["class", class'] (flatten inner)
 let inputAttrInner attr inner = tag "input" attr (flatten inner)
-let inputClassPlaceholderName class' placeholder name value inner =
-  tag "input" ["class", class'; "placeholder", placeholder; "name", name; "value", value] (flatten inner)
+let inputClassPlaceholderNameType class' placeholder name type' value inner =
+  tag "input" ["class", class'; "placeholder", placeholder; "name", name; "value", (string value); "type", type'] (flatten inner)
 let textareaClassPlaceholder class' placeholder text' = tag "textarea" ["class", class'; "placeholder", placeholder; "rows", "4"] (text text')
 let textareaClassPlaceholderName class' name placeholder text' = tag "textarea" ["class", class'; "name", name; "placeholder", placeholder; "rows", "4"] (text text')
 let sectionId id inner = tag "section" ["id", id] (flatten inner)

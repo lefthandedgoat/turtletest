@@ -1,7 +1,8 @@
-module fake
+module data.fake
 
-open types
+open types.read
 
+let empty = ""
 let random = System.Random()
 let counts () =
   {
@@ -24,20 +25,23 @@ let executions count apps =
 
 let application : Application =
   {
+    Id = 1
+    Private = false
     Name = "Android"
     Address = "http://www.android.com"
     Documentation = "https://developer.android.com/guide/index.html"
-    Owners = ""
+    Owners = empty
     Developers = "Alex Johnson, Susanne Billings, Tim Duncan"
     Notes = "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"
   }
 
 let suite : Suite =
   {
-    ApplicationName = "Android"
+    Id = 1
+    ApplicationId = 1
     Name = "Android Login"
     Version = "1.1"
-    Owners = ""
+    Owners = empty
     Notes = "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"
   }
 
@@ -47,13 +51,13 @@ let testcase : TestCase =
     SuiteName = "Android Login"
     Name = "Invalid Username"
     Version = "1.1"
-    Owners = ""
+    Owners = empty
     Notes = "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"
-    Requirements = ""
-    Steps = ""
-    Expected = ""
-    History = ""
-    Attachments = ""
+    Requirements = empty
+    Steps = empty
+    Expected = empty
+    History = empty
+    Attachments = empty
   }
 
 let suites =
@@ -72,6 +76,6 @@ let testcases =
     ["Trident"; "Internet Explorer 7.0"; "Vista";   "7"; "Deprecated"]
   ]
 
-let applicationsOptions = [1,"Android"; 2,"IOS"; 3,"Desktop"]
+let applicationsOptions = ["","";"1","Android"; "2","IOS"; "3","Desktop"]
 
-let suitesOptions = [1,"Android Login"; 2,"IOS Login"; 3,"Desktop Login"]
+let suitesOptions = ["","";"1","Android Login"; "2","IOS Login"; "3","Desktop Login"]

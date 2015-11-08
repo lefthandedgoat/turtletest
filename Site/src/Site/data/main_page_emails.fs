@@ -1,17 +1,18 @@
-module main_page_emails
+module data.main_page_emails
 
 open System
 open Npgsql
+open adohelper
 
-let firstOrNone s = s |> Seq.tryFind (fun _ -> true)
-
-let nonQuery sql =
-  use connection = new NpgsqlConnection("Server=127.0.0.1;User Id=emails; Password=taconacho;Database=emails;")
-  connection.Open()
-  use command = new NpgsqlCommand(sql, connection)
-  command.ExecuteNonQuery() |> ignore
+let connectionString = "Server=127.0.0.1;User Id=emails; Password=taconacho;Database=emails;"
 
 let insertEmail email =
-  sprintf "INSERT INTO main_page (email)
-  VALUES ('%s')" email
-  |> nonQuery
+  let sql = """
+INSERT INTO main_page (email)
+VALUES (:email)
+"""
+  use connection = connection connectionString
+  use command = command connection sql
+  command
+  |> param "email" email
+  |> executeNonQuery
