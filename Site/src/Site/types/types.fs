@@ -29,6 +29,12 @@ module permissions =
       | Contributor -> true
       | Neither -> false
 
+  let owner permissions =
+    match permissions with
+      | Owner -> true
+      | Contributor
+      | Neither -> false
+
   type Permission =
     {
       UserId : int
@@ -85,8 +91,9 @@ module read =
 
   type TestCase =
     {
-      ApplicationName : string
-      SuiteName : string
+      Id : int
+      ApplicationId : int
+      SuiteId : int
       Name : string
       Version : string
       Owners : string

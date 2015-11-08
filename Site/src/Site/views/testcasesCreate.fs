@@ -1,9 +1,10 @@
-module testcasesCreate
+module views.testcasesCreate
 
 open Suave.Html
 open html_common
 open html_bootstrap
 open forms.newtypes
+open views.partial
 
 let empty = ""
 
@@ -12,8 +13,8 @@ let testcase_details applications suites =
     header [ h3 "Create Test Case" ]
     content [
       form_horizontal [
-        label_select "Application" applications
-        label_select "Suite" suites
+        label_select "Application" (views.suites.applicationsToSelect applications)
+        label_select "Suite" (views.testcases.suitesToSelect suites)
         label_text "Name" empty
         label_text "Version" empty
         label_text "Owners" empty
@@ -41,7 +42,7 @@ let html user counts applications suites =
   base_html
     "create test case"
     [
-      partial_sidebar.left_sidebar user counts
+      partial.sidebar.left_sidebar user counts
       testcase_content applications suites
     ]
     scripts.none
@@ -51,8 +52,8 @@ let error_testcase_details applications suites errors (newTestCase : NewTestCase
     header [ h3 "Create Test Case" ]
     content [
       form_horizontal [
-        errored_label_select "Application" applications newTestCase.Application errors
-        errored_label_select "Suite" suites newTestCase.Suite errors
+        errored_label_select "Application" (views.suites.applicationsToSelect applications) newTestCase.Application errors
+        errored_label_select "Suite" (views.testcases.suitesToSelect suites) newTestCase.Suite errors
         errored_label_text "Name" newTestCase.Name errors
         errored_label_text "Version" newTestCase.Version errors
         errored_label_text "Owners" newTestCase.Owners errors
@@ -80,7 +81,7 @@ let error_html user counts applications suites errors newTestCase =
   base_html
     "create test case"
     [
-      partial_sidebar.left_sidebar user counts
+      partial.sidebar.left_sidebar user counts
       error_testcase_content applications suites errors newTestCase
     ]
     scripts.none

@@ -1,4 +1,4 @@
-module register
+module views.register
 
 open Suave.Html
 open html_common

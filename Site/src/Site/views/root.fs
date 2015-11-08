@@ -1,4 +1,4 @@
-module root
+module views.root
 
 open Suave.Html
 open html_common

@@ -1,4 +1,4 @@
-module partial_executions
+module views.partial.executions
 
 open Suave.Html
 open html_common

@@ -1,4 +1,4 @@
-module partial_tile
+module views.partial.tile
 
 open Suave.Html
 open html_common
