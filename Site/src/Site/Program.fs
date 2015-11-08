@@ -48,6 +48,12 @@ let redirectWithReturnPath redirection =
     let path = x.url.AbsolutePath
     Redirection.FOUND (redirection |> paths.withParam ("returnPath", path)))
 
+let userExists userName f_success =
+  let user = data_users.tryByName userName
+  match user with
+    | None -> NOT_FOUND "Page not found"
+    | Some(user) -> f_success user
+
 let loggedOn f_success =
   Auth.authenticate
     Cookie.CookieLife.Session
@@ -56,14 +62,14 @@ let loggedOn f_success =
     (fun _ -> Choice2Of2 reset)
     f_success
 
-let canCreateEdit f_success =
+let canCreateEdit f_success user =
   loggedOn (getSession (fun session ->
     match session with
-    | User(_) -> f_success session
+    | User(_) -> f_success user session
     | _ -> UNAUTHORIZED "Not logged in"))
 
-let canView f_success =
-  getSession (fun sess -> f_success sess)
+let canView f_success user =
+  getSession (fun sess -> f_success user sess)
 
 let register'' =
   choose [
@@ -104,178 +110,138 @@ let home'' userName = warbler (fun _ ->
       let executions = fake.executions 5 ["Android"; "IOS"; "Desktop"]
       OK <| home.html userName counts executions)
 
-let application'' (userName, id) session = warbler (fun _ ->
-  let user = data_users.tryByName userName
-  match user with
+let application'' id (user : User) session = warbler (fun _ ->
+  let application = data_applications.tryById id
+  match application with
     | None -> NOT_FOUND "Page not found"
-    | Some(_) ->
-      let application = data_applications.tryById id
-      match application with
+    | Some(application) ->
+      let counts = fake.counts()
+      let permissions = data_permissions.getApplicationsCreateEditPermissions user.Name session
+      let executions = fake.executions 8 [application.Name]
+      let suites = data_suites.getByApplicationId application.Id
+      OK <| applications.details permissions user.Name counts executions application suites)
+
+let applicationCreate'' (user : User) session =
+  let permissions = data_permissions.getApplicationsCreateEditPermissions user.Name session
+  if ownerOrContributor permissions |> not
+  then NOT_FOUND "Page not found"
+  else
+    let counts = fake.counts()
+    choose [
+      GET >>= warbler (fun _ ->
+        OK <| applicationsCreate.html user.Name counts)
+      POST >>= bindToForm forms.newApplication (fun newApplication ->
+        let errors = forms.newApplicationValidation newApplication
+        if errors.Length = 0
+        then
+          let id = data_applications.insert user.Id newApplication
+          FOUND <| paths.application_link user.Name id
+        else OK <| applicationsCreate.error_html user.Name counts errors newApplication)
+    ]
+
+let applicationEdit'' id (user : User) session =
+  let permissions = data_permissions.getApplicationsCreateEditPermissions user.Name session
+  if ownerOrContributor permissions |> not
+  then NOT_FOUND "Page not found"
+  else
+    let counts = fake.counts()
+    choose [
+      GET >>= warbler (fun _ ->
+        let application' = data_applications.tryById id
+        match application' with
         | None -> NOT_FOUND "Page not found"
         | Some(application) ->
-          let counts = fake.counts()
-          let permissions = data_permissions.getApplicationsCreateEditPermissions userName session
-          let executions = fake.executions 8 [application.Name]
-          let suites = data_suites.getByApplicationId application.Id
-          OK <| applications.details permissions userName counts executions application suites)
+          OK <| applicationsEdit.html user.Name counts application)
+      POST >>= bindToForm forms.editApplication (fun editApplication ->
+        let errors = forms.editApplicationValidation editApplication
+        if errors.Length = 0
+        then
+          data_applications.update id editApplication
+          FOUND <| paths.application_link user.Name id
+        else OK <| applicationsEdit.error_html user.Name counts errors editApplication)
+    ]
 
-let applicationCreate'' userName session =
-  let user = data_users.tryByName userName
-  match user with
-    | None -> NOT_FOUND "Page not found"
-    | Some(user) ->
-      let permissions = data_permissions.getApplicationsCreateEditPermissions userName session
-      if ownerOrContributor permissions |> not
-      then NOT_FOUND "Page not found"
-      else
-        let counts = fake.counts()
-        choose [
-          GET >>= warbler (fun _ ->
-            OK <| applicationsCreate.html userName counts)
-          POST >>= bindToForm forms.newApplication (fun newApplication ->
-            let errors = forms.newApplicationValidation newApplication
-            if errors.Length = 0
-            then
-              let id = data_applications.insert user.Id newApplication
-              FOUND <| paths.application_link userName id
-            else OK <| applicationsCreate.error_html userName counts errors newApplication)
-        ]
+let applications'' (user : User) (session : Session) = warbler (fun _ ->
+  let permissions, apps = data_permissions.getPermissionsAndApplications user.Name session
+  let counts = fake.counts()
+  if ownerOrContributor permissions && apps.Length = 0
+  then FOUND <| paths.applicationCreate_link user.Name
+  else OK <| applications.list permissions user.Name counts apps)
 
-let applicationEdit'' (userName, id) session =
-  let user = data_users.tryByName userName
-  match user with
+let suite'' id (user : User) session = warbler (fun _ ->
+  let suite = data_suites.tryById id
+  match suite with
     | None -> NOT_FOUND "Page not found"
-    | Some(_) ->
-      let permissions = data_permissions.getApplicationsCreateEditPermissions userName session
-      if ownerOrContributor permissions |> not
-      then NOT_FOUND "Page not found"
-      else
-        let counts = fake.counts()
-        choose [
-          GET >>= warbler (fun _ ->
-            let application' = data_applications.tryById id
-            match application' with
-            | None -> NOT_FOUND "Page not found"
-            | Some(application) ->
-              OK <| applicationsEdit.html userName counts application)
-          POST >>= bindToForm forms.editApplication (fun editApplication ->
-            let errors = forms.editApplicationValidation editApplication
-            if errors.Length = 0
-            then
-              data_applications.update id editApplication
-              FOUND <| paths.application_link userName id
-            else OK <| applicationsEdit.error_html userName counts errors editApplication)
-        ]
-
-let applications'' userName (session : Session) = warbler (fun _ ->
-  let user = data_users.tryByName userName
-  match user with
-    | None -> NOT_FOUND "Page not found"
-    | Some(_) ->
-      let permissions, apps = data_permissions.getPermissionsAndApplications userName session
+    | Some(suite') ->
       let counts = fake.counts()
-      if ownerOrContributor permissions && apps.Length = 0
-      then FOUND <| paths.applicationCreate_link userName
-      else OK <| applications.list permissions userName counts apps)
+      let testcases = fake.testcases
+      let applications = data_applications.getByUserId user.Id
+      OK <| suites.details user.Name suite' testcases applications counts)
 
-let suite'' (userName, id) session = warbler (fun _ ->
-  let user = data_users.tryByName userName
-  match user with
-    | None -> NOT_FOUND "Page not found"
-    | Some(user) ->
+let suiteCreate'' (user : User) session =
+  let counts = fake.counts()
+  let applications = data_applications.getByUserId user.Id
+  choose [
+    GET >>= warbler (fun _ ->
+      OK <| suitesCreate.html user.Name counts applications)
+    POST >>= bindToForm forms.newSuite (fun newSuite ->
+      let errors = forms.newSuiteValidation newSuite
+      if errors.Length > 0
+      then OK <| suitesCreate.error_html user.Name counts applications errors newSuite
+      else
+        let application' = data_applications.tryById (int newSuite.Application)
+        match application' with
+        | None -> NOT_FOUND "Page not found"
+        | Some(application) ->
+          let id = data_suites.insert application.Id newSuite
+          FOUND <| paths.suite_link user.Name id)
+  ]
+
+let suiteEdit'' id (user : User) session =
+  let counts = fake.counts()
+  let applications = data_applications.getByUserId user.Id
+  choose [
+    GET >>= warbler (fun _ ->
       let suite = data_suites.tryById id
       match suite with
-        | None -> NOT_FOUND "Page not found"
-        | Some(suite') ->
-          let counts = fake.counts()
-          let testcases = fake.testcases
-          let applications = data_applications.getByUserId user.Id
-          OK <| suites.details userName suite' testcases applications counts)
+      | None -> NOT_FOUND "Page not found"
+      | Some(suite) ->
+        OK <| suiteEdit.html user.Name counts applications suite)
+    POST >>= bindToForm forms.editSuite (fun editSuite ->
+      let errors = forms.editSuiteValidation editSuite
+      if errors.Length > 0
+      then OK <| suiteEdit.error_html user.Name counts errors applications editSuite
+      else
+        data_suites.update id editSuite
+        FOUND <| paths.suite_link user.Name id)
+  ]
 
-let suiteCreate'' userName session =
-  let user = data_users.tryByName userName
-  match user with
-    | None -> NOT_FOUND "Page not found"
-    | Some(user) ->
-      let counts = fake.counts()
-      let applications = data_applications.getByUserId user.Id
-      choose [
-        GET >>= warbler (fun _ ->
-          OK <| suitesCreate.html userName counts applications)
-        POST >>= bindToForm forms.newSuite (fun newSuite ->
-          let errors = forms.newSuiteValidation newSuite
-          if errors.Length > 0
-          then OK <| suitesCreate.error_html userName counts applications errors newSuite
-          else
-            let application' = data_applications.tryById (int newSuite.Application)
-            match application' with
-            | None -> NOT_FOUND "Page not found"
-            | Some(application) ->
-              let id = data_suites.insert application.Id newSuite
-              FOUND <| paths.suite_link userName id)
-      ]
+let suites'' (user : User) session = warbler (fun _ ->
+  let counts = fake.counts()
+  let suites' = data_suites.getByUserId user.Id
+  if suites'.Length = 0
+  then FOUND <| paths.suiteCreate_link user.Name
+  else OK <| suites.list user.Name counts suites')
 
-let suiteEdit'' (userName, id) session =
-  let user = data_users.tryByName userName
-  match user with
-    | None -> NOT_FOUND "Page not found"
-    | Some(user) ->
-      let counts = fake.counts()
-      let applications = data_applications.getByUserId user.Id
-      choose [
-        GET >>= warbler (fun _ ->
-          let suite = data_suites.tryById id
-          match suite with
-          | None -> NOT_FOUND "Page not found"
-          | Some(suite) ->
-            OK <| suiteEdit.html userName counts applications suite)
-        POST >>= bindToForm forms.editSuite (fun editSuite ->
-          let errors = forms.editSuiteValidation editSuite
-          if errors.Length > 0
-          then OK <| suiteEdit.error_html userName counts errors applications editSuite
-          else
-            data_suites.update id editSuite
-            FOUND <| paths.suite_link userName id)
-      ]
+let testcases'' (user : User) session = warbler (fun _ ->
+  let counts = fake.counts()
+  let testcase = fake.testcase
+  OK <| testcases.html user.Name testcase counts)
 
-let suites'' userName session = warbler (fun _ ->
-  let user = data_users.tryByName userName
-  match user with
-    | None -> NOT_FOUND "Page not found"
-    | Some(user) ->
-      let counts = fake.counts()
-      let suites' = data_suites.getByUserId user.Id
-      if suites'.Length = 0
-      then FOUND <| paths.suiteCreate_link userName
-      else OK <| suites.list userName counts suites')
-
-let testcases'' userName session = warbler (fun _ ->
-  let user = data_users.tryByName userName
-  match user with
-    | None -> NOT_FOUND "Page not found"
-    | Some(user) ->
-      let counts = fake.counts()
-      let testcase = fake.testcase
-      OK <| testcases.html userName testcase counts)
-
-let testcasesCreate'' userName session =
-  let user = data_users.tryByName userName
-  match user with
-    | None -> NOT_FOUND "Page not found"
-    | Some(user) ->
-      let counts = fake.counts()
-      let applications = fake.applicationsOptions
-      let suites = fake.suitesOptions
-      choose [
-        GET >>= warbler (fun _ ->
-          OK <| testcasesCreate.html userName counts applications suites)
-        //newSuiteValidation
-        POST >>= bindToForm forms.newTestCase (fun newTestCase ->
-          let errors = forms.newTestCaseValidation newTestCase
-          if errors.Length > 0
-          then OK <| testcasesCreate.error_html userName counts applications suites errors newTestCase
-          else FOUND <| paths.testcases_link userName)
-      ]
+let testcasesCreate'' (user : User) session =
+  let counts = fake.counts()
+  let applications = fake.applicationsOptions
+  let suites = fake.suitesOptions
+  choose [
+    GET >>= warbler (fun _ ->
+      OK <| testcasesCreate.html user.Name counts applications suites)
+    //newSuiteValidation
+    POST >>= bindToForm forms.newTestCase (fun newTestCase ->
+      let errors = forms.newTestCaseValidation newTestCase
+      if errors.Length > 0
+      then OK <| testcasesCreate.error_html user.Name counts applications suites errors newTestCase
+      else FOUND <| paths.testcases_link user.Name)
+  ]
 
 let executions'' userName = warbler (fun _ ->
   let user = data_users.tryByName userName
@@ -299,20 +265,20 @@ let webPart =
     path paths.login >>= login''
     path paths.register >>= register''
     path paths.logout >>= logout''
-    pathScan paths.applicationCreate (fun userName -> canCreateEdit (applicationCreate'' userName))
-    pathScan paths.applicationEdit (fun (userName, id) -> canCreateEdit (applicationEdit'' (userName, id)))
-    pathScan paths.suiteCreate (fun userName -> canCreateEdit (suiteCreate'' userName))
-    pathScan paths.suiteEdit (fun (userName, id) -> canCreateEdit (suiteEdit'' (userName, id)))
-    pathScan paths.testcasesCreate (fun userName -> canCreateEdit (testcasesCreate'' userName))
+    pathScan paths.applicationCreate (fun userName -> userExists userName (canCreateEdit applicationCreate''))
+    pathScan paths.applicationEdit (fun (userName, id) -> userExists userName (canCreateEdit (applicationEdit'' id)))
+    pathScan paths.suiteCreate (fun userName -> userExists userName (canCreateEdit suiteCreate''))
+    pathScan paths.suiteEdit (fun (userName, id) -> userExists userName (canCreateEdit (suiteEdit'' id)))
+    pathScan paths.testcasesCreate (fun userName -> userExists userName (canCreateEdit testcasesCreate''))
 
     pathRegex "(.*)\.(css|png|gif|js|ico|woff|tff)" >>= Files.browseHome
 
     GET >>= choose [
-      pathScan paths.application (fun (userName, id) -> canView (application'' (userName,id)))
-      pathScan paths.applications (fun userName -> canView (applications'' userName))
-      pathScan paths.suite (fun (userName, id) -> canView (suite'' (userName,id)))
-      pathScan paths.suites (fun userName -> canView (suites'' userName))
-      pathScan paths.testcases (fun userName -> canView (testcases'' userName))
+      pathScan paths.application (fun (userName, id) -> userExists userName (canView (application'' id)))
+      pathScan paths.applications (fun userName -> userExists userName (canView applications''))
+      pathScan paths.suite (fun (userName, id) -> userExists userName (canView (suite'' id)))
+      pathScan paths.suites (fun userName -> userExists userName (canView suites''))
+      pathScan paths.testcases (fun userName -> userExists userName (canView testcases''))
       pathScan paths.executions executions''
       pathScan paths.home home''
     ]
