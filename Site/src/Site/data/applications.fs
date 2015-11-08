@@ -1,10 +1,12 @@
-module data_applications
+module data.applications
 
 open System
 open Npgsql
 open adohelper
 open forms
-open types
+open types.read
+open forms.newtypes
+open forms.edittypes
 
 let connectionString = "Server=127.0.0.1;User Id=turtletest; Password=taconacho;Database=turtletest;"
 
@@ -60,7 +62,7 @@ INSERT INTO turtletest.Applications
   |> executeScalar
   |> string |> int
 
-let update application_id (editApplication : forms.EditApplication) =
+let update application_id (editApplication : EditApplication) =
   let sql = """
 UPDATE turtletest.Applications
 SET

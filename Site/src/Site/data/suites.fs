@@ -1,10 +1,11 @@
-module data_suites
+module data.suites
 
 open System
 open Npgsql
 open adohelper
-open forms
-open types
+open types.read
+open forms.newtypes
+open forms.edittypes
 
 let connectionString = "Server=127.0.0.1;User Id=turtletest; Password=taconacho;Database=turtletest;"
 
@@ -49,7 +50,7 @@ INSERT INTO turtletest.Suites
   |> executeScalar
   |> string |> int
 
-let update suite_id (editSuite : forms.EditSuite) =
+let update suite_id (editSuite : EditSuite) =
   let sql = """
 UPDATE turtletest.Suites
 SET

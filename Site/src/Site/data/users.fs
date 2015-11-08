@@ -1,10 +1,12 @@
-module data_users
+module data.users
 
 open System
 open Npgsql
 open adohelper
 open forms
-open types
+open types.crypto
+open types.read
+open forms.newtypes
 open BCrypt.Net
 
 let connectionString = "Server=127.0.0.1;User Id=turtletest; Password=taconacho;Database=turtletest;"
@@ -13,7 +15,7 @@ let bCryptSchemes : BCryptScheme list = [ { Id = 1; WorkFactor = 8; } ]
 let getBCryptScheme id = bCryptSchemes |> List.find (fun scheme -> scheme.Id = id)
 let currentBCryptScheme = 1
 
-let toUser (reader : NpgsqlDataReader) : types.User list =
+let toUser (reader : NpgsqlDataReader) : types.read.User list =
   [ while reader.Read() do
     yield {
       Id = getInt32 "user_id" reader

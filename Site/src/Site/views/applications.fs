@@ -3,7 +3,8 @@ module applications
 open Suave.Html
 open html_common
 open html_bootstrap
-open types
+open types.read
+open types.permissions
 
 let privateOptions = ["True","Yes"; "False","No"]
 
@@ -13,7 +14,7 @@ let application_create_button user =
 let application_edit_button user id =
   button_edit (paths.applicationEdit_link user id) [ text "Edit"]
 
-let application_details (application : types.Application ) =
+let application_details (application : Application ) =
   block_flat [
     header [ h3 application.Name ]
     content [
@@ -72,7 +73,7 @@ let grid user applications =
     ]
   ]
 
-let application_content permission user executionRows (application : types.Application) suites =
+let application_content permission user executionRows (application : Application) suites =
   let edit_and_create_buttons =
     if ownerOrContributor permission
     then row_nomargin [ m12 [ application_edit_button user application.Id; application_create_button user ] ]

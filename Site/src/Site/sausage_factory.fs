@@ -16,7 +16,7 @@ open Suave.Web
 open Suave.Html
 open html_common
 open html_bootstrap
-open types
+open types.session
 
 let bindToForm form handler =
   //todo since we manually handle errors, make bad request log errors and send you too an oops page
@@ -48,7 +48,7 @@ let redirectWithReturnPath redirection =
     Redirection.FOUND (redirection |> paths.withParam ("returnPath", path)))
 
 let userExists userName f_success =
-  let user = data_users.tryByName userName
+  let user = data.users.tryByName userName
   match user with
     | None -> NOT_FOUND "Page not found"
     | Some(user) -> f_success user

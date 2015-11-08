@@ -5,7 +5,7 @@ open html_common
 open html_bootstrap
 open partial_tile
 open partial_executions
-open types
+open types.read
 
 let home_content user counts executionRows =
   mcontent [

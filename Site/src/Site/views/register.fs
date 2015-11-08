@@ -3,7 +3,7 @@ module register
 open Suave.Html
 open html_common
 open html_bootstrap
-open types
+open forms.newtypes
 
 let empty = ""
 
@@ -36,7 +36,7 @@ let html =
     [register_content]
     scripts.none
 
-let errored_user_details errors (newUser : forms.NewUser)=
+let errored_user_details errors (newUser : NewUser)=
   block_flat [
     header [ h3 "Register" ]
     content [

@@ -1,4 +1,4 @@
-module main_page_emails
+module data.main_page_emails
 
 open System
 open Npgsql
