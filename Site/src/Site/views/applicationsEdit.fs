@@ -3,12 +3,13 @@ module applicationsEdit
 open Suave.Html
 open html_common
 open html_bootstrap
-open types
+open types.read
+open forms.edittypes
 
 let empty = ""
 let privateOptions = ["",""; "True","Yes"; "False","No"]
 
-let applications_details (editApplication : types.Application) =
+let applications_details (editApplication : Application) =
   block_flat [
     header [ h3 "Edit Application" ]
     content [
@@ -43,7 +44,7 @@ let html user counts editApplication =
     ]
     scripts.none
 
-let error_applications_details errors (editApplication : forms.EditApplication) =
+let error_applications_details errors (editApplication : EditApplication) =
   block_flat [
     header [ h3 "Edit Application" ]
     content [

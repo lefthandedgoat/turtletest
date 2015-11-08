@@ -1,10 +1,12 @@
-module data_permissions
+module data.permissions
 
 open System
 open Npgsql
 open adohelper
 open forms
 open types
+open types.permissions
+open types.session
 
 let connectionString = "Server=127.0.0.1;User Id=turtletest; Password=taconacho;Database=turtletest;"
 
@@ -30,18 +32,18 @@ INSERT INTO turtletest.Permissions
 
 let getPermissionsAndApplications userName session =
   match session with
-    | NoSession -> Neither, data_applications.getPublicApplications userName
+    | NoSession -> Neither, data.applications.getPublicApplications userName
     | User(user_id) ->
-      let user = data_users.getById user_id
+      let user = data.users.getById user_id
       if user.Name = userName
-      then Owner, data_applications.getByUserId user_id
-      else Contributor, data_applications.getContributorOrPublicApplications user_id
+      then Owner, data.applications.getByUserId user_id
+      else Contributor, data.applications.getContributorOrPublicApplications user_id
 
 let getApplicationsCreateEditPermissions userName session =
   match session with
     | NoSession -> Neither
     | User(user_id) ->
-      let user = data_users.getById user_id
+      let user = data.users.getById user_id
       if user.Name = userName
       then Owner
       else Neither //only owners can create and edit applications

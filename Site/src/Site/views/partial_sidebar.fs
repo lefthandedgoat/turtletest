@@ -3,7 +3,7 @@ module partial_sidebar
 open Suave.Html
 open html_common
 open html_bootstrap
-open types
+open types.read
 
 let private side_link link text' count style icon' =
   li [

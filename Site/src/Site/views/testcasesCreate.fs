@@ -3,7 +3,7 @@ module testcasesCreate
 open Suave.Html
 open html_common
 open html_bootstrap
-open types
+open forms.newtypes
 
 let empty = ""
 
@@ -46,7 +46,7 @@ let html user counts applications suites =
     ]
     scripts.none
 
-let error_testcase_details applications suites errors (newTestCase : forms.NewTestCase)=
+let error_testcase_details applications suites errors (newTestCase : NewTestCase)=
   block_flat [
     header [ h3 "Create Test Case" ]
     content [

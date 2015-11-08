@@ -1,7 +1,8 @@
-module adohelper
+module data.adohelper
 
 open Npgsql
-open types
+open types.read
+open types.permissions
 
 let firstOrNone s = s |> Seq.tryFind (fun _ -> true)
 

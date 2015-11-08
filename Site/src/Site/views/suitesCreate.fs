@@ -3,7 +3,7 @@ module suitesCreate
 open Suave.Html
 open html_common
 open html_bootstrap
-open types
+open forms.newtypes
 
 let empty = ""
 
@@ -40,7 +40,7 @@ let html user counts applications =
     ]
     scripts.none
 
-let error_suite_details applications errors (newSuite : forms.NewSuite) =
+let error_suite_details applications errors (newSuite : NewSuite) =
   block_flat [
     header [ h3 "Create Suite" ]
     content [

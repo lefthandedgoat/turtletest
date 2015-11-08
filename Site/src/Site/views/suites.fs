@@ -3,7 +3,7 @@ module suites
 open Suave.Html
 open html_common
 open html_bootstrap
-open types
+open types.read
 
 let suite_create_button user =
   button_create (paths.suiteCreate_link user) [ text "Create"]
@@ -16,7 +16,7 @@ let applicationsToSelect applications =
   |> List.map (fun (app : Application) -> string app.Id, app.Name)
   |> List.sortBy (fun (_, name) -> name)
 
-let suite_details (suite : types.Suite) applications =
+let suite_details (suite : Suite) applications =
   block_flat [
     header [ h3 suite.Name ]
     content [

@@ -3,7 +3,7 @@ module applicationsCreate
 open Suave.Html
 open html_common
 open html_bootstrap
-open types
+open forms.newtypes
 
 let empty = ""
 let privateOptions = ["",""; "True","Yes"; "False","No"]
@@ -43,7 +43,7 @@ let html user counts =
     ]
     scripts.none
 
-let error_applications_details errors (newApplication : forms.NewApplication) =
+let error_applications_details errors (newApplication : NewApplication) =
   block_flat [
     header [ h3 "Create Application" ]
     content [

@@ -1,6 +1,6 @@
-module fake
+module data.fake
 
-open types
+open types.read
 
 let empty = ""
 let random = System.Random()

@@ -3,11 +3,13 @@ module suiteEdit
 open Suave.Html
 open html_common
 open html_bootstrap
-open types
+open types.read
+open forms.newtypes
+open forms.edittypes
 
 let empty = ""
 
-let suite_details applications (editSuite : types.Suite) =
+let suite_details applications (editSuite : Suite) =
 
   block_flat [
     header [ h3 "Edit Suite" ]
@@ -41,7 +43,7 @@ let html user counts applications editSuite =
     ]
     scripts.none
 
-let error_suite_details errors applications (editSuite : forms.EditSuite) =
+let error_suite_details errors applications (editSuite : EditSuite) =
   block_flat [
     header [ h3 "Edit Suite" ]
     content [

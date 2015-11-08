@@ -1,94 +1,99 @@
-module types
+namespace types
 
-type BCryptScheme =
-  {
-    Id : int
-    WorkFactor : int
-  }
+module crypto =
+  type BCryptScheme =
+    {
+      Id : int
+      WorkFactor : int
+    }
 
-type Session =
-  | NoSession
-  | User of int
+module session =
+  type Session =
+    | NoSession
+    | User of int
 
-type Counts =
-  {
-    Applications : int
-    Suites : int
-    TestCases : int
-    Executions : int
-  }
+module response =
+  type RootResponse =
+    | Get
+    | Success
 
-type ExecutionRow =
-  {
-    Application : string
-    Description : string
-    Percent : int
-  }
-
-type User =
-  {
-    Id : int
-    Name : string
-    Email : string
-    Password : string
-    Scheme : int
-  }
-
-type Permissions =
-  | Owner
-  | Contributor
-  | Neither
-
-let ownerOrContributor permissions =
-  match permissions with
+module permissions =
+  type Permissions =
     | Owner
-    | Contributor -> true
-    | Neither -> false
+    | Contributor
+    | Neither
 
-type Permission =
-  {
-    UserId : int
-    ApplicationId : int
-    Permission : Permissions
-  }
+  let ownerOrContributor permissions =
+    match permissions with
+      | Owner
+      | Contributor -> true
+      | Neither -> false
 
-type Application =
-  {
-    Id : int
-    Private : bool
-    Name : string
-    Address : string
-    Documentation : string
-    Owners : string
-    Developers : string
-    Notes : string
-  }
+  type Permission =
+    {
+      UserId : int
+      ApplicationId : int
+      Permission : Permissions
+    }
 
-type Suite =
-  {
-    Id : int
-    ApplicationId : int
-    Name : string
-    Version : string
-    Owners : string
-    Notes : string
-  }
+module read =
+  type Counts =
+    {
+      Applications : int
+      Suites : int
+      TestCases : int
+      Executions : int
+    }
 
-type TestCase =
-  {
-    ApplicationName : string
-    SuiteName : string
-    Name : string
-    Version : string
-    Owners : string
-    Notes : string
-    Requirements : string
-    Steps : string
-    Expected : string
-    History : string
-    Attachments : string
-  }
+  type ExecutionRow =
+    {
+      Application : string
+      Description : string
+      Percent : int
+    }
 
-type RootResponse =
-  | Get
-  | Success
+  type User =
+    {
+      Id : int
+      Name : string
+      Email : string
+      Password : string
+      Scheme : int
+    }
+
+  type Application =
+    {
+      Id : int
+      Private : bool
+      Name : string
+      Address : string
+      Documentation : string
+      Owners : string
+      Developers : string
+      Notes : string
+    }
+
+  type Suite =
+    {
+      Id : int
+      ApplicationId : int
+      Name : string
+      Version : string
+      Owners : string
+      Notes : string
+    }
+
+  type TestCase =
+    {
+      ApplicationName : string
+      SuiteName : string
+      Name : string
+      Version : string
+      Owners : string
+      Notes : string
+      Requirements : string
+      Steps : string
+      Expected : string
+      History : string
+      Attachments : string
+    }
