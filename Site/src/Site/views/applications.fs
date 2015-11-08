@@ -72,34 +72,44 @@ let grid user applications =
     ]
   ]
 
-let application_content user executionRows (application : types.Application) suites =
+let application_content permission user executionRows (application : types.Application) suites =
+  let edit_and_create_buttons =
+    if ownerOrContributor permission
+    then row_nomargin [ m12 [ application_edit_button user application.Id; application_create_button user ] ]
+    else emptyText
+
   mcontent [
-    row_nomargin [ m12 [ application_edit_button user application.Id; application_create_button user ] ]
+    edit_and_create_buttons
     row [ m12 [ application_details application ] ]
     row [ m12 [ suites_grid user suites ] ]
     row [ m12 [ partial_executions.execution executionRows ] ]
   ]
 
-let applications_content user applications =
+let applications_content permission user applications =
+  let create_button =
+    if ownerOrContributor permission
+    then row_nomargin [ m12 [ application_create_button user ] ]
+    else emptyText
+
   mcontent [
-    row_nomargin [ m12 [ application_create_button user ] ]
+    create_button
     row [ m12 [ grid user applications ] ]
   ]
 
-let details user counts executions application suites =
+let details permission user counts executions application suites =
   base_html
     "application - details"
     [
       partial_sidebar.left_sidebar user counts
-      application_content user executions application suites
+      application_content permission user executions application suites
     ]
     scripts.applications_bundle
 
-let list user counts (applications : Application list) =
+let list permission user counts (applications : Application list) =
   base_html
     "applications"
     [
       partial_sidebar.left_sidebar user counts
-      applications_content user applications
+      applications_content permission user applications
     ]
     scripts.applications_bundle

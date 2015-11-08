@@ -6,6 +6,10 @@ type BCryptScheme =
     WorkFactor : int
   }
 
+type Session =
+  | NoSession
+  | User of int
+
 type Counts =
   {
     Applications : int
@@ -28,6 +32,24 @@ type User =
     Email : string
     Password : string
     Scheme : int
+  }
+
+type Permissions =
+  | Owner
+  | Contributor
+  | Neither
+
+let ownerOrContributor permissions =
+  match permissions with
+    | Owner
+    | Contributor -> true
+    | Neither -> false
+
+type Permission =
+  {
+    UserId : int
+    ApplicationId : int
+    Permission : Permissions
   }
 
 type Application =

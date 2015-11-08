@@ -1,6 +1,7 @@
 module adohelper
 
 open Npgsql
+open types
 
 let firstOrNone s = s |> Seq.tryFind (fun _ -> true)
 
@@ -37,3 +38,9 @@ let getString name (reader : NpgsqlDataReader) =
 
 let getBool name (reader : NpgsqlDataReader) =
   reader.GetBoolean(reader.GetOrdinal(name))
+
+let permissionToInt (permission : Permissions) =
+  match permission with
+    | Owner -> 1
+    | Contributor -> 2
+    | Neither -> 0

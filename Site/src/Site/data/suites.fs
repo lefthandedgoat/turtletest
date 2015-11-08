@@ -71,7 +71,7 @@ WHERE suite_id = :suite_id;
   |> param "suite_id" suite_id
   |> executeNonQuery
 
-let getById id =
+let tryById id =
   let sql = """
 SELECT * FROM turtletest.Suites
 WHERE suite_id = :suite_id

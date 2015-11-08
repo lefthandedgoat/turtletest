@@ -86,7 +86,7 @@ WHERE application_id = :application_id;
   |> param "application_id" application_id
   |> executeNonQuery
 
-let getById id =
+let tryById id =
   let sql = """
 SELECT * FROM turtletest.applications
 WHERE application_id = :application_id
@@ -102,6 +102,35 @@ let getByUserId user_id =
   let sql = """
 SELECT * FROM turtletest.applications
 WHERE user_id = :user_id
+"""
+  use connection = connection connectionString
+  use command = command connection sql
+  command
+  |> param "user_id" user_id
+  |> read toApplication
+
+let getPublicApplications userName =
+  let sql = """
+SELECT a.* FROM turtletest.Applications as a
+JOIN turtletest.Users as u
+ON a.user_id = u.user_id
+WHERE u.name = :name
+AND a.Private= FALSE;
+"""
+  use connection = connection connectionString
+  use command = command connection sql
+  command
+  |> param "name" userName
+  |> read toApplication
+
+//todo test this!
+let getContributorOrPublicApplications user_id =
+  let sql = """
+SELECT a.* FROM turtletest.Applications as a
+LEFT JOIN turtletest.Permissions as p
+ON a.application_id = p.application_id
+WHERE a.Private = FALSE
+OR (p.user_id IS NOT NULL AND p.Permission = 2) --Contributor
 """
   use connection = connection connectionString
   use command = command connection sql
