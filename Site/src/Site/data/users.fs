@@ -54,6 +54,18 @@ INSERT INTO turtletest.Users
   |> executeScalar
   |> string |> int
 
+let getById user_id =
+  let sql = """
+SELECT * FROM turtletest.users
+WHERE user_id = :user_id
+"""
+  use connection = connection connectionString
+  use command = command connection sql
+  command
+  |> param "user_id" user_id
+  |> read toUser
+  |> List.head
+
 let tryByName name =
   let sql = """
 SELECT * FROM turtletest.users

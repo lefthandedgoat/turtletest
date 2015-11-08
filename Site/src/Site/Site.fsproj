@@ -50,9 +50,10 @@
     <Compile Include="data/fake.fs" />
     <Compile Include="data/adohelper.fs" />
     <Compile Include="data/main_page_emails.fs" />
-    <Compile Include="data/applications.fs" />
-    <Compile Include="data/suites.fs" />
     <Compile Include="data/users.fs" />
+    <Compile Include="data/applications.fs" />
+    <Compile Include="data/permissions.fs" />
+    <Compile Include="data/suites.fs" />
     <Compile Include="html/common.fs" />
     <Compile Include="html/bootstrap.fs" />
     <Compile Include="html/scripts.fs" />
