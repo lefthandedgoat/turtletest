@@ -1,4 +1,4 @@
-module partial_sidebar
+module views.partial.sidebar
 
 open Suave.Html
 open html_common

@@ -42,11 +42,28 @@ CREATE TABLE turtletest.Suites(
   suite_id SERIAL              PRIMARY KEY NOT NULL,
   application_id integer       NOT NULL REFERENCES turtletest.Applications (application_id),
   name           varchar(1024) NOT NULL,
-  version        varchar(1024) NOT NULL,
+  version        varchar(1024) NULL,
   owners         varchar(1024) NULL,
   notes          varchar(4096) NULL);
 
 CREATE INDEX suites_fk_applications ON turtletest.Suites (application_id);
+
+CREATE TABLE turtletest.TestCases(
+  testcase_id SERIAL           PRIMARY KEY NOT NULL,
+  application_id integer       NOT NULL REFERENCES turtletest.Applications (application_id),
+  suite_id integer             NOT NULL REFERENCES turtletest.Suites (suite_id),
+  name           varchar(1024) NOT NULL,
+  version        varchar(1024) NULL,
+  owners         varchar(1024) NULL,
+  notes          varchar(4096) NULL,
+  requirements   varchar(4096) NULL,
+  steps          varchar(4096) NULL,
+  expected       varchar(4096) NULL,
+  history        varchar(4096) NULL,
+  attachments    varchar(4096) NULL);
+
+CREATE INDEX testcases_fk_applications ON turtletest.TestCases (application_id);
+CREATE INDEX testcases_fk_suites ON turtletest.TestCases (suite_id);
 
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA turtletest TO turtletest;
 GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA turtletest TO turtletest;

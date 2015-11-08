@@ -1,9 +1,10 @@
-module suites
+module views.suites
 
 open Suave.Html
 open html_common
 open html_bootstrap
 open types.read
+open views.partial
 
 let suite_create_button user =
   button_create (paths.suiteCreate_link user) [ text "Create"]
@@ -30,18 +31,23 @@ let suite_details (suite : Suite) applications =
     ]
   ]
 
-let testcases_grid testcases =
-  let toTd row = row |> List.map(fun cell' -> td [text cell'])
+let testcases_grid user testcases =
+  let toTd (testcase : TestCase) =
+    [
+      td [ aHref (paths.testcase_link user testcase.Id) [ text (string testcase.Id) ] ]
+      td [ text (string testcase.Name) ]
+      td [ text (string testcase.Version) ]
+      td [ text (string testcase.Owners) ]
+    ]
   block_flat [
     header [ h3 "Test Cases" ]
     content [
       table_bordered
         [
-          "Column 1"
-          "Column 2"
-          "Column 3"
-          "Column 4"
-          "Column 5"
+          "Id"
+          "Name"
+          "Version"
+          "Owners"
         ]
         testcases toTd
     ]
@@ -69,11 +75,11 @@ let grid user suites =
     ]
   ]
 
-let suite_content user suite testcases applications =
+let suite_content user (suite : Suite) testcases applications =
   mcontent [
     row_nomargin [ m12 [ suite_edit_button user suite.Id; suite_create_button user ] ]
     row [ m12 [ suite_details suite applications ] ]
-    row [ m12 [ testcases_grid testcases ] ]
+    row [ m12 [ testcases_grid user testcases ] ]
   ]
 
 let suites_content user applications =
@@ -84,9 +90,9 @@ let suites_content user applications =
 
 let details user suite testcases applications counts =
   base_html
-    "suites"
+    "suite - details"
     [
-      partial_sidebar.left_sidebar user counts
+      partial.sidebar.left_sidebar user counts
       suite_content user suite testcases applications
     ]
     scripts.applications_bundle
@@ -95,7 +101,7 @@ let list user counts (suites : Suite list) =
   base_html
     "suites"
     [
-      partial_sidebar.left_sidebar user counts
+      partial.sidebar.left_sidebar user counts
       suites_content user suites
     ]
     scripts.applications_bundle

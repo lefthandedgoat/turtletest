@@ -1,9 +1,10 @@
-module suitesCreate
+module views.suitesCreate
 
 open Suave.Html
 open html_common
 open html_bootstrap
 open forms.newtypes
+open views.partial
 
 let empty = ""
 
@@ -35,7 +36,7 @@ let html user counts applications =
   base_html
     "create suite"
     [
-      partial_sidebar.left_sidebar user counts
+      partial.sidebar.left_sidebar user counts
       suite_content applications
     ]
     scripts.none
@@ -68,7 +69,7 @@ let error_html user counts applications errors newSuite =
   base_html
     "create suite"
     [
-      partial_sidebar.left_sidebar user counts
+      partial.sidebar.left_sidebar user counts
       error_suite_content applications errors newSuite
     ]
     scripts.none

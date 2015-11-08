@@ -1,9 +1,10 @@
-module applicationsCreate
+module views.applicationsCreate
 
 open Suave.Html
 open html_common
 open html_bootstrap
 open forms.newtypes
+open views.partial
 
 let empty = ""
 let privateOptions = ["",""; "True","Yes"; "False","No"]
@@ -38,7 +39,7 @@ let html user counts =
   base_html
     "create application"
     [
-      partial_sidebar.left_sidebar user counts
+      partial.sidebar.left_sidebar user counts
       applications_content
     ]
     scripts.none
@@ -73,7 +74,7 @@ let error_html user counts errors newApplication =
   base_html
     "create application"
     [
-      partial_sidebar.left_sidebar user counts
+      partial.sidebar.left_sidebar user counts
       error_applications_content errors newApplication
     ]
     scripts.none

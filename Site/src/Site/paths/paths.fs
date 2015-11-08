@@ -39,11 +39,17 @@ let suiteCreate_link user = sprintf "/%s/suite/create" user
 let suiteEdit : StringIntPath = "/%s/suite/edit/%i"
 let suiteEdit_link user id = sprintf "/%s/suite/edit/%i" user id
 
+let testcase : StringIntPath = "/%s/testcase/%i"
+let testcase_link user id = sprintf "/%s/testcase/%i" user id
+
 let testcases : StringPath = "/%s/testcases"
 let testcases_link user = sprintf "/%s/testcases" user
 
-let testcasesCreate : StringPath = "/%s/testcases/create"
-let testcasesCreate_link user = sprintf "/%s/testcases/create" user
+let testcaseCreate : StringPath = "/%s/testcase/create"
+let testcaseCreate_link user = sprintf "/%s/testcase/create" user
+
+let testcaseEdit : StringIntPath = "/%s/testcase/edit/%i"
+let testcaseEdit_link user id = sprintf "/%s/testcase/edit/%i" user id
 
 let executions : StringPath = "/%s/executions"
 let executions_link user = sprintf "/%s/executions" user

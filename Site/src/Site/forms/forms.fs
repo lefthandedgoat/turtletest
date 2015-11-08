@@ -124,11 +124,18 @@ module newvalidations =
   //NEWSUITE
   let applicationRequired = (fun (suite : NewSuite) -> String.IsNullOrWhiteSpace suite.Application |> not), "Application", "Application is required"
   let suiteNameRequired = (fun (suite : NewSuite) -> String.IsNullOrWhiteSpace suite.Name |> not), "Name", "Name is required"
+  let suiteApplicationNumeric =
+    (fun (suite : NewSuite) ->
+      let canParse, _ = System.Int32.TryParse(suite.Application)
+      canParse)
+    ,"Application"
+    ,"Application is not a valid number"
 
   let newSuiteValidation newSuite =
     [
       applicationRequired
       suiteNameRequired
+      suiteApplicationNumeric
     ] |> applyValidations newSuite
 
   //NEWTESTCASE
@@ -163,12 +170,27 @@ module edittypes =
     Notes : string;
   }
 
+  type EditTestCase = {
+    Application : string;
+    Suite : string;
+    Name : string;
+    Version : string;
+    Owners : string;
+    Notes : string;
+    Requirements : string;
+    Steps : string;
+    Expected : string;
+    History : string;
+    Attachments : string;
+  }
+
 module editforms =
   open common
   open edittypes
 
   let editApplication : Form<EditApplication> = form
   let editSuite : Form<EditSuite> = form
+  let editTestCase : Form<EditTestCase> = form
 
 module editvalidations =
   open common
@@ -205,3 +227,29 @@ module editvalidations =
       editSuiteApplicationRequired
       editSuiteApplicationNumeric
     ] |> applyValidations editSuite
+
+  //EDITTESTCASE
+  let editTestCaseApplicationRequired = (fun (testCase : EditTestCase) -> String.IsNullOrWhiteSpace testCase.Application |> not), "Application", "Application is required"
+  let editTestCaseSuiteRequired = (fun (testCase : EditTestCase) -> String.IsNullOrWhiteSpace testCase.Suite |> not), "Suite", "Suite is required"
+  let editTestCaseNameRequired = (fun (testCase : EditTestCase) -> String.IsNullOrWhiteSpace testCase.Name |> not), "Name", "Name is required"
+  let editTestCaseApplicationNumeric =
+    (fun (testCase : EditTestCase) ->
+      let canParse, _ = System.Int32.TryParse(testCase.Application)
+      canParse)
+    ,"Application"
+    ,"Application is not a valid number"
+  let editTestCaseSuiteNumeric =
+    (fun (testCase : EditTestCase) ->
+      let canParse, _ = System.Int32.TryParse(testCase.Suite)
+      canParse)
+    ,"Suite"
+    ,"Suite is not a valid number"
+
+  let editTestCaseValidation editTestCase =
+    [
+      editTestCaseApplicationRequired
+      editTestCaseSuiteRequired
+      editTestCaseNameRequired
+      editTestCaseApplicationNumeric
+      editTestCaseSuiteNumeric
+    ] |> applyValidations editTestCase

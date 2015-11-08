@@ -1,10 +1,11 @@
-module applications
+module views.applications
 
 open Suave.Html
 open html_common
 open html_bootstrap
 open types.read
 open types.permissions
+open views.partial
 
 let privateOptions = ["True","Yes"; "False","No"]
 
@@ -83,7 +84,7 @@ let application_content permission user executionRows (application : Application
     edit_and_create_buttons
     row [ m12 [ application_details application ] ]
     row [ m12 [ suites_grid user suites ] ]
-    row [ m12 [ partial_executions.execution executionRows ] ]
+    row [ m12 [ partial.executions.execution executionRows ] ]
   ]
 
 let applications_content permission user applications =
@@ -101,7 +102,7 @@ let details permission user counts executions application suites =
   base_html
     "application - details"
     [
-      partial_sidebar.left_sidebar user counts
+      partial.sidebar.left_sidebar user counts
       application_content permission user executions application suites
     ]
     scripts.applications_bundle
@@ -110,7 +111,7 @@ let list permission user counts (applications : Application list) =
   base_html
     "applications"
     [
-      partial_sidebar.left_sidebar user counts
+      partial.sidebar.left_sidebar user counts
       applications_content permission user applications
     ]
     scripts.applications_bundle

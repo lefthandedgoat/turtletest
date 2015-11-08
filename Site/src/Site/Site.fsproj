@@ -54,6 +54,7 @@
     <Compile Include="data/applications.fs" />
     <Compile Include="data/permissions.fs" />
     <Compile Include="data/suites.fs" />
+    <Compile Include="data/testcases.fs" />
     <Compile Include="html/common.fs" />
     <Compile Include="html/bootstrap.fs" />
     <Compile Include="html/scripts.fs" />
@@ -71,6 +72,7 @@
     <Compile Include="views/suiteEdit.fs" />
     <Compile Include="views/testcases.fs" />
     <Compile Include="views/testcasesCreate.fs" />
+    <Compile Include="views/testcasesEdit.fs" />
     <Compile Include="views/executions.fs" />
     <Compile Include="views/root.fs" />
     <Compile Include="sausage_factory.fs" />

@@ -1,4 +1,4 @@
-module suiteEdit
+module views.suiteEdit
 
 open Suave.Html
 open html_common
@@ -6,6 +6,7 @@ open html_bootstrap
 open types.read
 open forms.newtypes
 open forms.edittypes
+open views.partial
 
 let empty = ""
 
@@ -38,7 +39,7 @@ let html user counts applications editSuite =
   base_html
     "edit suite"
     [
-      partial_sidebar.left_sidebar user counts
+      partial.sidebar.left_sidebar user counts
       suite_content applications editSuite
     ]
     scripts.none
@@ -71,7 +72,7 @@ let error_html user counts errors applications editSuite =
   base_html
     "edit suite"
     [
-      partial_sidebar.left_sidebar user counts
+      partial.sidebar.left_sidebar user counts
       error_suite_content errors applications editSuite
     ]
     scripts.none

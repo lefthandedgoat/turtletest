@@ -1,4 +1,4 @@
-module login
+module views.login
 
 open Suave.Html
 open html_common

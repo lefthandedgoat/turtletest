@@ -1,10 +1,11 @@
-module applicationsEdit
+module views.applicationsEdit
 
 open Suave.Html
 open html_common
 open html_bootstrap
 open types.read
 open forms.edittypes
+open views.partial
 
 let empty = ""
 let privateOptions = ["",""; "True","Yes"; "False","No"]
@@ -39,7 +40,7 @@ let html user counts editApplication =
   base_html
     "edit application"
     [
-      partial_sidebar.left_sidebar user counts
+      partial.sidebar.left_sidebar user counts
       applications_content editApplication
     ]
     scripts.none
@@ -74,7 +75,7 @@ let error_html user counts errors editApplication =
   base_html
     "edit application"
     [
-      partial_sidebar.left_sidebar user counts
+      partial.sidebar.left_sidebar user counts
       error_applications_content errors editApplication
     ]
     scripts.none
