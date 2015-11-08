@@ -73,6 +73,7 @@
     <Compile Include="views/testcasesCreate.fs" />
     <Compile Include="views/executions.fs" />
     <Compile Include="views/root.fs" />
+    <Compile Include="sausage_factory.fs" />
     <Compile Include="Program.fs" />
     <Content Include="css/*.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
