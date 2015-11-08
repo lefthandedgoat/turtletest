@@ -101,14 +101,10 @@ let login'' =
 
 let logout'' = choose [ GET >>= reset ]
 
-let home'' userName = warbler (fun _ ->
-  let user = data_users.tryByName userName
-  match user with
-    | None -> NOT_FOUND "Page not found"
-    | Some(_) ->
-      let counts = fake.counts()
-      let executions = fake.executions 5 ["Android"; "IOS"; "Desktop"]
-      OK <| home.html userName counts executions)
+let home'' (user : User) session = warbler (fun _ ->
+  let counts = fake.counts()
+  let executions = fake.executions 5 ["Android"; "IOS"; "Desktop"]
+  OK <| home.html user.Name counts executions)
 
 let application'' id (user : User) session = warbler (fun _ ->
   let application = data_applications.tryById id
@@ -243,13 +239,9 @@ let testcasesCreate'' (user : User) session =
       else FOUND <| paths.testcases_link user.Name)
   ]
 
-let executions'' userName = warbler (fun _ ->
-  let user = data_users.tryByName userName
-  match user with
-    | None -> NOT_FOUND "Page not found"
-    | Some(user) ->
-      let counts = fake.counts()
-      OK <| executions.html userName counts)
+let executions'' (user : User) session = warbler (fun _ ->
+  let counts = fake.counts()
+  OK <| executions.html user.Name counts)
 
 let root'' =
   choose [
@@ -279,8 +271,8 @@ let webPart =
       pathScan paths.suite (fun (userName, id) -> userExists userName (canView (suite'' id)))
       pathScan paths.suites (fun userName -> userExists userName (canView suites''))
       pathScan paths.testcases (fun userName -> userExists userName (canView testcases''))
-      pathScan paths.executions executions''
-      pathScan paths.home home''
+      pathScan paths.executions (fun userName -> userExists userName (canView executions''))
+      pathScan paths.home (fun userName -> userExists userName (canView home''))
     ]
   ]
 
