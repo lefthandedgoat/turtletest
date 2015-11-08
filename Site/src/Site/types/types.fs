@@ -33,6 +33,7 @@ type User =
 type Application =
   {
     Id : int
+    Private : bool
     Name : string
     Address : string
     Documentation : string

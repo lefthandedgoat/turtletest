@@ -26,6 +26,7 @@ let executions count apps =
 let application : Application =
   {
     Id = 1
+    Private = false
     Name = "Android"
     Address = "http://www.android.com"
     Documentation = "https://developer.android.com/guide/index.html"

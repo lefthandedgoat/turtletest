@@ -13,6 +13,7 @@ let toApplication (reader : NpgsqlDataReader) : Application list =
     yield {
       Id = getInt32 "application_id" reader
       Name = getString "name" reader
+      Private = getBool "private" reader
       Address = getString "address" reader
       Documentation = getString "documentation" reader
       Owners = getString "owners" reader
@@ -27,6 +28,7 @@ INSERT INTO turtletest.Applications
   (application_id
    ,user_id
    ,name
+   ,private
    ,address
    ,documentation
    ,owners
@@ -36,6 +38,7 @@ INSERT INTO turtletest.Applications
    DEFAULT
    ,:user_id
    ,:name
+   ,:private
    ,:address
    ,:documentation
    ,:owners
@@ -47,6 +50,7 @@ INSERT INTO turtletest.Applications
   use command = command connection sql
   command
   |> param "name" application.Name
+  |> param "private" (boolean application.Private)
   |> param "user_id" user_id
   |> param "address" application.Address
   |> param "documentation" application.Documentation
@@ -61,6 +65,7 @@ let update application_id (editApplication : forms.EditApplication) =
 UPDATE turtletest.Applications
 SET
   name = :name
+  ,private = :private
   ,address = :address
   ,documentation = :documentation
   ,owners = :owners
@@ -72,6 +77,7 @@ WHERE application_id = :application_id;
   use command = command connection sql
   command
   |> param "name" editApplication.Name
+  |> param "private" (boolean editApplication.Private)
   |> param "address" editApplication.Address
   |> param "documentation" editApplication.Documentation
   |> param "owners" editApplication.Owners

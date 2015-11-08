@@ -6,6 +6,7 @@ open html_bootstrap
 open types
 
 let empty = ""
+let privateOptions = ["",""; "True","Yes"; "False","No"]
 
 let applications_details =
   block_flat [
@@ -18,6 +19,7 @@ let applications_details =
         label_text "Owners" empty
         label_text "Developers" empty
         label_textarea "Notes" empty
+        label_select "Private" privateOptions
         form_group [ sm10 [ button_save ] ]
       ]
     ]
@@ -52,6 +54,7 @@ let error_applications_details errors (newApplication : forms.NewApplication) =
         errored_label_text "Owners" newApplication.Owners errors
         errored_label_text "Developers" newApplication.Developers errors
         errored_label_textarea "Notes" newApplication.Notes errors
+        errored_label_select "Private" privateOptions newApplication.Private errors
         form_group [ sm10 [ button_save ] ]
       ]
     ]

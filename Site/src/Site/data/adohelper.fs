@@ -4,6 +4,8 @@ open Npgsql
 
 let firstOrNone s = s |> Seq.tryFind (fun _ -> true)
 
+let boolean (value : string) = System.Convert.ToBoolean(value)
+
 let connection (connectionString : string) =
   let connection = new NpgsqlConnection(connectionString)
   connection.Open()
@@ -32,3 +34,6 @@ let getInt32 name (reader : NpgsqlDataReader) =
 
 let getString name (reader : NpgsqlDataReader) =
   reader.GetString(reader.GetOrdinal(name))
+
+let getBool name (reader : NpgsqlDataReader) =
+  reader.GetBoolean(reader.GetOrdinal(name))

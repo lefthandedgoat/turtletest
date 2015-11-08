@@ -59,6 +59,7 @@ let newUserValidation newUser =
 
 type NewApplication = {
   Name : string;
+  Private : string;
   Address : string;
   Documentation : string;
   Owners : string;
@@ -69,10 +70,17 @@ type NewApplication = {
 let newApplication : Form<NewApplication> = form
 
 let applicationNameRequired = (fun (app : NewApplication) -> String.IsNullOrWhiteSpace app.Name |> not), "Name", "Name is required"
+let applicationPrivateIsBool =
+  (fun (app : NewApplication) ->
+   let canConvert, _ = System.Boolean.TryParse(app.Private)
+   canConvert)
+  ,"Private"
+  ,"Private must be Yes or No"
 
 let newApplicationValidation newApplication =
   [
     applicationNameRequired
+    applicationPrivateIsBool
   ] |> applyValidations newApplication
 
 type NewSuite = {
@@ -123,6 +131,7 @@ let newTestCaseValidation newTestCase =
 
 type EditApplication = {
   Name : string;
+  Private : string;
   Address : string;
   Documentation : string;
   Owners : string;
@@ -133,10 +142,17 @@ type EditApplication = {
 let editApplication : Form<EditApplication> = form
 
 let editApplicationNameRequired = (fun (app : EditApplication) -> String.IsNullOrWhiteSpace app.Name |> not), "Name", "Name is required"
+let editApplicationPrivateIsBool =
+  (fun (app : EditApplication) ->
+   let canConvert, _ = System.Boolean.TryParse(app.Private)
+   canConvert)
+  ,"Private"
+  ,"Private must be Yes or No"
 
 let editApplicationValidation editApplication =
   [
     editApplicationNameRequired
+    editApplicationPrivateIsBool
   ] |> applyValidations editApplication
 
 type EditSuite = {
