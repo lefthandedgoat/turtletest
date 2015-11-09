@@ -124,7 +124,7 @@ let suite'' id (user : User) session = warbler (fun _ ->
       | None -> NOT_FOUND "Page not found"
       | Some(suite') ->
         let counts = data.counts.getCounts user.Name session
-        let testcases = data.testcases.getByUserId user.Id
+        let testcases = data.testcases.getBySuiteId id
         let applications = data.applications.getByUserId user.Id
         OK <| views.suites.details user.Name suite' testcases applications counts)
 
