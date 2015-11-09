@@ -114,59 +114,76 @@ let applications'' (user : User) (session : Session) = warbler (fun _ ->
   else OK <| views.applications.list permissions user.Name counts apps)
 
 let suite'' id (user : User) session = warbler (fun _ ->
-  let suite = data.suites.tryById id
-  match suite with
-    | None -> NOT_FOUND "Page not found"
-    | Some(suite') ->
-      let counts = data.fake.counts()
-      let testcases = data.testcases.getByUserId user.Id
-      let applications = data.applications.getByUserId user.Id
-      OK <| views.suites.details user.Name suite' testcases applications counts)
+  let permissions = data.permissions.getSpecificSuiteCreateEditPermissions id session
+  if ownerOrContributor permissions |> not
+  then NOT_FOUND "Page not found"
+  else
+    let suite = data.suites.tryById id
+    match suite with
+      | None -> NOT_FOUND "Page not found"
+      | Some(suite') ->
+        let counts = data.fake.counts()
+        let testcases = data.testcases.getByUserId user.Id
+        let applications = data.applications.getByUserId user.Id
+        OK <| views.suites.details user.Name suite' testcases applications counts)
 
 let suiteCreate'' (user : User) session =
-  let counts = data.fake.counts()
-  let applications = data.applications.getByUserId user.Id
-  choose [
-    GET >>= warbler (fun _ ->
-      OK <| views.suitesCreate.html user.Name counts applications)
-    POST >>= bindToForm newforms.newSuite (fun newSuite ->
-      let errors = newvalidations.newSuiteValidation newSuite
-      if errors.Length > 0
-      then OK <| views.suitesCreate.error_html user.Name counts applications errors newSuite
-      else
-        let application' = data.applications.tryById (int newSuite.Application)
-        match application' with
-        | None -> NOT_FOUND "Page not found"
-        | Some(application) ->
-          let id = data.suites.insert application.Id newSuite
-          FOUND <| paths.suite_link user.Name id)
-  ]
+  let permissions = data.permissions.getSuiteCreateEditPermissions session
+  if ownerOrContributor permissions |> not
+  then NOT_FOUND "Page not found"
+  else
+    let counts = data.fake.counts()
+    let applications = data.applications.getByUserId user.Id
+    choose [
+      GET >>= warbler (fun _ ->
+        OK <| views.suitesCreate.html user.Name counts applications)
+      POST >>= bindToForm newforms.newSuite (fun newSuite ->
+        let errors = newvalidations.newSuiteValidation newSuite
+        if errors.Length > 0
+        then OK <| views.suitesCreate.error_html user.Name counts applications errors newSuite
+        else
+          let application' = data.applications.tryById (int newSuite.Application)
+          match application' with
+          | None -> NOT_FOUND "Page not found"
+          | Some(application) ->
+            let id = data.suites.insert application.Id newSuite
+            FOUND <| paths.suite_link user.Name id)
+    ]
 
 let suiteEdit'' id (user : User) session =
-  let counts = data.fake.counts()
-  let applications = data.applications.getByUserId user.Id
-  choose [
-    GET >>= warbler (fun _ ->
-      let suite = data.suites.tryById id
-      match suite with
-      | None -> NOT_FOUND "Page not found"
-      | Some(suite) ->
-        OK <| views.suiteEdit.html user.Name counts applications suite)
-    POST >>= bindToForm editforms.editSuite (fun editSuite ->
-      let errors = editvalidations.editSuiteValidation editSuite
-      if errors.Length > 0
-      then OK <| views.suiteEdit.error_html user.Name counts errors applications editSuite
-      else
-        data.suites.update id editSuite
-        FOUND <| paths.suite_link user.Name id)
-  ]
+  let permissions = data.permissions.getSpecificSuiteCreateEditPermissions id session
+  if ownerOrContributor permissions |> not
+  then NOT_FOUND "Page not found"
+  else
+    let counts = data.fake.counts()
+    let applications = data.applications.getByUserId user.Id
+    choose [
+      GET >>= warbler (fun _ ->
+        let suite = data.suites.tryById id
+        match suite with
+        | None -> NOT_FOUND "Page not found"
+        | Some(suite) ->
+          OK <| views.suiteEdit.html user.Name counts applications suite)
+      POST >>= bindToForm editforms.editSuite (fun editSuite ->
+        let errors = editvalidations.editSuiteValidation editSuite
+        if errors.Length > 0
+        then OK <| views.suiteEdit.error_html user.Name counts errors applications editSuite
+        else
+          data.suites.update id editSuite
+          FOUND <| paths.suite_link user.Name id)
+    ]
 
 let suites'' (user : User) session = warbler (fun _ ->
-  let counts = data.fake.counts()
-  let suites' = data.suites.getByUserId user.Id
-  if suites'.Length = 0
-  then FOUND <| paths.suiteCreate_link user.Name
-  else OK <| views.suites.list user.Name counts suites')
+  //todo switch to being able to view public suites
+  let permissions = data.permissions.getSuiteCreateEditPermissions session
+  if ownerOrContributor permissions |> not
+  then NOT_FOUND "Page not found"
+  else
+    let counts = data.fake.counts()
+    let suites' = data.suites.getByUserId user.Id
+    if suites'.Length = 0
+    then FOUND <| paths.suiteCreate_link user.Name
+    else OK <| views.suites.list user.Name counts suites')
 
 let testcase'' id (user : User) session = warbler (fun _ ->
   let testcase = data.testcases.tryById id
@@ -204,7 +221,7 @@ let testcaseCreate'' (user : User) session =
     ]
 
 let testcaseEdit'' id (user : User) session =
-  let permissions = data.permissions.getTestCaseCreateEditPermissions session
+  let permissions = data.permissions.getSpecificTestCaseCreateEditPermissions id session
   if ownerOrContributor permissions |> not
   then NOT_FOUND "Page not found"
   else

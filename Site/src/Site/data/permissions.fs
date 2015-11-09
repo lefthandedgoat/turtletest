@@ -57,6 +57,56 @@ let getApplicationsCreateEditPermissions userName session =
       then Owner
       else Neither //only owners can create and edit applications
 
+let getSpecificSuiteCreateEditPermissions (suite_id : int) session =
+  let getSuitePermission user_id suite_id =
+    let sql = """
+  SELECT p.*
+  FROM turtletest.Suites as s
+  JOIN turtletest.Permissions as p
+  ON s.application_id = p.application_id
+  WHERE s.suite_id = :suite_id
+  AND p.user_id = :user_id
+  """
+    use connection = connection connectionString
+    use command = command connection sql
+    command
+    |> param "suite_id" suite_id
+    |> param "user_id" user_id
+    |> read toPermission
+    |> firstOrNone
+
+  match session with
+    | NoSession -> Neither
+    | User(user_id) ->
+      let permission = getSuitePermission user_id suite_id
+      match permission with
+        | Some(permission) -> permission.Permission
+        | None -> Neither
+
+let getSuiteCreateEditPermissions session =
+  let getSuitePermission user_id =
+    let sql = """
+  SELECT p.*
+  FROM turtletest.Suites as s
+  JOIN turtletest.Permissions as p
+  ON s.application_id = p.application_id
+  WHERE p.user_id = :user_id
+  """
+    use connection = connection connectionString
+    use command = command connection sql
+    command
+    |> param "user_id" user_id
+    |> read toPermission
+    |> firstOrNone
+
+  match session with
+    | NoSession -> Neither
+    | User(user_id) ->
+      let permission = getSuitePermission user_id
+      match permission with
+        | Some(permission) -> permission.Permission
+        | None -> Neither
+
 let getSpecificTestCaseCreateEditPermissions (testcase_id : int) session =
   let getTestCasePermission user_id =
     let sql = """
