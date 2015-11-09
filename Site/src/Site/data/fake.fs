@@ -4,13 +4,6 @@ open types.read
 
 let empty = ""
 let random = System.Random()
-let counts () =
-  {
-    Applications = random.Next(1, 10)
-    Suites = random.Next(4, 20)
-    TestCases = random.Next(50, 500)
-    Executions = random.Next(20, 100)
-  }
 
 let executions count apps =
   let appsCount = List.length apps

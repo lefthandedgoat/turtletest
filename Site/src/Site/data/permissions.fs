@@ -19,7 +19,7 @@ let toPermission (reader : NpgsqlDataReader) : Permission list =
     }
   ]
 
-let insert (permission : Permission) =
+let insert user_id application_id permissions =
   let sql = """
 INSERT INTO turtletest.Permissions
   (user_id
@@ -34,9 +34,9 @@ INSERT INTO turtletest.Permissions
   use connection = connection connectionString
   use command = command connection sql
   command
-  |> param "user_id" permission.UserId
-  |> param "application_id" permission.ApplicationId
-  |> param "permission" (permissionToInt permission.Permission)
+  |> param "user_id" user_id
+  |> param "application_id" application_id
+  |> param "permission" (permissionToInt permissions)
   |> executeNonQuery
 
 let getPermissionsAndApplications userName session =

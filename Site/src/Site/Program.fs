@@ -51,7 +51,7 @@ let login'' =
 let logout'' = choose [ GET >>= reset ]
 
 let home'' (user : User) session = warbler (fun _ ->
-  let counts = data.fake.counts()
+  let counts = data.counts.getCounts user.Name session
   let executions = data.fake.executions 5 ["Android"; "IOS"; "Desktop"]
   OK <| views.home.html user.Name counts executions)
 
@@ -60,7 +60,7 @@ let application'' id (user : User) session = warbler (fun _ ->
   match application with
     | None -> NOT_FOUND "Page not found"
     | Some(application) ->
-      let counts = data.fake.counts()
+      let counts = data.counts.getCounts user.Name session
       let permissions = data.permissions.getApplicationsCreateEditPermissions user.Name session
       let executions = data.fake.executions 8 [application.Name]
       let suites = data.suites.getByApplicationId application.Id
@@ -71,7 +71,7 @@ let applicationCreate'' (user : User) session =
   if owner permissions |> not
   then NOT_FOUND "Page not found"
   else
-    let counts = data.fake.counts()
+    let counts = data.counts.getCounts user.Name session
     choose [
       GET >>= warbler (fun _ ->
         OK <| views.applicationsCreate.html user.Name counts)
@@ -80,6 +80,7 @@ let applicationCreate'' (user : User) session =
         if errors.Length = 0
         then
           let id = data.applications.insert user.Id newApplication
+          data.permissions.insert user.Id id Permissions.Owner
           FOUND <| paths.application_link user.Name id
         else OK <| views.applicationsCreate.error_html user.Name counts errors newApplication)
     ]
@@ -89,7 +90,7 @@ let applicationEdit'' id (user : User) session =
   if owner permissions |> not
   then NOT_FOUND "Page not found"
   else
-    let counts = data.fake.counts()
+    let counts = data.counts.getCounts user.Name session
     choose [
       GET >>= warbler (fun _ ->
         let application' = data.applications.tryById id
@@ -108,7 +109,7 @@ let applicationEdit'' id (user : User) session =
 
 let applications'' (user : User) (session : Session) = warbler (fun _ ->
   let permissions, apps = data.permissions.getPermissionsAndApplications user.Name session
-  let counts = data.fake.counts()
+  let counts = data.counts.getCounts user.Name session
   if ownerOrContributor permissions && apps.Length = 0
   then FOUND <| paths.applicationCreate_link user.Name
   else OK <| views.applications.list permissions user.Name counts apps)
@@ -122,7 +123,7 @@ let suite'' id (user : User) session = warbler (fun _ ->
     match suite with
       | None -> NOT_FOUND "Page not found"
       | Some(suite') ->
-        let counts = data.fake.counts()
+        let counts = data.counts.getCounts user.Name session
         let testcases = data.testcases.getByUserId user.Id
         let applications = data.applications.getByUserId user.Id
         OK <| views.suites.details user.Name suite' testcases applications counts)
@@ -132,7 +133,7 @@ let suiteCreate'' (user : User) session =
   if ownerOrContributor permissions |> not
   then NOT_FOUND "Page not found"
   else
-    let counts = data.fake.counts()
+    let counts = data.counts.getCounts user.Name session
     let applications = data.applications.getByUserId user.Id
     choose [
       GET >>= warbler (fun _ ->
@@ -155,7 +156,7 @@ let suiteEdit'' id (user : User) session =
   if ownerOrContributor permissions |> not
   then NOT_FOUND "Page not found"
   else
-    let counts = data.fake.counts()
+    let counts = data.counts.getCounts user.Name session
     let applications = data.applications.getByUserId user.Id
     choose [
       GET >>= warbler (fun _ ->
@@ -179,7 +180,7 @@ let suites'' (user : User) session = warbler (fun _ ->
   if ownerOrContributor permissions |> not
   then NOT_FOUND "Page not found"
   else
-    let counts = data.fake.counts()
+    let counts = data.counts.getCounts user.Name session
     let suites' = data.suites.getByUserId user.Id
     if suites'.Length = 0
     then FOUND <| paths.suiteCreate_link user.Name
@@ -195,7 +196,7 @@ let testcase'' id (user : User) session = warbler (fun _ ->
       if ownerOrContributor permissions |> not
       then NOT_FOUND "Page not found"
       else
-        let counts = data.fake.counts()
+        let counts = data.counts.getCounts user.Name session
         let applications = data.applications.getByUserId user.Id
         let suites = data.suites.getByUserId user.Id
         OK <| views.testcases.details permissions user.Name applications suites counts testcase)
@@ -205,7 +206,7 @@ let testcaseCreate'' (user : User) session =
   if ownerOrContributor permissions |> not
   then NOT_FOUND "Page not found"
   else
-    let counts = data.fake.counts()
+    let counts = data.counts.getCounts user.Name session
     let applications = data.applications.getByUserId user.Id
     let suites = data.suites.getByUserId user.Id
     choose [
@@ -225,7 +226,7 @@ let testcaseEdit'' id (user : User) session =
   if ownerOrContributor permissions |> not
   then NOT_FOUND "Page not found"
   else
-    let counts = data.fake.counts()
+    let counts = data.counts.getCounts user.Name session
     let applications = data.applications.getByUserId user.Id
     let suites = data.suites.getByUserId user.Id
     choose [
@@ -250,7 +251,7 @@ let testcases'' (user : User) session = warbler (fun _ ->
   if ownerOrContributor permissions |> not
   then NOT_FOUND "Page not found"
   else
-    let counts = data.fake.counts()
+    let counts = data.counts.getCounts user.Name session
     let testcases = data.testcases.getByUserId user.Id
     if testcases.Length = 0
     then FOUND <| paths.testcaseCreate_link user.Name
@@ -258,7 +259,7 @@ let testcases'' (user : User) session = warbler (fun _ ->
       OK <| views.testcases.list permissions user.Name counts testcases)
 
 let executions'' (user : User) session = warbler (fun _ ->
-  let counts = data.fake.counts()
+  let counts = data.counts.getCounts user.Name session
   OK <| views.executions.html user.Name counts)
 
 let root'' =

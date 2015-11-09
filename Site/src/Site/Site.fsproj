@@ -55,6 +55,7 @@
     <Compile Include="data/permissions.fs" />
     <Compile Include="data/suites.fs" />
     <Compile Include="data/testcases.fs" />
+    <Compile Include="data/counts.fs" />
     <Compile Include="html/common.fs" />
     <Compile Include="html/bootstrap.fs" />
     <Compile Include="html/scripts.fs" />
