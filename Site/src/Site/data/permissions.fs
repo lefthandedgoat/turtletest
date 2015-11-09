@@ -83,7 +83,7 @@ let getSpecificSuiteCreateEditPermissions (suite_id : int) session =
         | Some(permission) -> permission.Permission
         | None -> Neither
 
-let getSuiteCreateEditPermissions session =
+let getSuiteCreateEditPermissions userName session =
   let getSuitePermission user_id =
     let sql = """
   SELECT p.*
@@ -102,10 +102,14 @@ let getSuiteCreateEditPermissions session =
   match session with
     | NoSession -> Neither
     | User(user_id) ->
-      let permission = getSuitePermission user_id
-      match permission with
-        | Some(permission) -> permission.Permission
-        | None -> Neither
+      let user = data.users.getById user_id
+      if user.Name = userName
+      then Owner
+      else
+        let permission = getSuitePermission user_id
+        match permission with
+          | Some(permission) -> permission.Permission
+          | None -> Neither
 
 let getSpecificTestCaseCreateEditPermissions (testcase_id : int) session =
   let getTestCasePermission user_id =
@@ -135,7 +139,7 @@ let getSpecificTestCaseCreateEditPermissions (testcase_id : int) session =
 
 //todo ultimately this should return a list of applications
 //or something that the user can do stuff to
-let getTestCaseCreateEditPermissions session =
+let getTestCaseCreateEditPermissions userName session =
   let getTestCasePermission user_id =
     let sql = """
   SELECT p.*
@@ -154,7 +158,11 @@ let getTestCaseCreateEditPermissions session =
   match session with
     | NoSession -> Neither
     | User(user_id) ->
-      let permission = getTestCasePermission user_id
-      match permission with
-        | Some(permission) -> permission.Permission
-        | None -> Neither
+      let user = data.users.getById user_id
+      if user.Name = userName
+      then Owner
+      else
+        let permission = getTestCasePermission user_id
+        match permission with
+          | Some(permission) -> permission.Permission
+          | None -> Neither

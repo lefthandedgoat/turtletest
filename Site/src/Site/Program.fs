@@ -129,7 +129,7 @@ let suite'' id (user : User) session = warbler (fun _ ->
         OK <| views.suites.details session user.Name suite' testcases applications counts)
 
 let suiteCreate'' (user : User) session =
-  let permissions = data.permissions.getSuiteCreateEditPermissions session
+  let permissions = data.permissions.getSuiteCreateEditPermissions user.Name session
   if ownerOrContributor permissions |> not
   then NOT_FOUND "Page not found"
   else
@@ -176,7 +176,7 @@ let suiteEdit'' id (user : User) session =
 
 let suites'' (user : User) session = warbler (fun _ ->
   //todo switch to being able to view public suites
-  let permissions = data.permissions.getSuiteCreateEditPermissions session
+  let permissions = data.permissions.getSuiteCreateEditPermissions user.Name session
   if ownerOrContributor permissions |> not
   then NOT_FOUND "Page not found"
   else
@@ -202,7 +202,7 @@ let testcase'' id (user : User) session = warbler (fun _ ->
         OK <| views.testcases.details session permissions user.Name applications suites counts testcase)
 
 let testcaseCreate'' (user : User) session =
-  let permissions = data.permissions.getTestCaseCreateEditPermissions session
+  let permissions = data.permissions.getTestCaseCreateEditPermissions user.Name session
   if ownerOrContributor permissions |> not
   then NOT_FOUND "Page not found"
   else
@@ -247,7 +247,7 @@ let testcaseEdit'' id (user : User) session =
 
 let testcases'' (user : User) session = warbler (fun _ ->
   //todo switch to being able to view public test cases
-  let permissions = data.permissions.getTestCaseCreateEditPermissions session
+  let permissions = data.permissions.getTestCaseCreateEditPermissions user.Name session
   if ownerOrContributor permissions |> not
   then NOT_FOUND "Page not found"
   else
