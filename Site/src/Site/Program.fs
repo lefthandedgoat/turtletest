@@ -29,8 +29,13 @@ let register'' =
       if errors.Length > 0
       then OK <| views.register.error_html errors newUser
       else
-        data.users.insert newUser |> ignore //ignore for now, in future return success/failure (duplicate username etc)
-        FOUND <| paths.home_link newUser.Name)
+        //todo check for duplicates etc, I think it will error
+        let id = data.users.insert newUser
+        //todo common code to move to the sausage factory???
+        Auth.authenticated Cookie.CookieLife.Session false
+        >>= statefulForSession
+        >>= sessionStore (fun store -> store.set "user_id" id)
+        >>= request (fun _ -> FOUND <| paths.home_link newUser.Name))
   ]
 
 let login'' =
