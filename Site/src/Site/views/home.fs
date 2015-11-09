@@ -17,11 +17,11 @@ let home_content user counts executionRows =
     row [ m12 [ partial.executions.execution executionRows ] ]
   ]
 
-let html user counts executions =
+let html session user counts executions =
   base_html
     "home"
     [
-      views.partial.sidebar.left_sidebar user counts
+      views.partial.sidebar.left_sidebar session user counts
       home_content user counts executions
     ]
     scripts.none

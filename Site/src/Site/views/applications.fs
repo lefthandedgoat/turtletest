@@ -98,20 +98,20 @@ let applications_content permission user applications =
     row [ m12 [ grid user applications ] ]
   ]
 
-let details permission user counts executions application suites =
+let details session permission user counts executions application suites =
   base_html
     "application - details"
     [
-      partial.sidebar.left_sidebar user counts
+      partial.sidebar.left_sidebar session user counts
       application_content permission user executions application suites
     ]
     scripts.applications_bundle
 
-let list permission user counts (applications : Application list) =
+let list session permission user counts (applications : Application list) =
   base_html
     "applications"
     [
-      partial.sidebar.left_sidebar user counts
+      partial.sidebar.left_sidebar session user counts
       applications_content permission user applications
     ]
     scripts.applications_bundle

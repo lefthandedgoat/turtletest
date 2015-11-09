@@ -36,11 +36,11 @@ let applications_content editApplication =
     ]
   ]
 
-let html user counts editApplication =
+let html session user counts editApplication =
   base_html
     "edit application"
     [
-      partial.sidebar.left_sidebar user counts
+      partial.sidebar.left_sidebar session user counts
       applications_content editApplication
     ]
     scripts.none
@@ -71,11 +71,11 @@ let error_applications_content errors editApplication =
     ]
   ]
 
-let error_html user counts errors editApplication =
+let error_html session user counts errors editApplication =
   base_html
     "edit application"
     [
-      partial.sidebar.left_sidebar user counts
+      partial.sidebar.left_sidebar session user counts
       error_applications_content errors editApplication
     ]
     scripts.none

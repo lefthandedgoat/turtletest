@@ -88,20 +88,20 @@ let suites_content user applications =
     row [ m12 [ grid user applications ] ]
   ]
 
-let details user suite testcases applications counts =
+let details session user suite testcases applications counts =
   base_html
     "suite - details"
     [
-      partial.sidebar.left_sidebar user counts
+      partial.sidebar.left_sidebar session user counts
       suite_content user suite testcases applications
     ]
     scripts.applications_bundle
 
-let list user counts (suites : Suite list) =
+let list session user counts (suites : Suite list) =
   base_html
     "suites"
     [
-      partial.sidebar.left_sidebar user counts
+      partial.sidebar.left_sidebar session user counts
       suites_content user suites
     ]
     scripts.applications_bundle

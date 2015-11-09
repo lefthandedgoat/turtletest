@@ -35,11 +35,11 @@ let applications_content =
     ]
   ]
 
-let html user counts =
+let html session user counts =
   base_html
     "create application"
     [
-      partial.sidebar.left_sidebar user counts
+      partial.sidebar.left_sidebar session user counts
       applications_content
     ]
     scripts.none
@@ -70,11 +70,11 @@ let error_applications_content errors newApplication =
     ]
   ]
 
-let error_html user counts errors newApplication =
+let error_html session user counts errors newApplication =
   base_html
     "create application"
     [
-      partial.sidebar.left_sidebar user counts
+      partial.sidebar.left_sidebar session user counts
       error_applications_content errors newApplication
     ]
     scripts.none

@@ -40,11 +40,11 @@ let testcase_content applications suites editTestCase =
     ]
   ]
 
-let html user counts applications suites editTestCase =
+let html session user counts applications suites editTestCase =
   base_html
     "edit test case"
     [
-      partial.sidebar.left_sidebar user counts
+      partial.sidebar.left_sidebar session user counts
       testcase_content applications suites editTestCase
     ]
     scripts.none
@@ -79,11 +79,11 @@ let error_testcase_content errors applications suites editSuite =
     ]
   ]
 
-let error_html user counts errors applications suites editTestCase =
+let error_html session user counts errors applications suites editTestCase =
   base_html
     "edit test case"
     [
-      partial.sidebar.left_sidebar user counts
+      partial.sidebar.left_sidebar session user counts
       error_testcase_content errors applications suites editTestCase
     ]
     scripts.none

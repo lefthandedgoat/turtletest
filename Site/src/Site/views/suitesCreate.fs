@@ -32,11 +32,11 @@ let suite_content applications =
     ]
   ]
 
-let html user counts applications =
+let html session user counts applications =
   base_html
     "create suite"
     [
-      partial.sidebar.left_sidebar user counts
+      partial.sidebar.left_sidebar session user counts
       suite_content applications
     ]
     scripts.none
@@ -65,11 +65,11 @@ let error_suite_content applications errors newSuite =
     ]
   ]
 
-let error_html user counts applications errors newSuite =
+let error_html session user counts applications errors newSuite =
   base_html
     "create suite"
     [
-      partial.sidebar.left_sidebar user counts
+      partial.sidebar.left_sidebar session user counts
       error_suite_content applications errors newSuite
     ]
     scripts.none

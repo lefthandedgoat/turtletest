@@ -53,7 +53,7 @@ let logout'' = choose [ GET >>= reset ]
 let home'' (user : User) session = warbler (fun _ ->
   let counts = data.counts.getCounts user.Name session
   let executions = data.fake.executions 5 ["Android"; "IOS"; "Desktop"]
-  OK <| views.home.html user.Name counts executions)
+  OK <| views.home.html session user.Name counts executions)
 
 let application'' id (user : User) session = warbler (fun _ ->
   let application = data.applications.tryById id
@@ -64,7 +64,7 @@ let application'' id (user : User) session = warbler (fun _ ->
       let permissions = data.permissions.getApplicationsCreateEditPermissions user.Name session
       let executions = data.fake.executions 8 [application.Name]
       let suites = data.suites.getByApplicationId application.Id
-      OK <| views.applications.details permissions user.Name counts executions application suites)
+      OK <| views.applications.details session permissions user.Name counts executions application suites)
 
 let applicationCreate'' (user : User) session =
   let permissions = data.permissions.getApplicationsCreateEditPermissions user.Name session
@@ -74,7 +74,7 @@ let applicationCreate'' (user : User) session =
     let counts = data.counts.getCounts user.Name session
     choose [
       GET >>= warbler (fun _ ->
-        OK <| views.applicationsCreate.html user.Name counts)
+        OK <| views.applicationsCreate.html session user.Name counts)
       POST >>= bindToForm newforms.newApplication (fun newApplication ->
         let errors = newvalidations.newApplicationValidation newApplication
         if errors.Length = 0
@@ -82,7 +82,7 @@ let applicationCreate'' (user : User) session =
           let id = data.applications.insert user.Id newApplication
           data.permissions.insert user.Id id Permissions.Owner
           FOUND <| paths.application_link user.Name id
-        else OK <| views.applicationsCreate.error_html user.Name counts errors newApplication)
+        else OK <| views.applicationsCreate.error_html session user.Name counts errors newApplication)
     ]
 
 let applicationEdit'' id (user : User) session =
@@ -97,14 +97,14 @@ let applicationEdit'' id (user : User) session =
         match application' with
         | None -> NOT_FOUND "Page not found"
         | Some(application) ->
-          OK <| views.applicationsEdit.html user.Name counts application)
+          OK <| views.applicationsEdit.html session user.Name counts application)
       POST >>= bindToForm editforms.editApplication (fun editApplication ->
         let errors = editvalidations.editApplicationValidation editApplication
         if errors.Length = 0
         then
           data.applications.update id editApplication
           FOUND <| paths.application_link user.Name id
-        else OK <| views.applicationsEdit.error_html user.Name counts errors editApplication)
+        else OK <| views.applicationsEdit.error_html session user.Name counts errors editApplication)
     ]
 
 let applications'' (user : User) (session : Session) = warbler (fun _ ->
@@ -112,7 +112,7 @@ let applications'' (user : User) (session : Session) = warbler (fun _ ->
   let counts = data.counts.getCounts user.Name session
   if ownerOrContributor permissions && apps.Length = 0
   then FOUND <| paths.applicationCreate_link user.Name
-  else OK <| views.applications.list permissions user.Name counts apps)
+  else OK <| views.applications.list session permissions user.Name counts apps)
 
 let suite'' id (user : User) session = warbler (fun _ ->
   let permissions = data.permissions.getSpecificSuiteCreateEditPermissions id session
@@ -126,7 +126,7 @@ let suite'' id (user : User) session = warbler (fun _ ->
         let counts = data.counts.getCounts user.Name session
         let testcases = data.testcases.getBySuiteId id
         let applications = data.applications.getByUserId user.Id
-        OK <| views.suites.details user.Name suite' testcases applications counts)
+        OK <| views.suites.details session user.Name suite' testcases applications counts)
 
 let suiteCreate'' (user : User) session =
   let permissions = data.permissions.getSuiteCreateEditPermissions session
@@ -137,11 +137,11 @@ let suiteCreate'' (user : User) session =
     let applications = data.applications.getByUserId user.Id
     choose [
       GET >>= warbler (fun _ ->
-        OK <| views.suitesCreate.html user.Name counts applications)
+        OK <| views.suitesCreate.html session user.Name counts applications)
       POST >>= bindToForm newforms.newSuite (fun newSuite ->
         let errors = newvalidations.newSuiteValidation newSuite
         if errors.Length > 0
-        then OK <| views.suitesCreate.error_html user.Name counts applications errors newSuite
+        then OK <| views.suitesCreate.error_html session user.Name counts applications errors newSuite
         else
           let application' = data.applications.tryById (int newSuite.Application)
           match application' with
@@ -164,11 +164,11 @@ let suiteEdit'' id (user : User) session =
         match suite with
         | None -> NOT_FOUND "Page not found"
         | Some(suite) ->
-          OK <| views.suiteEdit.html user.Name counts applications suite)
+          OK <| views.suiteEdit.html session user.Name counts applications suite)
       POST >>= bindToForm editforms.editSuite (fun editSuite ->
         let errors = editvalidations.editSuiteValidation editSuite
         if errors.Length > 0
-        then OK <| views.suiteEdit.error_html user.Name counts errors applications editSuite
+        then OK <| views.suiteEdit.error_html session user.Name counts errors applications editSuite
         else
           data.suites.update id editSuite
           FOUND <| paths.suite_link user.Name id)
@@ -184,7 +184,7 @@ let suites'' (user : User) session = warbler (fun _ ->
     let suites' = data.suites.getByUserId user.Id
     if suites'.Length = 0
     then FOUND <| paths.suiteCreate_link user.Name
-    else OK <| views.suites.list user.Name counts suites')
+    else OK <| views.suites.list session user.Name counts suites')
 
 let testcase'' id (user : User) session = warbler (fun _ ->
   let testcase = data.testcases.tryById id
@@ -199,7 +199,7 @@ let testcase'' id (user : User) session = warbler (fun _ ->
         let counts = data.counts.getCounts user.Name session
         let applications = data.applications.getByUserId user.Id
         let suites = data.suites.getByUserId user.Id
-        OK <| views.testcases.details permissions user.Name applications suites counts testcase)
+        OK <| views.testcases.details session permissions user.Name applications suites counts testcase)
 
 let testcaseCreate'' (user : User) session =
   let permissions = data.permissions.getTestCaseCreateEditPermissions session
@@ -211,14 +211,14 @@ let testcaseCreate'' (user : User) session =
     let suites = data.suites.getByUserId user.Id
     choose [
       GET >>= warbler (fun _ ->
-        OK <| views.testcasesCreate.html user.Name counts applications suites)
+        OK <| views.testcasesCreate.html session user.Name counts applications suites)
       POST >>= bindToForm newforms.newTestCase (fun newTestCase ->
         let errors = newvalidations.newTestCaseValidation newTestCase
         if errors.Length = 0
         then
           let id = data.testcases.insert newTestCase
           FOUND <| paths.testcase_link user.Name id
-        else OK <| views.testcasesCreate.error_html user.Name counts applications suites errors newTestCase)
+        else OK <| views.testcasesCreate.error_html session user.Name counts applications suites errors newTestCase)
     ]
 
 let testcaseEdit'' id (user : User) session =
@@ -235,11 +235,11 @@ let testcaseEdit'' id (user : User) session =
         match testcase with
         | None -> NOT_FOUND "Page not found"
         | Some(testcase) ->
-          OK <| views.testcaseEdit.html user.Name counts applications suites testcase)
+          OK <| views.testcaseEdit.html session user.Name counts applications suites testcase)
       POST >>= bindToForm editforms.editTestCase (fun editTestCase ->
         let errors = editvalidations.editTestCaseValidation editTestCase
         if errors.Length > 0
-        then OK <| views.testcaseEdit.error_html user.Name counts errors applications suites editTestCase
+        then OK <| views.testcaseEdit.error_html session user.Name counts errors applications suites editTestCase
         else
           data.testcases.update id editTestCase
           FOUND <| paths.testcase_link user.Name id)
@@ -256,11 +256,11 @@ let testcases'' (user : User) session = warbler (fun _ ->
     if testcases.Length = 0
     then FOUND <| paths.testcaseCreate_link user.Name
     else
-      OK <| views.testcases.list permissions user.Name counts testcases)
+      OK <| views.testcases.list session permissions user.Name counts testcases)
 
 let executions'' (user : User) session = warbler (fun _ ->
   let counts = data.counts.getCounts user.Name session
-  OK <| views.executions.html user.Name counts)
+  OK <| views.executions.html session user.Name counts)
 
 let root'' =
   choose [

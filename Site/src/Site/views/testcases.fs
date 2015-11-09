@@ -82,20 +82,20 @@ let testcases_content permission user testcases =
     row [ m12 [ grid user testcases ] ]
   ]
 
-let details permission user applications suites counts testcase =
+let details session permission user applications suites counts testcase =
   base_html
     "test case - details"
     [
-      partial.sidebar.left_sidebar user counts
+      partial.sidebar.left_sidebar session user counts
       testcase_content permission user applications suites testcase
     ]
     scripts.none
 
-let list permission user counts (testcases : TestCase list) =
+let list session permission user counts (testcases : TestCase list) =
   base_html
     "test cases"
     [
-      partial.sidebar.left_sidebar user counts
+      partial.sidebar.left_sidebar session user counts
       testcases_content permission user testcases
     ]
     scripts.applications_bundle

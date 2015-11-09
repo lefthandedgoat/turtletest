@@ -4,6 +4,7 @@ open Suave.Html
 open html_common
 open html_bootstrap
 open types.read
+open types.session
 
 let private side_link link text' count style icon' =
   li [
@@ -14,7 +15,21 @@ let private side_link link text' count style icon' =
     ]
   ]
 
-let left_sidebar user counts =
+let loginOrLogout session =
+  match session with
+    | NoSession ->
+      aHref "/login" [
+        icon "user"
+        sidebar_item [text "Login"]
+      ]
+    | User(user_id) ->
+      let user = data.users.getById user_id
+      aHref "/logout" [
+        icon "user"
+        sidebar_item [text (sprintf "Hi %s!" user.Name)]
+      ]
+
+let left_sidebar (session : Session) user counts =
   sidebar [
     toggle [ icon "bars" ]
     navblock [
@@ -30,6 +45,15 @@ let left_sidebar user counts =
             side_link (paths.suites_link user) "Suites" counts.Suites "success" "sitemap"
             side_link (paths.testcases_link user) "Test Cases" counts.TestCases "prusia" "thumbs-up"
             side_link (paths.executions_link user) "Executions" counts.Executions "danger" "toggle-right"
+          ]
+        ]
+      ]
+      menu_space [
+        vnavigation [
+          li [
+            divClass "collapse-button" [
+              loginOrLogout session
+            ]
           ]
         ]
       ]

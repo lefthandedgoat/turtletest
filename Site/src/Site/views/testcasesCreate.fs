@@ -38,11 +38,11 @@ let testcase_content applications suites =
     ]
   ]
 
-let html user counts applications suites =
+let html session user counts applications suites =
   base_html
     "create test case"
     [
-      partial.sidebar.left_sidebar user counts
+      partial.sidebar.left_sidebar session user counts
       testcase_content applications suites
     ]
     scripts.none
@@ -77,11 +77,11 @@ let error_testcase_content applications suites errors newTestCase =
     ]
   ]
 
-let error_html user counts applications suites errors newTestCase =
+let error_html session user counts applications suites errors newTestCase =
   base_html
     "create test case"
     [
-      partial.sidebar.left_sidebar user counts
+      partial.sidebar.left_sidebar session user counts
       error_testcase_content applications suites errors newTestCase
     ]
     scripts.none
