@@ -8,7 +8,7 @@ open forms.edittypes
 open views.partial
 
 let empty = ""
-let privateOptions = ["",""; "True","Yes"; "False","No"]
+let privateOptions = ["True","Yes"; "False","No"]
 
 let applications_details (editApplication : Application) =
   block_flat [

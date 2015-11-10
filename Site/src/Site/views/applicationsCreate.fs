@@ -7,7 +7,7 @@ open forms.newtypes
 open views.partial
 
 let empty = ""
-let privateOptions = ["",""; "True","Yes"; "False","No"]
+let privateOptions = ["True","Yes"; "False","No"]
 
 let applications_details =
   block_flat [

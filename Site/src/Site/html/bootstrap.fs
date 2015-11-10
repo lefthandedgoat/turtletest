@@ -114,10 +114,10 @@ let private base_label_textarea label' text' errors =
 let base_label_select label' (options : (string * string) list) selected errors =
   form_group_control_label_sm8 label' [
     select_form_control label'
-      (options |> List.map (fun (id, value) ->
-                            if id = selected
-                            then selectedOption id value
-                            else option id value))
+      ([option "" ""] @ (options |> List.map (fun (id, value) ->
+                                    if id = selected
+                                    then selectedOption id value
+                                    else option id value)))
     errorsOrEmptyText label' errors
   ]
 

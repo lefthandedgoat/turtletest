@@ -93,9 +93,9 @@ module newvalidations =
   let emailValid = (fun (user : NewUser) -> try MailAddress(user.Email)|> ignore; true with | _ -> false), "Email", "Email not valid"
   let passwordsMatch = (fun (user : NewUser) -> user.Password = user.RepeatPassword), "Password", "Passwords must match"
   let passwordRegexMatch =
-    (fun f -> Regex(passwordPattern).IsMatch(f.Password) && Regex(passwordPattern).IsMatch(f.RepeatPassword)),
-    "Password",
-    "Password must between 6 and 100 characters"
+    (fun f -> Regex(passwordPattern).IsMatch(f.Password) && Regex(passwordPattern).IsMatch(f.RepeatPassword))
+    ,"Password"
+    ,"Password must between 6 and 100 characters"
 
   let newUserValidation newUser =
     [
@@ -110,8 +110,8 @@ module newvalidations =
   let applicationNameRequired = (fun (app : NewApplication) -> String.IsNullOrWhiteSpace app.Name |> not), "Name", "Name is required"
   let applicationPrivateIsBool =
     (fun (app : NewApplication) ->
-     let canConvert, _ = System.Boolean.TryParse(app.Private)
-     canConvert)
+      let canConvert, _ = System.Boolean.TryParse(app.Private)
+      canConvert)
     ,"Private"
     ,"Private must be Yes or No"
 
@@ -122,20 +122,18 @@ module newvalidations =
     ] |> applyValidations newApplication
 
   //NEWSUITE
-  let applicationRequired = (fun (suite : NewSuite) -> String.IsNullOrWhiteSpace suite.Application |> not), "Application", "Application is required"
-  let suiteNameRequired = (fun (suite : NewSuite) -> String.IsNullOrWhiteSpace suite.Name |> not), "Name", "Name is required"
-  let suiteApplicationNumeric =
+  let applicationRequired =
     (fun (suite : NewSuite) ->
       let canParse, _ = System.Int32.TryParse(suite.Application)
-      canParse)
+      canParse && (not <| String.IsNullOrWhiteSpace suite.Application))
     ,"Application"
-    ,"Application is not a valid number"
+    ,"Application is required"
+  let suiteNameRequired = (fun (suite : NewSuite) -> String.IsNullOrWhiteSpace suite.Name |> not), "Name", "Name is required"
 
   let newSuiteValidation newSuite =
     [
       applicationRequired
       suiteNameRequired
-      suiteApplicationNumeric
     ] |> applyValidations newSuite
 
   //NEWTESTCASE
@@ -200,8 +198,8 @@ module editvalidations =
   let editApplicationNameRequired = (fun (app : EditApplication) -> String.IsNullOrWhiteSpace app.Name |> not), "Name", "Name is required"
   let editApplicationPrivateIsBool =
     (fun (app : EditApplication) ->
-     let canConvert, _ = System.Boolean.TryParse(app.Private)
-     canConvert)
+      let canConvert, _ = System.Boolean.TryParse(app.Private)
+      canConvert)
     ,"Private"
     ,"Private must be Yes or No"
 
@@ -213,43 +211,37 @@ module editvalidations =
 
   //EDITSUITE
   let editSuiteNameRequired = (fun (suite : EditSuite) -> String.IsNullOrWhiteSpace suite.Name |> not), "Name", "Name is required"
-  let editSuiteApplicationRequired = (fun (suite : EditSuite) -> String.IsNullOrWhiteSpace suite.Name |> not), "Application", "Application is required"
-  let editSuiteApplicationNumeric =
+  let editSuiteApplicationRequired =
     (fun (suite : EditSuite) ->
       let canParse, _ = System.Int32.TryParse(suite.Application)
-      canParse)
+      canParse && (not <| String.IsNullOrWhiteSpace suite.Application))
     ,"Application"
-    ,"Application is not a valid number"
+    ,"Application is required"
 
   let editSuiteValidation editSuite =
     [
       editSuiteNameRequired
       editSuiteApplicationRequired
-      editSuiteApplicationNumeric
     ] |> applyValidations editSuite
 
   //EDITTESTCASE
-  let editTestCaseApplicationRequired = (fun (testCase : EditTestCase) -> String.IsNullOrWhiteSpace testCase.Application |> not), "Application", "Application is required"
-  let editTestCaseSuiteRequired = (fun (testCase : EditTestCase) -> String.IsNullOrWhiteSpace testCase.Suite |> not), "Suite", "Suite is required"
-  let editTestCaseNameRequired = (fun (testCase : EditTestCase) -> String.IsNullOrWhiteSpace testCase.Name |> not), "Name", "Name is required"
-  let editTestCaseApplicationNumeric =
+  let editTestCaseApplicationRequired =
     (fun (testCase : EditTestCase) ->
       let canParse, _ = System.Int32.TryParse(testCase.Application)
-      canParse)
+      canParse && (not <| String.IsNullOrWhiteSpace testCase.Application))
     ,"Application"
-    ,"Application is not a valid number"
-  let editTestCaseSuiteNumeric =
+    ,"Application is required"
+  let editTestCaseSuiteRequired =
     (fun (testCase : EditTestCase) ->
       let canParse, _ = System.Int32.TryParse(testCase.Suite)
-      canParse)
+      canParse && (String.IsNullOrWhiteSpace testCase.Suite |> not))
     ,"Suite"
-    ,"Suite is not a valid number"
+    ,"Suite is required"
+  let editTestCaseNameRequired = (fun (testCase : EditTestCase) -> String.IsNullOrWhiteSpace testCase.Name |> not), "Name", "Name is required"
 
   let editTestCaseValidation editTestCase =
     [
       editTestCaseApplicationRequired
       editTestCaseSuiteRequired
       editTestCaseNameRequired
-      editTestCaseApplicationNumeric
-      editTestCaseSuiteNumeric
     ] |> applyValidations editTestCase
