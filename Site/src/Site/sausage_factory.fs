@@ -18,6 +18,9 @@ open html_common
 open html_bootstrap
 open types.session
 
+let twoWeeks = System.TimeSpan.FromDays(12.0)
+let twoWeekCookie = Suave.Cookie.CookieLife.MaxAge twoWeeks
+
 let bindToForm form handler =
   //todo since we manually handle errors, make bad request log errors and send you too an oops page
   bindReq (bindForm form) handler BAD_REQUEST
@@ -33,7 +36,7 @@ let reset =
   >>= FOUND paths.login
 
 let getSession f =
-  statefulForSession
+  stateful twoWeekCookie false
   >>= context (fun x ->
     match x |> HttpContext.state with
     | None -> f NoSession
@@ -55,7 +58,7 @@ let userExists userName f_success =
 
 let loggedOn f_success =
   Auth.authenticate
-    Cookie.CookieLife.Session
+    twoWeekCookie
     false
     (fun () -> Choice2Of2(redirectWithReturnPath paths.login))
     (fun _ -> Choice2Of2 reset)

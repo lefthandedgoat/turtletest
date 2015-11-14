@@ -32,8 +32,8 @@ let register'' =
         //todo check for duplicates etc, I think it will error
         let id = data.users.insert newUser
         //todo common code to move to the sausage factory???
-        Auth.authenticated Cookie.CookieLife.Session false
-        >>= statefulForSession
+        Auth.authenticated twoWeekCookie false
+        >>= stateful twoWeekCookie false
         >>= sessionStore (fun store -> store.set "user_id" id)
         >>= request (fun _ -> FOUND <| paths.home_link newUser.Name))
   ]
@@ -45,12 +45,12 @@ let login'' =
     POST >>= bindToForm newforms.loginAttempt (fun loginAttempt ->
       let user = data.users.authenticate loginAttempt.Email loginAttempt.Password
       match user with
+        | None -> OK <| views.login.html true loginAttempt.Email
         | Some(u) ->
-          Auth.authenticated Cookie.CookieLife.Session false
-          >>= statefulForSession
+          Auth.authenticated twoWeekCookie false
+          >>= stateful twoWeekCookie false
           >>= sessionStore (fun store -> store.set "user_id" u.Id)
-          >>= request (fun _ -> FOUND <| paths.home_link u.Name)
-        | None -> OK <| views.login.html true loginAttempt.Email)
+          >>= request (fun _ -> FOUND <| paths.home_link u.Name))
   ]
 
 let logout'' = choose [ GET >>= reset ]
