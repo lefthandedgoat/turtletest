@@ -37,6 +37,6 @@ let login_content error email =
 
 let html error email =
   base_html
-    "register"
+    "login"
     [login_content error email]
     scripts.none
