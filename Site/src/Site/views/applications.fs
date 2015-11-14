@@ -10,14 +10,17 @@ open views.partial
 let privateOptions = ["True","Yes"; "False","No"]
 
 let application_create_button user =
-  button_create (paths.applicationCreate_link user) [ text "Create"]
+  button_small_create (paths.applicationCreate_link user) [ text "Create"]
 
 let application_edit_button user id =
-  button_edit (paths.applicationEdit_link user id) [ text "Edit"]
+  button_small_edit (paths.applicationEdit_link user id) [ text "Edit"]
 
-let application_details (application : Application ) =
+let suite_create_button user =
+  button_small_create (paths.suiteCreate_link user) [ text "Create"]
+
+let application_details (application : Application ) buttons =
   block_flat [
-    header [ h3 application.Name ]
+    header [ h3Inner application.Name [ buttons ] ]
     content [
       form_horizontal [
         label_text_ahref_button "Address" application.Address "Go!"
@@ -39,7 +42,7 @@ let suites_grid user suites =
       td [ text (string suite.Owners) ]
     ]
   block_flat [
-    header [ h3 "Suites" ]
+    header [ h3Inner "Suites" [ pull_right [ suite_create_button user ] ] ]
     content [
       table_bordered
         [
@@ -52,7 +55,7 @@ let suites_grid user suites =
     ]
   ]
 
-let grid user applications =
+let grid user applications buttons =
   let toTd (app : Application) =
     [
       td [ aHref (paths.application_link user app.Id) [ text (string app.Id) ] ]
@@ -61,7 +64,7 @@ let grid user applications =
       td [ text (string app.Developers) ]
     ]
   block_flat [
-    header [ h3 "Applications" ]
+    header [ h3Inner "Applications" [ pull_right [ buttons ] ] ]
     content [
       table_bordered
         [
@@ -77,12 +80,11 @@ let grid user applications =
 let application_content permission user executionRows (application : Application) suites =
   let edit_and_create_buttons =
     if ownerOrContributor permission
-    then row_nomargin [ m12 [ application_edit_button user application.Id; application_create_button user ] ]
+    then pull_right [ application_edit_button user application.Id; application_create_button user ]
     else emptyText
 
   mcontent [
-    edit_and_create_buttons
-    row [ m12 [ application_details application ] ]
+    row [ m12 [ application_details application edit_and_create_buttons ] ]
     row [ m12 [ suites_grid user suites ] ]
     row [ m12 [ partial.executions.execution executionRows ] ]
   ]
@@ -90,12 +92,11 @@ let application_content permission user executionRows (application : Application
 let applications_content permission user applications =
   let create_button =
     if ownerOrContributor permission
-    then row_nomargin [ m12 [ application_create_button user ] ]
+    then application_create_button user
     else emptyText
 
   mcontent [
-    create_button
-    row [ m12 [ grid user applications ] ]
+    row [ m12 [ grid user applications create_button ] ]
   ]
 
 let details session permission user counts executions application suites =

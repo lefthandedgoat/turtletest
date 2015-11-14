@@ -21,7 +21,7 @@ let suite_details applications (editSuite : Suite) =
         label_text "Version" editSuite.Version
         label_text "Owners" editSuite.Owners
         label_textarea "Notes" editSuite.Notes
-        form_group [ sm10 [ button_save ] ]
+        form_group [ sm10 [ pull_right [ button_save ] ] ]
       ]
     ]
   ]
@@ -54,7 +54,7 @@ let error_suite_details errors applications (editSuite : EditSuite) =
         errored_label_text "Version" editSuite.Version errors
         errored_label_text "Owners" editSuite.Owners errors
         errored_label_textarea "Notes" editSuite.Notes errors
-        form_group [ sm10 [ button_save ] ]
+        form_group [ sm10 [ pull_right [ button_save ] ] ]
       ]
     ]
   ]

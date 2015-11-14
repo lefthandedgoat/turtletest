@@ -22,7 +22,7 @@ let applications_details (editApplication : Application) =
         label_text "Developers" editApplication.Developers
         label_textarea "Notes" editApplication.Notes
         label_select_selected "Private" privateOptions (string editApplication.Private)
-        form_group [ sm10 [ button_save ] ]
+        form_group [ sm10 [ pull_right [ button_save ] ] ]
       ]
     ]
   ]
@@ -57,7 +57,7 @@ let error_applications_details errors (editApplication : EditApplication) =
         errored_label_text "Developers" editApplication.Developers errors
         errored_label_textarea "Notes" editApplication.Notes errors
         errored_label_select "Private" privateOptions editApplication.Private errors
-        form_group [ sm10 [ button_save ] ]
+        form_group [ sm10 [ pull_right [ button_save ] ] ]
       ]
     ]
   ]

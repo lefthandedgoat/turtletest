@@ -7,19 +7,22 @@ open types.read
 open views.partial
 
 let suite_create_button user =
-  button_create (paths.suiteCreate_link user) [ text "Create"]
+  button_small_create (paths.suiteCreate_link user) [ text "Create"]
 
 let suite_edit_button user id =
-  button_edit (paths.suiteEdit_link user id) [ text "Edit"]
+  button_small_edit (paths.suiteEdit_link user id) [ text "Edit"]
+
+let testcase_create_button user =
+  button_small_create (paths.testcaseCreate_link user) [ text "Create"]
 
 let applicationsToSelect applications =
   applications
   |> List.map (fun (app : Application) -> string app.Id, app.Name)
   |> List.sortBy (fun (_, name) -> name)
 
-let suite_details (suite : Suite) applications =
+let suite_details (suite : Suite) applications buttons =
   block_flat [
-    header [ h3 suite.Name ]
+    header [ h3Inner suite.Name [ pull_right buttons ] ]
     content [
       form_horizontal [
         label_select_selected "Application" (applicationsToSelect applications) (string suite.ApplicationId)
@@ -31,7 +34,7 @@ let suite_details (suite : Suite) applications =
     ]
   ]
 
-let testcases_grid user testcases =
+let testcases_grid user testcases buttons =
   let toTd (testcase : TestCase) =
     [
       td [ aHref (paths.testcase_link user testcase.Id) [ text (string testcase.Id) ] ]
@@ -40,7 +43,7 @@ let testcases_grid user testcases =
       td [ text (string testcase.Owners) ]
     ]
   block_flat [
-    header [ h3 "Test Cases" ]
+    header [ h3Inner "Test Cases" [ pull_right buttons ] ]
     content [
       table_bordered
         [
@@ -53,7 +56,7 @@ let testcases_grid user testcases =
     ]
   ]
 
-let grid user suites =
+let grid user suites buttons =
   let toTd (suite : Suite) =
     [
       td [ aHref (paths.suite_link user suite.Id) [ text (string suite.Id) ] ]
@@ -62,7 +65,7 @@ let grid user suites =
       td [ text (string suite.Owners) ]
     ]
   block_flat [
-    header [ h3 "Suites" ]
+    header [ h3Inner "Suites" [ pull_right buttons ] ]
     content [
       table_bordered
         [
@@ -77,15 +80,13 @@ let grid user suites =
 
 let suite_content user (suite : Suite) testcases applications =
   mcontent [
-    row_nomargin [ m12 [ suite_edit_button user suite.Id; suite_create_button user ] ]
-    row [ m12 [ suite_details suite applications ] ]
-    row [ m12 [ testcases_grid user testcases ] ]
+    row [ m12 [ suite_details suite applications [ suite_edit_button user suite.Id; suite_create_button user ] ] ]
+    row [ m12 [ testcases_grid user testcases [ testcase_create_button user ] ] ]
   ]
 
 let suites_content user applications =
   mcontent [
-    row_nomargin [ m12 [ suite_create_button user ] ]
-    row [ m12 [ grid user applications ] ]
+    row [ m12 [ grid user applications [ suite_create_button user ] ] ]
   ]
 
 let details session user suite testcases applications counts =

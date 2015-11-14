@@ -18,7 +18,7 @@ let suite_details applications =
         label_text "Version" empty
         label_text "Owners" empty
         label_textarea "Notes" empty
-        form_group [ sm10 [ button_save ] ]
+        form_group [ sm10 [ pull_right [ button_save ] ] ]
       ]
     ]
   ]
@@ -51,7 +51,7 @@ let error_suite_details applications errors (newSuite : NewSuite) =
         errored_label_text "Version" newSuite.Version errors
         errored_label_text "Owners" newSuite.Owners errors
         errored_label_textarea "Notes" newSuite.Notes errors
-        form_group [ sm10 [ button_save ] ]
+        form_group [ sm10 [ pull_right [ button_save ] ] ]
       ]
     ]
   ]

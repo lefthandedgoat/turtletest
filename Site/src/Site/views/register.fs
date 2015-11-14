@@ -16,7 +16,7 @@ let user_details =
         label_text "Email" empty
         label_password "Password" empty
         label_password "Repeat Password" empty
-        form_group [ sm10 [ button_submit ] ]
+        form_group [ sm10 [ pull_right [ button_submit ] ] ]
       ]
     ]
   ]
@@ -45,7 +45,7 @@ let errored_user_details errors (newUser : NewUser)=
         errored_label_text "Email" newUser.Email errors
         errored_label_password "Password" newUser.Password errors
         errored_label_password "Repeat Password" newUser.RepeatPassword errors
-        form_group [ sm10 [ button_submit ] ]
+        form_group [ sm10 [ pull_right [ button_submit ] ] ]
       ]
     ]
   ]

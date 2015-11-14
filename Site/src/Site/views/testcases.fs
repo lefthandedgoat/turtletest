@@ -8,19 +8,19 @@ open types.permissions
 open views.partial
 
 let testcase_create_button user =
-  button_create (paths.testcaseCreate_link user) [ text "Create"]
+  button_small_create (paths.testcaseCreate_link user) [ text "Create"]
 
 let testcase_edit_button user id =
-  button_edit (paths.testcaseEdit_link user id ) [ text "Edit"]
+  button_small_edit (paths.testcaseEdit_link user id ) [ text "Edit"]
 
 let suitesToSelect suites =
   suites
   |> List.map (fun (suite : Suite) -> string suite.Id, suite.Name)
   |> List.sortBy (fun (_, name) -> name)
 
-let testcase_details applications suites (testcase : TestCase ) =
+let testcase_details applications suites (testcase : TestCase ) buttons =
   block_flat [
-    header [ h3 testcase.Name ]
+    header [ h3Inner testcase.Name [ pull_right buttons ] ]
     content [
       form_horizontal [
         label_select_selected "Application" (views.suites.applicationsToSelect applications) (string testcase.ApplicationId)
@@ -38,7 +38,7 @@ let testcase_details applications suites (testcase : TestCase ) =
     ]
   ]
 
-let grid user testcases =
+let grid user testcases buttons =
   let toTd (testcase : TestCase) =
     [
       td [ aHref (paths.testcase_link user testcase.Id) [ text (string testcase.Id) ] ]
@@ -47,7 +47,7 @@ let grid user testcases =
       td [ text (string testcase.Owners) ]
     ]
   block_flat [
-    header [ h3 "Test Cases" ]
+    header [ h3Inner "Test Cases" [ pull_right buttons ] ]
     content [
       table_bordered
         [
@@ -63,23 +63,21 @@ let grid user testcases =
 let testcase_content permission user applications suites testcase =
   let edit_and_create_buttons =
     if ownerOrContributor permission
-    then row_nomargin [ m12 [ testcase_edit_button user testcase.Id; testcase_create_button user ] ]
-    else emptyText
+    then [ testcase_edit_button user testcase.Id; testcase_create_button user ]
+    else [ emptyText ]
 
   mcontent [
-    edit_and_create_buttons
-    row [ m12 [ testcase_details applications suites testcase ] ]
+    row [ m12 [ testcase_details applications suites testcase edit_and_create_buttons ] ]
   ]
 
 let testcases_content permission user testcases =
   let create_button =
     if ownerOrContributor permission
-    then row_nomargin [ m12 [ testcase_create_button user ] ]
-    else emptyText
+    then [ testcase_create_button user ]
+    else [ emptyText ]
 
   mcontent [
-    create_button
-    row [ m12 [ grid user testcases ] ]
+    row [ m12 [ grid user testcases create_button ] ]
   ]
 
 let details session permission user applications suites counts testcase =

@@ -23,6 +23,7 @@ let h1Class class' xml = tag "h1" ["class",class'] xml
 let h1 s = tag "h1" [] (text s)
 let h2 s = tag "h2" [] (text s)
 let h3 s = tag "h3" [] (text s)
+let h3Inner s inner = tag "h3" [] (flatten (text s :: inner))
 let h4 s = tag "h4" [] (text s)
 let h5 s = tag "h5" [] (text s)
 let h6 s = tag "h6" [] (text s)

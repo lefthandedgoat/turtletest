@@ -24,7 +24,7 @@ let testcase_details applications suites =
         label_text "Expected" empty
         label_text "History" empty
         label_text "Attachments" empty
-        form_group [ sm10 [ button_save ] ]
+        form_group [ sm10 [ pull_right [ button_save ] ] ]
       ]
     ]
   ]
@@ -63,7 +63,7 @@ let error_testcase_details applications suites errors (newTestCase : NewTestCase
         errored_label_text "Expected" newTestCase.Expected errors
         errored_label_text "History" newTestCase.History errors
         errored_label_text "Attachments" newTestCase.Attachments errors
-        form_group [ sm10 [ button_save ] ]
+        form_group [ sm10 [ pull_right [ button_save ] ] ]
       ]
     ]
   ]

@@ -49,10 +49,13 @@ let input_group_button inner = spanClass "input-group-btn" inner
 let control_label inner = labelClass "col-sm-2 control-label" inner
 let button_primary href inner = aHrefAttr href ["class", "btn btn-primary"] inner
 let button_success href inner = aHrefAttr href ["class", "btn btn-success"] inner
-let button_save = inputAttr [ "value","Save"; "type","submit"; "class","btn btn-success pull-right"; ]
-let button_submit = inputAttr [ "value","Submit"; "type","submit"; "class","btn btn-success pull-right"; ]
-let button_create href inner = aHrefAttr href ["class", "btn btn-success pull-right"] inner
+let button_save = inputAttr [ "value","Save"; "type","submit"; "class","btn btn-success"; ]
+let button_submit = inputAttr [ "value","Submit"; "type","submit"; "class","btn btn-success"; ]
+let button_create href inner = aHrefAttr href ["class", "btn btn-success"] inner
+let button_small_create href inner = aHrefAttr href ["class", "btn btn-sm btn-success"] inner
 let button_edit href inner = aHrefAttr href ["class", "btn btn-danger"] inner
+let button_small_edit href inner = aHrefAttr href ["class", "btn btn-sm btn-danger"] inner
+let pull_right inner = spanClass "pull-right" inner
 
 let textEmtpyForNone text' = match text' with Some(t) -> t | None -> ""
 

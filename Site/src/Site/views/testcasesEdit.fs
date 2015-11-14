@@ -26,7 +26,7 @@ let testcase_details applications suites (editTestCase : TestCase) =
         label_text "Expected" editTestCase.Expected
         label_text "History" editTestCase.History
         label_text "Attachments" editTestCase.Attachments
-        form_group [ sm10 [ button_save ] ]
+        form_group [ sm10 [ pull_right [ button_save ] ] ]
       ]
     ]
   ]
@@ -65,7 +65,7 @@ let error_testcase_details errors applications suites (editTestCase : EditTestCa
         errored_label_text "Expected" editTestCase.Expected errors
         errored_label_text "History" editTestCase.History errors
         errored_label_text "Attachments" editTestCase.Attachments errors
-        form_group [ sm10 [ button_save ] ]
+        form_group [ sm10 [ pull_right [ button_save ] ] ]
       ]
     ]
   ]

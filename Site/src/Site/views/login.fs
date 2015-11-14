@@ -21,7 +21,7 @@ let login_details error email=
         errorTag
         label_text "Email" email
         label_password "Password" empty
-        form_group [ sm10 [ button_submit ] ]
+        form_group [ sm10 [ pull_right [ button_submit ] ] ]
       ]
     ]
   ]
