@@ -309,4 +309,6 @@ let webPart =
     ]
   ]
 
-startWebServer defaultConfig webPart
+//todo put this in a web.config or something
+let config = { defaultConfig with serverKey = Text.Encoding.Default.GetBytes("""806970382358F417C7610E866FE2598B""") }
+startWebServer config webPart
