@@ -63,7 +63,7 @@ let home'' (user : User) session = warbler (fun _ ->
 let application'' id (user : User) session = warbler (fun _ ->
   let application = data.applications.tryById id
   match application with
-    | None -> NOT_FOUND "Page not found"
+    | None -> OK views.errors.error_404
     | Some(application) ->
       let counts = data.counts.getCounts user.Name session
       let permissions = data.permissions.getApplicationsCreateEditPermissions user.Name session
@@ -74,7 +74,7 @@ let application'' id (user : User) session = warbler (fun _ ->
 let applicationCreate'' (user : User) session =
   let permissions = data.permissions.getApplicationsCreateEditPermissions user.Name session
   if owner permissions |> not
-  then NOT_FOUND "Page not found"
+  then OK views.errors.error_404
   else
     let counts = data.counts.getCounts user.Name session
     choose [
@@ -93,14 +93,14 @@ let applicationCreate'' (user : User) session =
 let applicationEdit'' id (user : User) session =
   let permissions = data.permissions.getApplicationsCreateEditPermissions user.Name session
   if owner permissions |> not
-  then NOT_FOUND "Page not found"
+  then OK views.errors.error_404
   else
     let counts = data.counts.getCounts user.Name session
     choose [
       GET >>= warbler (fun _ ->
         let application' = data.applications.tryById id
         match application' with
-        | None -> NOT_FOUND "Page not found"
+        | None -> OK views.errors.error_404
         | Some(application) ->
           OK <| views.applicationsEdit.html session user.Name counts application)
       POST >>= bindToForm editforms.editApplication (fun editApplication ->
@@ -122,11 +122,11 @@ let applications'' (user : User) (session : Session) = warbler (fun _ ->
 let suite'' id (user : User) session = warbler (fun _ ->
   let permissions = data.permissions.getSpecificSuiteCreateEditPermissions id session
   if ownerOrContributor permissions |> not
-  then NOT_FOUND "Page not found"
+  then OK views.errors.error_404
   else
     let suite = data.suites.tryById id
     match suite with
-      | None -> NOT_FOUND "Page not found"
+      | None -> OK views.errors.error_404
       | Some(suite') ->
         let counts = data.counts.getCounts user.Name session
         let testcases = data.testcases.getBySuiteId id
@@ -136,7 +136,7 @@ let suite'' id (user : User) session = warbler (fun _ ->
 let suiteCreate'' (user : User) session =
   let permissions = data.permissions.getSuiteCreateEditPermissions user.Name session
   if ownerOrContributor permissions |> not
-  then NOT_FOUND "Page not found"
+  then OK views.errors.error_404
   else
     let counts = data.counts.getCounts user.Name session
     let applications = data.applications.getByUserId user.Id
@@ -150,7 +150,7 @@ let suiteCreate'' (user : User) session =
         else
           let application' = data.applications.tryById (int newSuite.Application)
           match application' with
-          | None -> NOT_FOUND "Page not found"
+          | None -> OK views.errors.error_404
           | Some(application) ->
             let id = data.suites.insert application.Id newSuite
             FOUND <| paths.suite_link user.Name id)
@@ -159,7 +159,7 @@ let suiteCreate'' (user : User) session =
 let suiteEdit'' id (user : User) session =
   let permissions = data.permissions.getSpecificSuiteCreateEditPermissions id session
   if ownerOrContributor permissions |> not
-  then NOT_FOUND "Page not found"
+  then OK views.errors.error_404
   else
     let counts = data.counts.getCounts user.Name session
     let applications = data.applications.getByUserId user.Id
@@ -167,7 +167,7 @@ let suiteEdit'' id (user : User) session =
       GET >>= warbler (fun _ ->
         let suite = data.suites.tryById id
         match suite with
-        | None -> NOT_FOUND "Page not found"
+        | None -> OK views.errors.error_404
         | Some(suite) ->
           OK <| views.suiteEdit.html session user.Name counts applications suite)
       POST >>= bindToForm editforms.editSuite (fun editSuite ->
@@ -183,7 +183,7 @@ let suites'' (user : User) session = warbler (fun _ ->
   //todo switch to being able to view public suites
   let permissions = data.permissions.getSuiteCreateEditPermissions user.Name session
   if ownerOrContributor permissions |> not
-  then NOT_FOUND "Page not found"
+  then OK views.errors.error_404
   else
     let counts = data.counts.getCounts user.Name session
     let suites' = data.suites.getByUserId user.Id
@@ -194,12 +194,12 @@ let suites'' (user : User) session = warbler (fun _ ->
 let testcase'' id (user : User) session = warbler (fun _ ->
   let testcase = data.testcases.tryById id
   match testcase with
-    | None -> NOT_FOUND "Page not found"
+    | None -> OK views.errors.error_404
     | Some(testcase) ->
       //todo switch to being able to view public test cases
       let permissions = data.permissions.getSpecificTestCaseCreateEditPermissions id session
       if ownerOrContributor permissions |> not
-      then NOT_FOUND "Page not found"
+      then OK views.errors.error_404
       else
         let counts = data.counts.getCounts user.Name session
         let applications = data.applications.getByUserId user.Id
@@ -209,7 +209,7 @@ let testcase'' id (user : User) session = warbler (fun _ ->
 let testcaseCreate'' (user : User) session =
   let permissions = data.permissions.getTestCaseCreateEditPermissions user.Name session
   if ownerOrContributor permissions |> not
-  then NOT_FOUND "Page not found"
+  then OK views.errors.error_404
   else
     let counts = data.counts.getCounts user.Name session
     let applications = data.applications.getByUserId user.Id
@@ -229,7 +229,7 @@ let testcaseCreate'' (user : User) session =
 let testcaseEdit'' id (user : User) session =
   let permissions = data.permissions.getSpecificTestCaseCreateEditPermissions id session
   if ownerOrContributor permissions |> not
-  then NOT_FOUND "Page not found"
+  then OK views.errors.error_404
   else
     let counts = data.counts.getCounts user.Name session
     let applications = data.applications.getByUserId user.Id
@@ -238,7 +238,7 @@ let testcaseEdit'' id (user : User) session =
       GET >>= warbler (fun _ ->
         let testcase = data.testcases.tryById id
         match testcase with
-        | None -> NOT_FOUND "Page not found"
+        | None -> OK views.errors.error_404
         | Some(testcase) ->
           OK <| views.testcaseEdit.html session user.Name counts applications suites testcase)
       POST >>= bindToForm editforms.editTestCase (fun editTestCase ->
@@ -254,7 +254,7 @@ let testcases'' (user : User) session = warbler (fun _ ->
   //todo switch to being able to view public test cases
   let permissions = data.permissions.getTestCaseCreateEditPermissions user.Name session
   if ownerOrContributor permissions |> not
-  then NOT_FOUND "Page not found"
+  then OK views.errors.error_404
   else
     let counts = data.counts.getCounts user.Name session
     let testcases = data.testcases.getByUserId user.Id
@@ -310,5 +310,8 @@ let webPart =
   ]
 
 //todo put this in a web.config or something
-let config = { defaultConfig with serverKey = Text.Encoding.Default.GetBytes("""806970382358F417C7610E866FE2598B""") }
+let config = { defaultConfig with
+                 errorHandler = sausage_factory.errorHandler
+                 serverKey = Text.Encoding.Default.GetBytes("""806970382358F417C7610E866FE2598B""")
+             }
 startWebServer config webPart

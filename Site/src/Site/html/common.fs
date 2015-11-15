@@ -17,12 +17,17 @@ open Suave.Html
 //emptyText is a work around for Suave.Experimental thinking
 //that something is a leaf node and rendering wrong
 let emptyText = text ""
+let bodyClass class' inner = tag "body" ["class",class'] (flatten inner)
 let divId id = divAttr ["id", id]
 let divClass c = divAttr ["class", c]
+let divIdClass id c = divAttr ["id", id; "class", c]
 let h1Class class' xml = tag "h1" ["class",class'] xml
 let h1 s = tag "h1" [] (text s)
+let h2Class class' xml = tag "h2" ["class",class'] xml
 let h2 s = tag "h2" [] (text s)
+let h3Class class' xml = tag "h3" ["class",class'] xml
 let h3 s = tag "h3" [] (text s)
+let h3ClassInner class' s inner = tag "h3" ["class",class'] (flatten (text s :: inner))
 let h3Inner s inner = tag "h3" [] (flatten (text s :: inner))
 let h4 s = tag "h4" [] (text s)
 let h5 s = tag "h5" [] (text s)

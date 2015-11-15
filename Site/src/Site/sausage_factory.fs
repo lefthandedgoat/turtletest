@@ -13,14 +13,23 @@ open Suave.Model.Binding
 open Suave.State.CookieStateStore
 open Suave.Types
 open Suave.Web
+open Suave.Utils
+open Suave.Http.ServerErrors
 open Suave.Html
 open html_common
 open html_bootstrap
 open types.session
 
+//todo since we manually handle errors, make bad request log errors and send you too an oops page
+let logAndShow500 error =
+  printfn "%A" error
+  INTERNAL_ERROR views.errors.error_500
+
+let errorHandler (_ : Exception) _ (ctx : HttpContext) =
+    Response.response HTTP_500 (UTF8.bytes views.errors.error_500) ctx
+
 let bindToForm form handler =
-  //todo since we manually handle errors, make bad request log errors and send you too an oops page
-  bindReq (bindForm form) handler BAD_REQUEST
+  bindReq (bindForm form) handler logAndShow500
 
 let sessionStore setF = context (fun x ->
   match HttpContext.state x with
@@ -50,7 +59,7 @@ let redirectWithReturnPath redirection =
 let userExists userName f_success =
   let user = data.users.tryByName userName
   match user with
-    | None -> NOT_FOUND "Page not found"
+    | None -> OK views.errors.error_404
     | Some(user) -> f_success user
 
 let loggedOn f_success =

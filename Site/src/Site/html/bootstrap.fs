@@ -10,6 +10,7 @@ let removeSpace (value : string) = value.Replace(" ", "")
 
 let icon type' = italic ["class", (sprintf "fa fa-%s" type')] emptyText
 let wrapper inner = divId "cl-wrapper" inner
+let wrapperClass class' inner = divIdClass "cl-wrapper" class' inner
 let sidebar inner = divClass "cl-sidebar" inner
 let toggle inner = divClass "cl-toggle" inner
 let navblock inner = divClass "cl-navblock" inner
@@ -56,6 +57,7 @@ let button_small_create href inner = aHrefAttr href ["class", "btn btn-sm btn-su
 let button_edit href inner = aHrefAttr href ["class", "btn btn-danger"] inner
 let button_small_edit href inner = aHrefAttr href ["class", "btn btn-sm btn-danger"] inner
 let pull_right inner = spanClass "pull-right" inner
+let page_error inner = divClass "page-error" inner
 
 let textEmtpyForNone text' = match text' with Some(t) -> t | None -> ""
 
@@ -65,6 +67,18 @@ let base_html title content scripts =
       base_head title
       body [
         wrapper content
+      ]
+      scripts
+    ]
+    |> xmlToString
+  sprintf "<!DOCTYPE html>%s" html'
+
+let error_html title content scripts =
+  let html' =
+    html [
+      base_head title
+      bodyClass "texture" [
+        wrapperClass "error-container" content
       ]
       scripts
     ]

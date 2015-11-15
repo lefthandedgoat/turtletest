@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -62,9 +62,11 @@
     <Compile Include="views/partial_executions.fs" />
     <Compile Include="views/partial_sidebar.fs" />
     <Compile Include="views/partial_tile.fs" />
+    <Compile Include="views/root.fs" />
     <Compile Include="views/register.fs" />
     <Compile Include="views/login.fs" />
     <Compile Include="views/home.fs" />
+    <Compile Include="views/errors.fs" />
     <Compile Include="views/applications.fs" />
     <Compile Include="views/applicationsCreate.fs" />
     <Compile Include="views/applicationsEdit.fs" />
@@ -75,7 +77,6 @@
     <Compile Include="views/testcasesCreate.fs" />
     <Compile Include="views/testcasesEdit.fs" />
     <Compile Include="views/executions.fs" />
-    <Compile Include="views/root.fs" />
     <Compile Include="sausage_factory.fs" />
     <Compile Include="Program.fs" />
     <Content Include="css/*.css">
