@@ -14,7 +14,7 @@ let user_details =
       form_horizontal [
         content [
           icon_label_text "Name" empty "user"
-          icon_label_text "Email" empty "user"
+          icon_label_text "Email" empty "envelope"
           icon_password_text "Password" empty "lock"
           icon_password_text "Repeat Password" empty "lock"
           form_group [ sm12 [ pull_right [ button_submit ] ] ]
@@ -40,7 +40,7 @@ let errored_user_details errors (newUser : NewUser)=
     content [
       form_horizontal [
         errored_icon_label_text "Name" newUser.Name "user" errors
-        errored_icon_label_text "Email" newUser.Email "user" errors
+        errored_icon_label_text "Email" newUser.Email "envelope" errors
         errored_icon_password_text "Password" newUser.Password "lock" errors
         errored_icon_password_text "Repeat Password" newUser.RepeatPassword "lock" errors
 
