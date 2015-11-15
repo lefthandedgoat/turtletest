@@ -57,8 +57,8 @@ let logout'' = choose [ GET >>= reset ]
 
 let home'' (user : User) session = warbler (fun _ ->
   let counts = data.counts.getCounts user.Name session
-  let executions = data.fake.executions 5 ["Android"; "IOS"; "Desktop"]
-  OK <| views.home.html session user.Name counts executions)
+  let testruns = data.fake.testruns 5 ["Android"; "IOS"; "Desktop"]
+  OK <| views.home.html session user.Name counts testruns)
 
 let application'' id (user : User) session = warbler (fun _ ->
   let application = data.applications.tryById id
@@ -67,9 +67,9 @@ let application'' id (user : User) session = warbler (fun _ ->
     | Some(application) ->
       let counts = data.counts.getCounts user.Name session
       let permissions = data.permissions.getApplicationsCreateEditPermissions user.Name session
-      let executions = data.fake.executions 8 [application.Name]
+      let testruns = data.fake.testruns 8 [application.Name]
       let suites = data.suites.getByApplicationId application.Id
-      OK <| views.applications.details session permissions user.Name counts executions application suites)
+      OK <| views.applications.details session permissions user.Name counts testruns application suites)
 
 let applicationCreate'' (user : User) session =
   let permissions = data.permissions.getApplicationsCreateEditPermissions user.Name session
@@ -266,9 +266,9 @@ let testcases'' (user : User) session = warbler (fun _ ->
     else
       OK <| views.testcases.list session permissions user.Name counts testcases)
 
-let executions'' (user : User) session = warbler (fun _ ->
+let testruns'' (user : User) session = warbler (fun _ ->
   let counts = data.counts.getCounts user.Name session
-  OK <| views.executions.html session user.Name counts)
+  OK <| views.testruns.html session user.Name counts)
 
 let root'' =
   choose [
@@ -306,7 +306,7 @@ let webPart =
       pathScan paths.testcase (fun (userName, id) -> userExists userName (canView (testcase'' id)))
       pathScan paths.testcases (fun userName -> userExists userName (canView testcases''))
 
-      pathScan paths.executions (fun userName -> userExists userName (canView executions''))
+      pathScan paths.testruns (fun userName -> userExists userName (canView testruns''))
 
       pathScan paths.home (fun userName -> userExists userName (canView home''))
     ]

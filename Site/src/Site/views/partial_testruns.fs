@@ -1,11 +1,11 @@
-module views.partial.executions
+module views.partial.testruns
 
 open Suave.Html
 open html_common
 open html_bootstrap
 open types.read
 
-let executionRow suite name percent =
+let testrunRow suite name percent =
   let color =
     if percent >= 75 then "success"
     else if percent >= 50 then "warning"
@@ -13,19 +13,19 @@ let executionRow suite name percent =
   let percent = (string percent) + "%"
 
   trClass "items" [
-    tdAttr [ "style","width: 10%;" ] [ labelX color (text "Execution") ]
+    tdAttr [ "style","width: 10%;" ] [ labelX color (text "Test Run") ]
     td [ p [ strong suite ] ]
     td [ p [ span [(text name) ] ] ]
     tdColor color [ divClass "progress" [ progress_bar color percent (text percent) ]]
   ]
 
-let execution executionRows =
+let testrun testrunRows =
   block_flat [
-    header [ h3 "Recent Executions" ]
+    header [ h3 "Recent Test Runs" ]
     content [
       table_responsive [
         tableClass "no-border hover list" [
-          tbodyClass "no-border-y" (executionRows |> List.map (fun er -> executionRow er.Application er.Description er.Percent))
+          tbodyClass "no-border-y" (testrunRows |> List.map (fun er -> testrunRow er.Application er.Description er.Percent))
         ]
       ]
     ]

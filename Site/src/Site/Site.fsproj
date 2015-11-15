@@ -59,7 +59,7 @@
     <Compile Include="html/common.fs" />
     <Compile Include="html/bootstrap.fs" />
     <Compile Include="html/scripts.fs" />
-    <Compile Include="views/partial_executions.fs" />
+    <Compile Include="views/partial_testruns.fs" />
     <Compile Include="views/partial_sidebar.fs" />
     <Compile Include="views/partial_tile.fs" />
     <Compile Include="views/root.fs" />
@@ -76,7 +76,7 @@
     <Compile Include="views/testcases.fs" />
     <Compile Include="views/testcasesCreate.fs" />
     <Compile Include="views/testcasesEdit.fs" />
-    <Compile Include="views/executions.fs" />
+    <Compile Include="views/testruns.fs" />
     <Compile Include="sausage_factory.fs" />
     <Compile Include="Program.fs" />
     <Content Include="css/*.css">

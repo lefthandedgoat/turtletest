@@ -48,10 +48,10 @@ module read =
       Applications : int
       Suites : int
       TestCases : int
-      Executions : int
+      TestRuns : int
     }
 
-  type ExecutionRow =
+  type TestRunRow =
     {
       Application : string
       Description : string

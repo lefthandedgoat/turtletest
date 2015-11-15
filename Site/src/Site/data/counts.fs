@@ -15,7 +15,7 @@ let toCounts (reader : NpgsqlDataReader) : Counts list =
       Applications = getInt32 "applications" reader
       Suites = getInt32 "suites" reader
       TestCases = getInt32 "testcases" reader
-      Executions = getInt32 "executions" reader
+      TestRuns = getInt32 "testruns" reader
     }
   ]
 let private getPublicCounts userName =
@@ -43,7 +43,7 @@ SELECT
   WHERE u.name = :name
   AND a.Private = FALSE) as testcases
 
-  ,(SELECT 0) as executions
+  ,(SELECT 0) as testruns
 """
   use connection = connection connectionString
   use command = command connection sql
@@ -92,7 +92,7 @@ SELECT
       OR (p.Permission = 1 OR p.Permission = 2))
   ) as testcases
 
-  ,(SELECT 0) as executions
+  ,(SELECT 0) as testruns
 """
   use connection = connection connectionString
   use command = command connection sql

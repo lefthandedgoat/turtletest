@@ -80,7 +80,7 @@ let grid user applications buttons =
     ]
   ]
 
-let application_content permission user executionRows (application : Application) suites =
+let application_content permission user testrunRows (application : Application) suites =
   let edit_and_create_buttons =
     if ownerOrContributor permission
     then pull_right [ application_create_button user; application_edit_button user application.Id ]
@@ -89,7 +89,7 @@ let application_content permission user executionRows (application : Application
   mcontent [
     row [ m12 [ application_details application edit_and_create_buttons ] ]
     row [ m12 [ suites_grid user suites application.Id ] ]
-    row [ m12 [ partial.executions.execution executionRows ] ]
+    row [ m12 [ partial.testruns.testrun testrunRows ] ]
   ]
 
 let applications_content permission user applications =
@@ -102,12 +102,12 @@ let applications_content permission user applications =
     row [ m12 [ grid user applications create_button ] ]
   ]
 
-let details session permission user counts executions application suites =
+let details session permission user counts testruns application suites =
   base_html
     "application - details"
     [
       partial.sidebar.left_sidebar session user counts
-      application_content permission user executions application suites
+      application_content permission user testruns application suites
     ]
     scripts.applications_bundle
 

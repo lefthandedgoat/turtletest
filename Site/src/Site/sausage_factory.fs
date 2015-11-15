@@ -25,7 +25,8 @@ let logAndShow500 error =
   printfn "%A" error
   INTERNAL_ERROR views.errors.error_500
 
-let errorHandler (_ : Exception) _ (ctx : HttpContext) =
+let errorHandler (ex : Exception) _ (ctx : HttpContext) =
+    printfn "%A" ex
     Response.response HTTP_500 (UTF8.bytes views.errors.error_500) ctx
 
 let bindToForm form handler =

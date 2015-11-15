@@ -44,7 +44,7 @@ let left_sidebar (session : Session) user counts =
             side_link (paths.applications_link user) "Applications" counts.Applications "primary" "desktop"
             side_link (paths.suites_link user) "Suites" counts.Suites "success" "sitemap"
             side_link (paths.testcases_link user) "Test Cases" counts.TestCases "prusia" "thumbs-up"
-            side_link (paths.executions_link user) "Executions" counts.Executions "danger" "toggle-right"
+            side_link (paths.testruns_link user) "Test Runs" counts.TestRuns "danger" "toggle-right"
           ]
         ]
       ]

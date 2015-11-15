@@ -5,7 +5,7 @@ open types.read
 let empty = ""
 let random = System.Random()
 
-let executions count apps =
+let testruns count apps =
   let appsCount = List.length apps
   let randomApp () = apps.[random.Next(0, appsCount)]
   [1 .. count]

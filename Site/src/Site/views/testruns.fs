@@ -1,4 +1,4 @@
-module views.executions
+module views.testruns
 
 open Suave.Html
 open html_common
@@ -8,7 +8,7 @@ open views.partial
 
 let html session user counts =
   base_html
-    "executions"
+    "test runs"
     [
       partial.sidebar.left_sidebar session user counts
       h1 "Coming Soon"
