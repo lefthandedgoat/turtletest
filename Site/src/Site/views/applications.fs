@@ -15,8 +15,8 @@ let application_create_button user =
 let application_edit_button user id =
   button_small_edit (paths.applicationEdit_link user id) [ text "Edit"]
 
-let suite_create_button user =
-  button_small_create (paths.suiteCreate_link user) [ text "Create"]
+let suite_create_button user id =
+  button_small_create (paths.suiteCreate_queryStringLink user id) [ text "Create"]
 
 let application_details (application : Application ) buttons =
   block_flat [
@@ -33,7 +33,7 @@ let application_details (application : Application ) buttons =
     ]
   ]
 
-let suites_grid user suites =
+let suites_grid user suites applicationId =
   let toTd (suite : Suite) =
     [
       td [ aHref (paths.suite_link user suite.Id) [ text (string suite.Id) ] ]
@@ -42,7 +42,7 @@ let suites_grid user suites =
       td [ text (string suite.Owners) ]
     ]
   block_flat [
-    header [ h3Inner "Suites" [ pull_right [ suite_create_button user ] ] ]
+    header [ h3Inner "Suites" [ pull_right [ suite_create_button user (sprintf "applicationId=%i" applicationId) ] ] ]
     content [
       table_bordered
         [
@@ -85,7 +85,7 @@ let application_content permission user executionRows (application : Application
 
   mcontent [
     row [ m12 [ application_details application edit_and_create_buttons ] ]
-    row [ m12 [ suites_grid user suites ] ]
+    row [ m12 [ suites_grid user suites application.Id ] ]
     row [ m12 [ partial.executions.execution executionRows ] ]
   ]
 

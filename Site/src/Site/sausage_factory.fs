@@ -78,3 +78,8 @@ let canCreateEdit f_success user =
 
 let canView f_success user =
   getSession (fun sess -> f_success user sess)
+
+let getQueryStringValue (req :HttpRequest) queryStringKey =
+  match (req.queryParam queryStringKey) with
+  | Choice1Of2 value -> value
+  | _ -> ""

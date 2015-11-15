@@ -35,6 +35,7 @@ let suites_link user = sprintf "/%s/suites" user
 
 let suiteCreate : StringPath = "/%s/suite/create"
 let suiteCreate_link user = sprintf "/%s/suite/create" user
+let suiteCreate_queryStringLink user queryString = sprintf "/%s/suite/create?%s" user queryString
 
 let suiteEdit : StringIntPath = "/%s/suite/edit/%i"
 let suiteEdit_link user id = sprintf "/%s/suite/edit/%i" user id

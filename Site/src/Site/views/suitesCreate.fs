@@ -8,12 +8,12 @@ open views.partial
 
 let empty = ""
 
-let suite_details applications =
+let suite_details applications applicationId =
   block_flat [
     header [ h3 "Create Suite" ]
     content [
       form_horizontal [
-        label_select "Application" (suites.applicationsToSelect applications)
+        label_select_selected "Application" (suites.applicationsToSelect applications) applicationId
         label_text "Name" empty
         label_text "Version" empty
         label_text "Owners" empty
@@ -23,21 +23,21 @@ let suite_details applications =
     ]
   ]
 
-let suite_content applications =
+let suite_content applications applicationId =
   mcontent [
     row [
       m12 [
-        suite_details applications
+        suite_details applications applicationId
       ]
     ]
   ]
 
-let html session user counts applications =
+let html session user counts applications applicationId =
   base_html
     "create suite"
     [
       partial.sidebar.left_sidebar session user counts
-      suite_content applications
+      suite_content applications applicationId
     ]
     scripts.none
 

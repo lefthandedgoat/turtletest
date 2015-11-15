@@ -141,8 +141,9 @@ let suiteCreate'' (user : User) session =
     let counts = data.counts.getCounts user.Name session
     let applications = data.applications.getByUserId user.Id
     choose [
-      GET >>= warbler (fun _ ->
-        OK <| views.suitesCreate.html session user.Name counts applications)
+      GET >>= request (fun req ->
+        let applicationId = getQueryStringValue req "applicationId"
+        OK <| views.suitesCreate.html session user.Name counts applications applicationId)
       POST >>= bindToForm newforms.newSuite (fun newSuite ->
         let errors = newvalidations.newSuiteValidation newSuite
         if errors.Length > 0
