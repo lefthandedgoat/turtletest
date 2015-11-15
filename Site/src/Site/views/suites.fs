@@ -7,13 +7,16 @@ open types.read
 open views.partial
 
 let suite_create_button user =
-  button_small_create (paths.suiteCreate_link user) [ text "Create"]
+  button_small_plain (paths.suiteCreate_link user) [ text "Create"]
+
+let suite_create_button_success user =
+  button_small_success (paths.suiteCreate_link user) [ text "Create"]
 
 let suite_edit_button user id =
-  button_small_edit (paths.suiteEdit_link user id) [ text "Edit"]
+  button_small_success (paths.suiteEdit_link user id) [ text "Edit"]
 
 let testcase_create_button user =
-  button_small_create (paths.testcaseCreate_link user) [ text "Create"]
+  button_small_success (paths.testcaseCreate_link user) [ text "Create"]
 
 let applicationsToSelect applications =
   applications
@@ -80,13 +83,13 @@ let grid user suites buttons =
 
 let suite_content user (suite : Suite) testcases applications =
   mcontent [
-    row [ m12 [ suite_details suite applications [ suite_edit_button user suite.Id; suite_create_button user ] ] ]
+    row [ m12 [ suite_details suite applications [ suite_create_button user; suite_edit_button user suite.Id ] ] ]
     row [ m12 [ testcases_grid user testcases [ testcase_create_button user ] ] ]
   ]
 
 let suites_content user applications =
   mcontent [
-    row [ m12 [ grid user applications [ suite_create_button user ] ] ]
+    row [ m12 [ grid user applications [ suite_create_button_success user ] ] ]
   ]
 
 let details session user suite testcases applications counts =

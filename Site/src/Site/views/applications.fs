@@ -10,13 +10,16 @@ open views.partial
 let privateOptions = ["True","Yes"; "False","No"]
 
 let application_create_button user =
-  button_small_create (paths.applicationCreate_link user) [ text "Create"]
+  button_small_plain (paths.applicationCreate_link user) [ text "Create"]
+
+let application_create_button_success user =
+  button_small_success (paths.applicationCreate_link user) [ text "Create"]
 
 let application_edit_button user id =
-  button_small_edit (paths.applicationEdit_link user id) [ text "Edit"]
+  button_small_success (paths.applicationEdit_link user id) [ text "Edit"]
 
 let suite_create_button user id =
-  button_small_create (paths.suiteCreate_queryStringLink user id) [ text "Create"]
+  button_small_success (paths.suiteCreate_queryStringLink user id) [ text "Create"]
 
 let application_details (application : Application ) buttons =
   block_flat [
@@ -80,7 +83,7 @@ let grid user applications buttons =
 let application_content permission user executionRows (application : Application) suites =
   let edit_and_create_buttons =
     if ownerOrContributor permission
-    then pull_right [ application_edit_button user application.Id; application_create_button user ]
+    then pull_right [ application_create_button user; application_edit_button user application.Id ]
     else emptyText
 
   mcontent [
@@ -92,7 +95,7 @@ let application_content permission user executionRows (application : Application
 let applications_content permission user applications =
   let create_button =
     if ownerOrContributor permission
-    then application_create_button user
+    then application_create_button_success user
     else emptyText
 
   mcontent [

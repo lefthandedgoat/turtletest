@@ -8,10 +8,13 @@ open types.permissions
 open views.partial
 
 let testcase_create_button user =
-  button_small_create (paths.testcaseCreate_link user) [ text "Create"]
+  button_small_plain (paths.testcaseCreate_link user) [ text "Create"]
+
+let testcase_create_button_success user =
+  button_small_success (paths.testcaseCreate_link user) [ text "Create"]
 
 let testcase_edit_button user id =
-  button_small_edit (paths.testcaseEdit_link user id ) [ text "Edit"]
+  button_small_success (paths.testcaseEdit_link user id ) [ text "Edit"]
 
 let suitesToSelect suites =
   suites
@@ -63,7 +66,7 @@ let grid user testcases buttons =
 let testcase_content permission user applications suites testcase =
   let edit_and_create_buttons =
     if ownerOrContributor permission
-    then [ testcase_edit_button user testcase.Id; testcase_create_button user ]
+    then [ testcase_create_button user; testcase_edit_button user testcase.Id ]
     else [ emptyText ]
 
   mcontent [
@@ -73,7 +76,7 @@ let testcase_content permission user applications suites testcase =
 let testcases_content permission user testcases =
   let create_button =
     if ownerOrContributor permission
-    then [ testcase_create_button user ]
+    then [ testcase_create_button_success user ]
     else [ emptyText ]
 
   mcontent [
