@@ -15,8 +15,9 @@ let suite_create_button_success user =
 let suite_edit_button user id =
   button_small_success (paths.suiteEdit_link user id) [ text "Edit"]
 
-let testcase_create_button user =
-  button_small_success (paths.testcaseCreate_link user) [ text "Create"]
+let testcase_create_button user applicationId suiteId =
+  let queryString = (sprintf "applicationId=%i&suiteId=%i" applicationId suiteId)
+  button_small_success (paths.testcaseCreate_queryStringlink user queryString) [ text "Create"]
 
 let applicationsToSelect applications =
   applications
@@ -84,7 +85,7 @@ let grid user suites buttons =
 let suite_content user (suite : Suite) testcases applications =
   mcontent [
     row [ m12 [ suite_details suite applications [ suite_create_button user; suite_edit_button user suite.Id ] ] ]
-    row [ m12 [ testcases_grid user testcases [ testcase_create_button user ] ] ]
+    row [ m12 [ testcases_grid user testcases [ testcase_create_button user suite.ApplicationId suite.Id ] ] ]
   ]
 
 let suites_content user applications =

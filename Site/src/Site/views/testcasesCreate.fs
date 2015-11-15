@@ -8,13 +8,13 @@ open views.partial
 
 let empty = ""
 
-let testcase_details applications suites =
+let testcase_details applications suites applicationId suiteId =
   block_flat [
     header [ h3 "Create Test Case" ]
     content [
       form_horizontal [
-        label_select "Application" (views.suites.applicationsToSelect applications)
-        label_select "Suite" (views.testcases.suitesToSelect suites)
+        label_select_selected "Application" (views.suites.applicationsToSelect applications) applicationId
+        label_select_selected "Suite" (views.testcases.suitesToSelect suites) suiteId
         label_text "Name" empty
         label_text "Version" empty
         label_text "Owners" empty
@@ -29,21 +29,15 @@ let testcase_details applications suites =
     ]
   ]
 
-let testcase_content applications suites =
-  mcontent [
-    row [
-      m12 [
-        testcase_details applications suites
-      ]
-    ]
-  ]
+let testcase_content applications suites applicationId suiteId =
+  mcontent [ row [ m12 [ testcase_details applications suites applicationId suiteId ] ] ]
 
-let html session user counts applications suites =
+let html session user counts applications suites applicationId suiteId =
   base_html
     "create test case"
     [
       partial.sidebar.left_sidebar session user counts
-      testcase_content applications suites
+      testcase_content applications suites applicationId suiteId
     ]
     scripts.none
 
@@ -69,13 +63,7 @@ let error_testcase_details applications suites errors (newTestCase : NewTestCase
   ]
 
 let error_testcase_content applications suites errors newTestCase =
-  mcontent [
-    row [
-      m12 [
-        error_testcase_details applications suites errors newTestCase
-      ]
-    ]
-  ]
+  mcontent [ row [ m12 [ error_testcase_details applications suites errors newTestCase ] ] ]
 
 let error_html session user counts applications suites errors newTestCase =
   base_html

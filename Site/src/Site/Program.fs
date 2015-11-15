@@ -216,8 +216,10 @@ let testcaseCreate'' (user : User) session =
     let applications = data.applications.getByUserId user.Id
     let suites = data.suites.getByUserId user.Id
     choose [
-      GET >>= warbler (fun _ ->
-        OK <| views.testcasesCreate.html session user.Name counts applications suites)
+      GET >>= request (fun req ->
+        let applicationId = getQueryStringValue req "applicationId"
+        let suiteId = getQueryStringValue req "suiteId"
+        OK <| views.testcasesCreate.html session user.Name counts applications suites applicationId suiteId)
       POST >>= bindToForm newforms.newTestCase (fun newTestCase ->
         let errors = newvalidations.newTestCaseValidation newTestCase
         if errors.Length = 0
