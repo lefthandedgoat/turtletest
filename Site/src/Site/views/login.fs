@@ -20,8 +20,8 @@ let login_details error email=
       form_horizontal [
         content [
           errorTag
-          icon_label_text "Email" email "user" []
-          icon_password_text "Password" empty "lock" []
+          icon_label_text "Email" email "user"
+          icon_password_text "Password" empty "lock"
           form_group [ sm12 [ pull_right [ button_register; button_login ] ] ]
         ]
       ]

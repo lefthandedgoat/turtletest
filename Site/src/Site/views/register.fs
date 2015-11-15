@@ -10,28 +10,26 @@ let empty = ""
 let user_details =
   block_flat [
     header [ h3 "Register" ]
-    content [
+    div [
       form_horizontal [
-        label_text "Name" empty
-        label_text "Email" empty
-        label_password "Password" empty
-        label_password "Repeat Password" empty
-        form_group [ sm10 [ pull_right [ button_submit ] ] ]
+        content [
+          icon_label_text "Name" empty "user"
+          icon_label_text "Email" empty "user"
+          icon_password_text "Password" empty "lock"
+          icon_password_text "Repeat Password" empty "lock"
+          form_group [ sm12 [ pull_right [ button_submit ] ] ]
+        ]
       ]
     ]
   ]
 
 let register_content =
-  mcontent [
-    row [
-      m12 [
-        user_details
-      ]
-    ]
+  divClass "middle-sign-up" [
+    user_details
   ]
 
 let html =
-  base_html
+  register_html
     "register"
     [register_content]
     scripts.none
@@ -41,26 +39,27 @@ let errored_user_details errors (newUser : NewUser)=
     header [ h3 "Register" ]
     content [
       form_horizontal [
-        errored_label_text "Name" newUser.Name errors
-        errored_label_text "Email" newUser.Email errors
-        errored_label_password "Password" newUser.Password errors
-        errored_label_password "Repeat Password" newUser.RepeatPassword errors
+        errored_icon_label_text "Name" newUser.Name "user" errors
+        errored_icon_label_text "Email" newUser.Email "user" errors
+        errored_icon_password_text "Password" newUser.Password "lock" errors
+        errored_icon_password_text "Repeat Password" newUser.RepeatPassword "lock" errors
+
+        //errored_label_text "Name" newUser.Name errors
+        //errored_label_text "Email" newUser.Email errors
+        //errored_label_password "Password" newUser.Password errors
+        //errored_label_password "Repeat Password" newUser.RepeatPassword errors
         form_group [ sm10 [ pull_right [ button_submit ] ] ]
       ]
     ]
   ]
 
 let error_register_content errors newUser =
-  mcontent [
-    row [
-      m12 [
-        errored_user_details errors newUser
-      ]
-    ]
+  divClass "middle-sign-up" [
+    errored_user_details errors newUser
   ]
 
 let error_html errors newUser =
-  base_html
+  register_html
     "register"
     [error_register_content errors newUser]
     scripts.none

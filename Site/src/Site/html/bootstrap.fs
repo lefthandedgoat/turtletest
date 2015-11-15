@@ -101,6 +101,18 @@ let login_html title content scripts =
     |> xmlToString
   sprintf "<!DOCTYPE html>%s" html'
 
+let register_html title content scripts =
+  let html' =
+    html [
+      base_head title
+      bodyClass "texture" [
+        wrapperClass "sign-up-container" content
+      ]
+      scripts
+    ]
+    |> xmlToString
+  sprintf "<!DOCTYPE html>%s" html'
+
 let form_group_control_label_sm8 label' inner =
   form_group [
     control_label [ text label' ]
@@ -172,25 +184,23 @@ let table_bordered ths (rows : 'a list) (toTd : 'a -> Xml list) =
     ]
   ]
 
-let icon_label_text label' text' icon' errors =
+let icon_label_text label' text' icon' =
   form_group [
     sm12 [
       input_group [
         input_group_addon [ icon icon' ]
         input_form_control label' label' text'
       ]
-      errorsOrEmptyText label' errors
     ]
   ]
 
-let icon_password_text label' text' icon' errors =
+let icon_password_text label' text' icon' =
   form_group [
     sm12 [
       input_group [
         input_group_addon [ icon icon' ]
         password_form_control label' label' text'
       ]
-      errorsOrEmptyText label' errors
     ]
   ]
 
@@ -204,3 +214,25 @@ let errored_label_text label' text' errors = base_label_text label' text' errors
 let errored_label_password label' text' errors = base_label_password label' text' errors
 let errored_label_textarea label' text' errors = base_label_textarea label' text' errors
 let errored_label_select label' options selected errors = base_label_select label' options selected errors
+
+let errored_icon_label_text label' text' icon' errors =
+  form_group [
+    sm12 [
+      input_group [
+        input_group_addon [ icon icon' ]
+        input_form_control label' label' text'
+      ]
+      errorsOrEmptyText label' errors
+    ]
+  ]
+
+let errored_icon_password_text label' text' icon' errors =
+  form_group [
+    sm12 [
+      input_group [
+        input_group_addon [ icon icon' ]
+        password_form_control label' label' text'
+      ]
+      errorsOrEmptyText label' errors
+    ]
+  ]
