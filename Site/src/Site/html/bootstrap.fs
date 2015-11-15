@@ -30,6 +30,7 @@ let sm3 inner = divClass "col-sm-3" inner
 let sm6 inner = divClass "col-sm-6" inner
 let sm8 inner = divClass "col-sm-8" inner
 let sm10 inner = divClass "col-sm-10" inner
+let sm12 inner = divClass "col-sm-12" inner
 let block_flat inner = divClass "block-flat" inner
 let header inner = divClass "header" inner
 let labelX x inner = spanAttr ["class", (sprintf "label label-%s" x)] [inner]
@@ -47,11 +48,14 @@ let input_form_control_inner placeholder name value inner = inputClassPlaceholde
 let textarea_form_control placeholder name value = textareaClassPlaceholderName "form-control" name placeholder value
 let select_form_control name inner = selectClassName "form-control" name inner
 let input_group_button inner = spanClass "input-group-btn" inner
+let input_group_addon inner = spanClass "input-group-addon" inner
 let control_label inner = labelClass "col-sm-2 control-label" inner
 let button_primary href inner = aHrefAttr href ["class", "btn btn-primary"] inner
 let button_success href inner = aHrefAttr href ["class", "btn btn-success"] inner
 let button_save = inputAttr [ "value","Save"; "type","submit"; "class","btn btn-success"; ]
 let button_submit = inputAttr [ "value","Submit"; "type","submit"; "class","btn btn-success"; ]
+let button_login = inputAttr [ "value","Login"; "type","submit"; "class","btn btn-success"; ]
+let button_register = aHrefAttr "/register" [ "class","btn"; ] [ text "Register" ]
 let button_create href inner = aHrefAttr href ["class", "btn btn-success"] inner
 let button_small_create href inner = aHrefAttr href ["class", "btn btn-sm btn-success"] inner
 let button_edit href inner = aHrefAttr href ["class", "btn btn-danger"] inner
@@ -79,6 +83,18 @@ let error_html title content scripts =
       base_head title
       bodyClass "texture" [
         wrapperClass "error-container" content
+      ]
+      scripts
+    ]
+    |> xmlToString
+  sprintf "<!DOCTYPE html>%s" html'
+
+let login_html title content scripts =
+  let html' =
+    html [
+      base_head title
+      bodyClass "texture" [
+        wrapperClass "login-container" content
       ]
       scripts
     ]
@@ -156,10 +172,31 @@ let table_bordered ths (rows : 'a list) (toTd : 'a -> Xml list) =
     ]
   ]
 
+let icon_label_text label' text' icon' errors =
+  form_group [
+    sm12 [
+      input_group [
+        input_group_addon [ icon icon' ]
+        input_form_control label' label' text'
+      ]
+      errorsOrEmptyText label' errors
+    ]
+  ]
+
+let icon_password_text label' text' icon' errors =
+  form_group [
+    sm12 [
+      input_group [
+        input_group_addon [ icon icon' ]
+        password_form_control label' label' text'
+      ]
+      errorsOrEmptyText label' errors
+    ]
+  ]
+
 let stand_alone_error text' =
   form_group [
-    sm2 [ emptyText ]
-    sm8 [ ulClass "parsley-errors-list" [ li [ text text'] ] ]
+    sm12 [ ulClass "parsley-errors-list" [ li [ text text'] ] ]
   ]
 
 let errored_label_text_ahref_button label' text' button' errors = base_label_text_ahref_button label' text' button' errors

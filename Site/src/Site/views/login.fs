@@ -16,27 +16,25 @@ let login_details error email=
 
   block_flat [
     header [ h3 "Login" ]
-    content [
+    div [
       form_horizontal [
-        errorTag
-        label_text "Email" email
-        label_password "Password" empty
-        form_group [ sm10 [ pull_right [ button_submit ] ] ]
+        content [
+          errorTag
+          icon_label_text "Email" email "user" []
+          icon_password_text "Password" empty "lock" []
+          form_group [ sm12 [ pull_right [ button_register; button_login ] ] ]
+        ]
       ]
     ]
   ]
 
 let login_content error email =
-  mcontent [
-    row [
-      m12 [
-        login_details error email
-      ]
-    ]
+  divClass "middle-login" [
+    login_details error email
   ]
 
 let html error email =
-  base_html
+  login_html
     "login"
     [login_content error email]
     scripts.none
