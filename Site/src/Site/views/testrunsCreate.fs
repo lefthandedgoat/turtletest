@@ -10,7 +10,7 @@ let empty = ""
 
 let testrun_details applications =
   block_flat [
-    header [ h3 "Create Test Case" ]
+    header [ h3 "Create Test Run" ]
     content [
       form_horizontal [
         label_select "Application" (views.suites.applicationsToSelect applications)
