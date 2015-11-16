@@ -104,3 +104,15 @@ module read =
       History : string
       Attachments : string
     }
+
+  type TestRun =
+    {
+      Id : int
+      ApplicationId : int
+      RunDate : System.DateTime
+      Description : string
+      NotRun : int array
+      Passed : int array
+      Failed : int array
+      PercentRun : int
+    }

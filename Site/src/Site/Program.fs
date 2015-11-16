@@ -266,9 +266,72 @@ let testcases'' (user : User) session = warbler (fun _ ->
     else
       OK <| views.testcases.list session permissions user.Name counts testcases)
 
+let testrun'' id (user : User) session = warbler (fun _ ->
+  let testrun = data.testruns.tryById id
+  match testrun with
+    | None -> OK views.errors.error_404
+    | Some(testrun) ->
+      //todo switch to being able to view public test runs
+      let permissions = data.permissions.getSpecificTestRunCreateEditPermissions id session
+      if ownerOrContributor permissions |> not
+      then OK views.errors.error_404
+      else
+        let counts = data.counts.getCounts user.Name session
+        let applications = data.applications.getByUserId user.Id
+        OK <| views.testruns.details session permissions user.Name applications counts testrun)
+
+let testrunCreate'' (user : User) session =
+  let permissions = data.permissions.getTestRunCreateEditPermissions user.Name session
+  if ownerOrContributor permissions |> not
+  then OK views.errors.error_404
+  else
+    let counts = data.counts.getCounts user.Name session
+    let applications = data.applications.getByUserId user.Id
+    choose [
+      GET >>= request (fun _ -> //todo back to req from _
+        //let applicationId = getQueryStringValue req "applicationId" //todo add this back
+        OK <| views.testrunsCreate.html session user.Name counts applications)
+      POST >>= bindToForm newforms.newTestRun (fun newTestRun ->
+        let errors = newvalidations.newTestRunValidation newTestRun
+        if errors.Length = 0
+        then
+          let id = data.testruns.insert newTestRun
+          FOUND <| paths.testrun_link user.Name id
+        else OK <| views.testrunsCreate.error_html session user.Name counts applications errors newTestRun)
+    ]
+
+let testrunEdit'' id (user : User) session =
+  let permissions = data.permissions.getSpecificTestRunCreateEditPermissions id session
+  if ownerOrContributor permissions |> not
+  then OK views.errors.error_404
+  else
+    let counts = data.counts.getCounts user.Name session
+    let applications = data.applications.getByUserId user.Id
+    choose [
+      GET >>= warbler (fun _ ->
+        let testrun = data.testruns.tryById id
+        match testrun with
+        | None -> OK views.errors.error_404
+        | Some(testrun) ->
+          OK <| views.testrunEdit.html session user.Name counts applications testrun)
+      POST >>= bindToForm editforms.editTestRun (fun editTestRun ->
+        let errors = editvalidations.editTestRunValidation editTestRun
+        if errors.Length > 0
+        then OK <| views.testrunEdit.error_html session user.Name counts errors applications editTestRun
+        else
+          data.testruns.update id editTestRun
+          FOUND <| paths.testrun_link user.Name id)
+    ]
+
 let testruns'' (user : User) session = warbler (fun _ ->
-  let counts = data.counts.getCounts user.Name session
-  OK <| views.testruns.html session user.Name counts)
+  //todo switch to being able to view public test runs
+  let permissions = data.permissions.getTestRunCreateEditPermissions user.Name session
+  if ownerOrContributor permissions |> not
+  then OK views.errors.error_404
+  else
+    let counts = data.counts.getCounts user.Name session
+    let testruns = data.testruns.getByUserId user.Id
+    OK <| views.testruns.list session permissions user.Name counts testruns)
 
 let root'' =
   choose [
@@ -294,6 +357,9 @@ let webPart =
     pathScan paths.testcaseCreate (fun userName -> userExists userName (canCreateEdit testcaseCreate''))
     pathScan paths.testcaseEdit (fun (userName, id) -> userExists userName (canCreateEdit (testcaseEdit'' id)))
 
+    pathScan paths.testrunCreate (fun userName -> userExists userName (canCreateEdit testrunCreate''))
+    pathScan paths.testrunEdit (fun (userName, id) -> userExists userName (canCreateEdit (testrunEdit'' id)))
+
     pathRegex "(.*)\.(css|png|gif|js|ico|woff|tff)" >>= Files.browseHome
 
     GET >>= choose [
@@ -306,6 +372,7 @@ let webPart =
       pathScan paths.testcase (fun (userName, id) -> userExists userName (canView (testcase'' id)))
       pathScan paths.testcases (fun userName -> userExists userName (canView testcases''))
 
+      pathScan paths.testrun (fun (userName, id) -> userExists userName (canView (testrun'' id)))
       pathScan paths.testruns (fun userName -> userExists userName (canView testruns''))
 
       pathScan paths.home (fun userName -> userExists userName (canView home''))

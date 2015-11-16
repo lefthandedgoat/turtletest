@@ -121,7 +121,7 @@ let form_group_control_label_sm8 label' inner =
   ]
 
 let private errorsOrEmptyText label errors =
-  let errors = errors |> List.filter (fun (prop, _) -> prop = (removeSpace label))
+  let errors = errors |> List.filter (fun (prop, _) -> (removeSpace prop) = (removeSpace label))
   match errors with
   | [] -> emptyText
   | _ ->

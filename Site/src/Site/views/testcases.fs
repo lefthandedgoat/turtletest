@@ -63,7 +63,7 @@ let grid user testcases buttons =
     ]
   ]
 
-let testcase_content permission user applications suites testcase =
+let testcase_content permission user applications suites (testcase : TestCase) =
   let edit_and_create_buttons =
     if ownerOrContributor permission
     then [ testcase_create_button user; testcase_edit_button user testcase.Id ]

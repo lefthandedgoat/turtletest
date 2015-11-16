@@ -40,8 +40,14 @@ let getInt32 name (reader : NpgsqlDataReader) =
 let getString name (reader : NpgsqlDataReader) =
   reader.GetString(reader.GetOrdinal(name))
 
+let getDateTime name (reader : NpgsqlDataReader) =
+  reader.GetDateTime(reader.GetOrdinal(name))
+
 let getBool name (reader : NpgsqlDataReader) =
   reader.GetBoolean(reader.GetOrdinal(name))
+
+let getIntArray name (reader : NpgsqlDataReader) =
+  reader.GetValue(reader.GetOrdinal(name)) :?> int array
 
 let permissionToInt (permission : Permissions) =
   match permission with

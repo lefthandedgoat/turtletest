@@ -55,7 +55,7 @@ INSERT INTO turtletest.TestCases
    ,:expected
    ,:history
    ,:attachments
- ) RETURNING suite_id;
+ ) RETURNING testcase_id;
 """
   use connection = connection connectionString
   use command = command connection sql

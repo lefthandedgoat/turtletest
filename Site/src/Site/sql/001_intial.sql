@@ -65,5 +65,16 @@ CREATE TABLE turtletest.TestCases(
 CREATE INDEX testcases_fk_applications ON turtletest.TestCases (application_id);
 CREATE INDEX testcases_fk_suites ON turtletest.TestCases (suite_id);
 
+CREATE TABLE turtletest.TestRuns(
+  testrun_id SERIAL            PRIMARY KEY NOT NULL,
+  application_id integer       NOT NULL REFERENCES turtletest.Applications (application_id),
+  run_date       timestamptz   NOT NULL,
+  description    varchar(1024) NOT NULL,
+  not_run        integer ARRAY NOT NULL,
+  passed         integer ARRAY NOT NULL,
+  failed         integer ARRAY NOT NULL);
+
+CREATE INDEX testruns_fk_applications ON turtletest.TestRuns (application_id);
+
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA turtletest TO turtletest;
 GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA turtletest TO turtletest;

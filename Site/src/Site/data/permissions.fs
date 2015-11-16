@@ -166,3 +166,59 @@ let getTestCaseCreateEditPermissions userName session =
         match permission with
           | Some(permission) -> permission.Permission
           | None -> Neither
+
+let getSpecificTestRunCreateEditPermissions (testrun_id : int) session =
+  let getTestRunPermission user_id =
+    let sql = """
+  SELECT p.*
+  FROM turtletest.TestRuns as t
+  JOIN turtletest.Permissions as p
+  ON t.application_id = p.application_id
+  WHERE t.testrun_id = :testrun_id
+  AND p.user_id = :user_id
+  """
+    use connection = connection connectionString
+    use command = command connection sql
+    command
+    |> param "testrun_id" testrun_id
+    |> param "user_id" user_id
+    |> read toPermission
+    |> firstOrNone
+
+  match session with
+    | NoSession -> Neither
+    | User(user_id) ->
+      let permission = getTestRunPermission user_id
+      match permission with
+        | Some(permission) -> permission.Permission
+        | None -> Neither
+
+//todo ultimately this should return a list of applications
+//or something that the user can do stuff to
+let getTestRunCreateEditPermissions userName session =
+  let getTestRunPermission user_id =
+    let sql = """
+  SELECT p.*
+  FROM turtletest.TestRuns as t
+  JOIN turtletest.Permissions as p
+  ON t.application_id = p.application_id
+  WHERE p.user_id = :user_id
+  """
+    use connection = connection connectionString
+    use command = command connection sql
+    command
+    |> param "user_id" user_id
+    |> read toPermission
+    |> firstOrNone
+
+  match session with
+    | NoSession -> Neither
+    | User(user_id) ->
+      let user = data.users.getById user_id
+      if user.Name = userName
+      then Owner
+      else
+        let permission = getTestRunPermission user_id
+        match permission with
+          | Some(permission) -> permission.Permission
+          | None -> Neither

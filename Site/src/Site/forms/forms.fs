@@ -72,6 +72,12 @@ module newtypes =
     Attachments : string;
   }
 
+  type NewTestRun = {
+    Application : string
+    Description : string
+    TestCases : string
+  }
+
 module newforms =
   open newtypes
   open common
@@ -81,6 +87,7 @@ module newforms =
   let newApplication : Form<NewApplication> = form
   let newSuite : Form<NewSuite> = form
   let newTestCase : Form<NewTestCase> = form
+  let newTestRun : Form<NewTestRun> = form
 
 module newvalidations =
   open newtypes
@@ -148,6 +155,18 @@ module newvalidations =
       testCaseNameRequired
     ] |> applyValidations newTestCase
 
+  //NEWTESTRUN
+  let testRunApplicationRequired = (fun (testRun : NewTestRun) -> String.IsNullOrWhiteSpace testRun.Application |> not), "Application", "Application is required"
+  let testRunDescriptionRequired = (fun (testRun : NewTestRun) -> String.IsNullOrWhiteSpace testRun.Description |> not), "Description", "Description is required"
+  let testRunTestCasesRequired = (fun (testRun : NewTestRun) -> String.IsNullOrWhiteSpace testRun.TestCases |> not), "Test Cases", "Test Cases are required"
+
+  let newTestRunValidation newTestRun =
+    [
+      testRunApplicationRequired
+      testRunDescriptionRequired
+      testRunTestCasesRequired
+    ] |> applyValidations newTestRun
+
 module edittypes =
 
   type EditApplication = {
@@ -182,6 +201,11 @@ module edittypes =
     Attachments : string;
   }
 
+  type EditTestRun = {
+    Application : string
+    Description : string
+  }
+
 module editforms =
   open common
   open edittypes
@@ -189,6 +213,7 @@ module editforms =
   let editApplication : Form<EditApplication> = form
   let editSuite : Form<EditSuite> = form
   let editTestCase : Form<EditTestCase> = form
+  let editTestRun : Form<EditTestRun> = form
 
 module editvalidations =
   open common
@@ -245,3 +270,18 @@ module editvalidations =
       editTestCaseSuiteRequired
       editTestCaseNameRequired
     ] |> applyValidations editTestCase
+
+  //EDITTESTRUN
+  let editTestRunApplicationRequired =
+    (fun (testRun : EditTestRun) ->
+      let canParse, _ = System.Int32.TryParse(testRun.Application)
+      canParse && (not <| String.IsNullOrWhiteSpace testRun.Application))
+    ,"Application"
+    ,"Application is required"
+  let editTestRunNameRequired = (fun (testRun : EditTestRun) -> String.IsNullOrWhiteSpace testRun.Description |> not), "Description", "Description is required"
+
+  let editTestRunValidation editTestRun =
+    [
+      editTestRunApplicationRequired
+      editTestRunNameRequired
+    ] |> applyValidations editTestRun

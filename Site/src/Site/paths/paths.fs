@@ -53,5 +53,14 @@ let testcaseCreate_queryStringlink user queryString = sprintf "/%s/testcase/crea
 let testcaseEdit : StringIntPath = "/%s/testcase/edit/%i"
 let testcaseEdit_link user id = sprintf "/%s/testcase/edit/%i" user id
 
+let testrun : StringIntPath = "/%s/testrun/%i"
+let testrun_link user id = sprintf "/%s/testrun/%i" user id
+
 let testruns : StringPath = "/%s/testruns"
 let testruns_link user = sprintf "/%s/testruns" user
+
+let testrunCreate : StringPath = "/%s/testrun/create"
+let testrunCreate_link user = sprintf "/%s/testrun/create" user
+
+let testrunEdit : StringIntPath = "/%s/testrun/edit/%i"
+let testrunEdit_link user id = sprintf "/%s/testrun/edit/%i" user id
