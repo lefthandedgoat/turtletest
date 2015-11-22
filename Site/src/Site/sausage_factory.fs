@@ -19,6 +19,7 @@ open Suave.Html
 open html_common
 open html_bootstrap
 open types.session
+open types.read
 
 //todo since we manually handle errors, make bad request log errors and send you too an oops page
 let logAndShow500 error =
@@ -62,6 +63,13 @@ let userExists userName f_success =
   match user with
     | None -> OK views.errors.error_404
     | Some(user) -> f_success user
+
+let applicationExistsAndUserHasPermissions id f_success (user : User) session =
+  let application = data.applications.tryById id
+  let permissions = data.permissions.getApplicationsCreateEditPermissions user.Name session
+  match application with
+    | None -> OK views.errors.error_404
+    | Some(application) -> f_success application user permissions session
 
 let loggedOn f_success =
   Auth.authenticate

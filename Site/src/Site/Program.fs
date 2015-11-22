@@ -60,16 +60,11 @@ let home'' (user : User) session = warbler (fun _ ->
   let testruns = data.fake.testruns 5 ["Android"; "IOS"; "Desktop"]
   OK <| views.home.html session user.Name counts testruns)
 
-let application'' id (user : User) session = warbler (fun _ ->
-  let application = data.applications.tryById id
-  match application with
-    | None -> OK views.errors.error_404
-    | Some(application) ->
-      let counts = data.counts.getCounts user.Name session
-      let permissions = data.permissions.getApplicationsCreateEditPermissions user.Name session
-      let testruns = data.fake.testruns 8 [application.Name]
-      let suites = data.suites.getByApplicationId application.Id
-      OK <| views.applications.details session permissions user.Name counts testruns application suites)
+let application'' (application : Application) (user : User) permissions session = warbler (fun _ ->
+  let counts = data.counts.getCounts user.Name session
+  let testruns = data.fake.testruns 8 [application.Name]
+  let suites = data.suites.getByApplicationId application.Id
+  OK <| views.applications.details session permissions user.Name counts testruns application suites)
 
 let applicationCreate'' (user : User) session =
   let permissions = data.permissions.getApplicationsCreateEditPermissions user.Name session
@@ -363,7 +358,7 @@ let webPart =
     pathRegex "(.*)\.(css|png|gif|js|ico|woff|tff)" >>= Files.browseHome
 
     GET >>= choose [
-      pathScan paths.application (fun (userName, id) -> userExists userName (canView (application'' id)))
+      pathScan paths.application (fun (userName, id) -> userExists userName (canView (applicationExistsAndUserHasPermissions id application'')))
       pathScan paths.applications (fun userName -> userExists userName (canView applications''))
 
       pathScan paths.suite (fun (userName, id) -> userExists userName (canView (suite'' id)))
