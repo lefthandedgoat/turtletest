@@ -65,7 +65,7 @@ let gitRaw = environVarOrDefault "gitRaw" "https://raw.github.com/lefthandedgoat
 // Read additional information from the release notes document
 let release = LoadReleaseNotes "RELEASE_NOTES.md"
 
-let buildDir = "./bin/Site/"
+let testsBuildDir = "./bin/tests/"
 
 // Helper active pattern for project types
 let (|Fsproj|Csproj|Vbproj|) (projFileName:string) =
@@ -180,10 +180,10 @@ Target "Release" (fun _ ->
     |> Async.RunSynchronously
 )
 
-Target "RunExe" (fun _ ->
+Target "RunTests" (fun _ ->
     let result =
         ExecProcess (fun info ->
-            info.FileName <- (buildDir @@ "Site.exe")
+            info.FileName <- (testsBuildDir @@ "tests.exe")
         ) (System.TimeSpan.FromMinutes 5.)
 
     if result <> 0 then failwith "Failed result from canopy unit tests"
@@ -202,7 +202,7 @@ Target "Default" DoNothing
   ==> "AssemblyInfo"
   ==> "Build"
   ==> "CopyBinaries"
-  ==> "RunExe"
+  ==> "RunTests"
   ==> "All"
 
 "All"
@@ -215,7 +215,7 @@ Target "Default" DoNothing
 "BuildPackage"
   ==> "Release"
 
-"RunExe"
+"RunTests"
   ==> "Default"
 
 RunTargetOrDefault "Default"
