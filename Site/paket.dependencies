@@ -8,3 +8,5 @@ nuget Suave
 nuget Suave.Experimental
 nuget Npgsql
 nuget BCrypt-Official
+nuget Newtonsoft.Json 6.0.8
+nuget canopy
