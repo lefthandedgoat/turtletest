@@ -66,6 +66,7 @@ let gitRaw = environVarOrDefault "gitRaw" "https://raw.github.com/lefthandedgoat
 let release = LoadReleaseNotes "RELEASE_NOTES.md"
 
 let testsBuildDir = "./bin/tests/"
+let siteBuildDir = "./bin/Site/"
 
 // Helper active pattern for project types
 let (|Fsproj|Csproj|Vbproj|) (projFileName:string) =
@@ -180,6 +181,10 @@ Target "Release" (fun _ ->
     |> Async.RunSynchronously
 )
 
+Target "StartServer" (fun _ ->
+    fireAndForget (fun info -> info.FileName <- (siteBuildDir @@ "Site.exe"))
+)
+
 Target "RunTests" (fun _ ->
     let result =
         ExecProcess (fun info ->
@@ -202,6 +207,7 @@ Target "Default" DoNothing
   ==> "AssemblyInfo"
   ==> "Build"
   ==> "CopyBinaries"
+  ==> "StartServer"
   ==> "RunTests"
   ==> "All"
 
@@ -214,8 +220,5 @@ Target "Default" DoNothing
 
 "BuildPackage"
   ==> "Release"
-
-"RunTests"
-  ==> "Default"
 
 RunTargetOrDefault "Default"

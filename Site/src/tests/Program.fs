@@ -4,7 +4,7 @@ open runner
 [<EntryPoint>]
 let main _ =
   start firefox
-  url "http://www.google.com"
+  url "http://localhost:8083"
   quit()
 
   canopy.runner.failedCount
