@@ -112,6 +112,21 @@ Target "CopyBinaries" (fun _ ->
     |>  Seq.iter (fun (fromDir, toDir) -> CopyDir toDir fromDir (fun _ -> true))
 )
 
+Target "CopyAssets" (fun _ ->
+    !! "src/Site/*.fsproj"
+    |>  Seq.map (fun f -> ((System.IO.Path.GetDirectoryName f) @@ "css", "bin/Site/css" @@ (System.IO.Path.GetFileNameWithoutExtension f)))
+    |>  Seq.iter (fun (fromDir, toDir) -> CopyDir toDir fromDir (fun _ -> true))
+    !! "src/Site/*.fsproj"
+    |>  Seq.map (fun f -> ((System.IO.Path.GetDirectoryName f) @@ "js", "bin/Site/js" @@ (System.IO.Path.GetFileNameWithoutExtension f)))
+    |>  Seq.iter (fun (fromDir, toDir) -> CopyDir toDir fromDir (fun _ -> true))
+    !! "src/Site/*.fsproj"
+    |>  Seq.map (fun f -> ((System.IO.Path.GetDirectoryName f) @@ "fonts", "bin/Site/fonts" @@ (System.IO.Path.GetFileNameWithoutExtension f)))
+    |>  Seq.iter (fun (fromDir, toDir) -> CopyDir toDir fromDir (fun _ -> true))
+    !! "src/Site/*.fsproj"
+    |>  Seq.map (fun f -> ((System.IO.Path.GetDirectoryName f) @@ "images", "bin/Site/images" @@ (System.IO.Path.GetFileNameWithoutExtension f)))
+    |>  Seq.iter (fun (fromDir, toDir) -> CopyDir toDir fromDir (fun _ -> true))
+)
+
 // --------------------------------------------------------------------------------------
 // Clean build results
 
@@ -207,6 +222,7 @@ Target "Default" DoNothing
   ==> "AssemblyInfo"
   ==> "Build"
   ==> "CopyBinaries"
+  ==> "CopyAssets"
   ==> "StartServer"
   ==> "RunTests"
   ==> "All"
