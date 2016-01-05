@@ -10,3 +10,5 @@ let findByPlaceholder placeholder f =
 
 let addFinders () =
   addFinder findByPlaceholder
+
+let goto uri = canopy.core.url uri

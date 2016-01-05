@@ -28,6 +28,8 @@ let main _ =
   testrunEdit.all()
 
   run()
+
+  System.Console.ReadKey() |> ignore
   quit()
 
   canopy.runner.failedCount

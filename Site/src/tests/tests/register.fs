@@ -8,10 +8,14 @@ open page_register
 let all () =
   context "register"
 
-  "test 1" &&& fun _ ->
-    url "http://localhost:8083/register"
+  "Can register new unique user" &&& fun _ ->
+    goto page_register.uri
+    let username, email = generateUniqueUser ()
 
-    "Name" << "fake"
-    "Email" << "fake_87654@null.dev"
+    "Name" << username
+    "Email" << email
     "Password" << "test123"
     "Repeat Password" << "test123"
+    click "Submit"
+
+    on (page_home.uri username)
