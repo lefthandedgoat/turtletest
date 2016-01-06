@@ -26,60 +26,8 @@ module email =
 
   let interestedEmail : Form<InterestedEmail> = common.form
 
-module newtypes =
-
-  type NewLoginAttempt = {
-    Email : string
-    Password : string
-  }
-
-  type NewUser = {
-    Name : string;
-    Email : string;
-    Password : string;
-    RepeatPassword : string;
-  }
-
-  type NewApplication = {
-    Name : string;
-    Private : string;
-    Address : string;
-    Documentation : string;
-    Owners : string;
-    Developers : string;
-    Notes : string;
-  }
-
-  type NewSuite = {
-    Application : string;
-    Name : string;
-    Version : string;
-    Owners : string;
-    Notes : string;
-  }
-
-  type NewTestCase = {
-    Application : string;
-    Suite : string;
-    Name : string;
-    Version : string;
-    Owners : string;
-    Notes : string;
-    Requirements : string;
-    Steps : string;
-    Expected : string;
-    History : string;
-    Attachments : string;
-  }
-
-  type NewTestRun = {
-    Application : string
-    Description : string
-    TestCases : string
-  }
-
 module newforms =
-  open newtypes
+  open forms.newtypes
   open common
 
   let loginAttempt : Form<NewLoginAttempt> = form
@@ -90,7 +38,7 @@ module newforms =
   let newTestRun : Form<NewTestRun> = form
 
 module newvalidations =
-  open newtypes
+  open forms.newtypes
   open common
 
   //NEWUSER
@@ -103,6 +51,23 @@ module newvalidations =
     (fun f -> Regex(passwordPattern).IsMatch(f.Password) && Regex(passwordPattern).IsMatch(f.RepeatPassword))
     ,"Password"
     ,"Password must between 6 and 100 characters"
+  let nameUnique =
+    (fun (user : NewUser) ->
+      let tryUser = data.users.tryByName user.Name
+      match tryUser with
+        | None -> true
+        | Some(_) -> false)
+    , "Name"
+    , "Name is already taken"
+
+  let emailUnique =
+    (fun (user : NewUser) ->
+      let tryUser = data.users.tryByEmail user.Email
+      match tryUser with
+        | None -> true
+        | Some(_) -> false)
+    , "Email"
+    , "Email is already taken"
 
   let newUserValidation newUser =
     [
@@ -111,6 +76,8 @@ module newvalidations =
       emailValid
       passwordsMatch
       passwordRegexMatch
+      nameUnique
+      emailUnique
     ] |> applyValidations newUser
 
   //NEWAPPLICATION
@@ -167,48 +134,9 @@ module newvalidations =
       testRunTestCasesRequired
     ] |> applyValidations newTestRun
 
-module edittypes =
-
-  type EditApplication = {
-    Name : string;
-    Private : string;
-    Address : string;
-    Documentation : string;
-    Owners : string;
-    Developers : string;
-    Notes : string;
-  }
-
-  type EditSuite = {
-    Application : string;
-    Name : string;
-    Version : string;
-    Owners : string;
-    Notes : string;
-  }
-
-  type EditTestCase = {
-    Application : string;
-    Suite : string;
-    Name : string;
-    Version : string;
-    Owners : string;
-    Notes : string;
-    Requirements : string;
-    Steps : string;
-    Expected : string;
-    History : string;
-    Attachments : string;
-  }
-
-  type EditTestRun = {
-    Application : string
-    Description : string
-  }
-
 module editforms =
+  open forms.edittypes
   open common
-  open edittypes
 
   let editApplication : Form<EditApplication> = form
   let editSuite : Form<EditSuite> = form
@@ -216,8 +144,8 @@ module editforms =
   let editTestRun : Form<EditTestRun> = form
 
 module editvalidations =
+  open forms.edittypes
   open common
-  open edittypes
 
   //EDITAPPLICATION
   let editApplicationNameRequired = (fun (app : EditApplication) -> String.IsNullOrWhiteSpace app.Name |> not), "Name", "Name is required"

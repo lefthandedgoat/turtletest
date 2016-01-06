@@ -116,3 +116,95 @@ module read =
       Failed : int array
       PercentRun : int
     }
+
+namespace forms
+module newtypes =
+
+  type NewLoginAttempt = {
+    Email : string
+    Password : string
+  }
+
+  type NewUser = {
+    Name : string;
+    Email : string;
+    Password : string;
+    RepeatPassword : string;
+  }
+
+  type NewApplication = {
+    Name : string;
+    Private : string;
+    Address : string;
+    Documentation : string;
+    Owners : string;
+    Developers : string;
+    Notes : string;
+  }
+
+  type NewSuite = {
+    Application : string;
+    Name : string;
+    Version : string;
+    Owners : string;
+    Notes : string;
+  }
+
+  type NewTestCase = {
+    Application : string;
+    Suite : string;
+    Name : string;
+    Version : string;
+    Owners : string;
+    Notes : string;
+    Requirements : string;
+    Steps : string;
+    Expected : string;
+    History : string;
+    Attachments : string;
+  }
+
+  type NewTestRun = {
+    Application : string
+    Description : string
+    TestCases : string
+  }
+
+module edittypes =
+
+  type EditApplication = {
+    Name : string;
+    Private : string;
+    Address : string;
+    Documentation : string;
+    Owners : string;
+    Developers : string;
+    Notes : string;
+  }
+
+  type EditSuite = {
+    Application : string;
+    Name : string;
+    Version : string;
+    Owners : string;
+    Notes : string;
+  }
+
+  type EditTestCase = {
+    Application : string;
+    Suite : string;
+    Name : string;
+    Version : string;
+    Owners : string;
+    Notes : string;
+    Requirements : string;
+    Steps : string;
+    Expected : string;
+    History : string;
+    Attachments : string;
+  }
+
+  type EditTestRun = {
+    Application : string
+    Description : string
+  }

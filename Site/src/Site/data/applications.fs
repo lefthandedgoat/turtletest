@@ -3,7 +3,7 @@ module data.applications
 open System
 open Npgsql
 open adohelper
-open forms
+open forms.newtypes
 open types.read
 open forms.newtypes
 open forms.edittypes

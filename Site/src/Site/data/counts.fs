@@ -3,7 +3,6 @@ module data.counts
 open System
 open Npgsql
 open adohelper
-open forms
 open types.read
 open types.session
 

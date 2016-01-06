@@ -3,10 +3,9 @@ module data.users
 open System
 open Npgsql
 open adohelper
-open forms
+open forms.newtypes
 open types.crypto
 open types.read
-open forms.newtypes
 open BCrypt.Net
 
 let connectionString = "Server=127.0.0.1;User Id=turtletest; Password=taconacho;Database=turtletest;"
@@ -77,6 +76,19 @@ WHERE name = :name
   use command = command connection sql
   command
   |> param "name" name
+  |> read toUser
+  |> firstOrNone
+
+//todo add index on email
+let tryByEmail email =
+  let sql = """
+SELECT * FROM turtletest.users
+WHERE email = :email
+"""
+  use connection = connection connectionString
+  use command = command connection sql
+  command
+  |> param "email" email
   |> read toUser
   |> firstOrNone
 

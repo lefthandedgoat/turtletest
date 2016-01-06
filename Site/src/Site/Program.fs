@@ -29,7 +29,6 @@ let register'' =
       if errors.Length > 0
       then OK <| views.register.error_html errors newUser
       else
-        //todo check for duplicates etc, I think it will error
         let id = data.users.insert newUser
         //todo common code to move to the sausage factory???
         Auth.authenticated Cookie.CookieLife.Session false
