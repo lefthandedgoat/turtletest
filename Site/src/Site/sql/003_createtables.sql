@@ -1,11 +1,12 @@
 CREATE TABLE turtletest.Users(
   user_id        SERIAL       PRIMARY KEY NOT NULL,
   name           varchar(64)  NOT NULL UNIQUE,
-  email          varchar(256) NOT NULL,
+  email          varchar(256) NOT NULL UNIQUE,
   password       varchar(60)  NOT NULL,
   scheme         smallint     NOT NULL);
 
 CREATE INDEX users_name ON turtletest.Users (name);
+CREATE INDEX users_email ON turtletest.Users (email);
 
 CREATE TABLE turtletest.Applications(
   application_id SERIAL       PRIMARY KEY NOT NULL,
