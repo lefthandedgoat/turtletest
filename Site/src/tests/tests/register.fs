@@ -19,3 +19,12 @@ let all () =
     click "Submit"
 
     on (page_home.uri username)
+
+  "Duplicate registrations are not allowed" &&& fun _ ->
+    let username, email = generateUniqueUser ()
+
+    register username email
+    tryRegister username email
+
+    displayed "Name is already taken"
+    displayed "Email is already taken"
