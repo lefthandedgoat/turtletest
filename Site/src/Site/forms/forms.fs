@@ -50,7 +50,7 @@ module newvalidations =
   let passwordRegexMatch =
     (fun f -> Regex(passwordPattern).IsMatch(f.Password) && Regex(passwordPattern).IsMatch(f.RepeatPassword))
     ,"Password"
-    ,"Password must between 6 and 100 characters"
+    ,"Password must be between 6 and 100 characters"
   let nameUnique =
     (fun (user : NewUser) ->
       let tryUser = data.users.tryByName user.Name
