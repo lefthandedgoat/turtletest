@@ -12,26 +12,41 @@ let all () =
 
   "Name required" &&& fun _ ->
     click "Submit"
-
     displayed "Name is required"
 
-  "Email invalid #1" &&& fun _ ->
-    click "Submit"
+  "Name invalid" &&& fun _ ->
+    name 65 Invalid
+    name 66 Invalid
 
+  "Name valid" &&& fun _ ->
+    name 1 Valid
+    name 2 Valid
+    name 63 Valid
+    name 64 Valid
+
+  "Email required" &&& fun _ ->
+    click "Submit"
     displayed "Email not valid"
 
-  "Email invalid #2" &&& fun _ ->
+  "Email invalid" &&& fun _ ->
     "Email" << "junk"
     click "Submit"
 
     displayed "Email not valid"
 
-  "Password invalid #1" &&& fun _ ->
+  "Email valid" &&& fun _ ->
     click "Submit"
+    displayed "Email not valid"
 
+    "Email" << "junk@null.dev"
+    click "Submit"
+    notDisplayed "Email not valid"
+
+  "Password required" &&& fun _ ->
+    click "Submit"
     displayed "Password must be between 6 and 100 characters"
 
-  "Password invalid #2" &&& fun _ ->
+  "Password invalid" &&& fun _ ->
     password 1 Invalid
     password 2 Invalid
     password 3 Invalid
