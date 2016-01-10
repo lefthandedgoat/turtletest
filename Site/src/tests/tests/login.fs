@@ -9,14 +9,14 @@ open page_login
 let all () =
   context "login"
 
-  let mutable username, email = "",""
+  let mutable name, email = "",""
 
   once (fun _ ->
     let u, e = page_register.generateUniqueUser()
-    username <- u
+    name <- u
     email <- e
 
-    page_register.register username email)
+    page_register.register name email)
 
   before (fun _ -> goto page_login.uri)
 
@@ -54,4 +54,4 @@ let all () =
     _password << "test1234"
     click _login
 
-    on (page_home.uri username)
+    on (page_home.uri name)
