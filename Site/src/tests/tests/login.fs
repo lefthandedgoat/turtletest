@@ -2,6 +2,7 @@ module login
 
 open canopy
 open canopyExtensions
+open common
 open runner
 open page_login
 

@@ -2,6 +2,7 @@ module applicationEdit
 
 open canopy
 open canopyExtensions
+open common
 open runner
 open page_applicationEdit
 

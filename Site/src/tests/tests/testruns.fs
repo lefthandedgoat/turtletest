@@ -2,6 +2,7 @@ module testruns
 
 open canopy
 open canopyExtensions
+open common
 open runner
 open page_testruns
 
