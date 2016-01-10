@@ -23,12 +23,6 @@ let _password6to10 = text "Password must be between 6 and 100 characters"
 let _passwordsMatch = text "Passwords must match"
 
 //helpers
-let random = System.Random()
-let private letters = [ 'a' .. 'z' ]
-
-let private genChars length =
-  [| 1 .. length |] |> Array.map (fun _ -> letters.[random.Next(25)]) |> System.String
-
 let generateUniqueUser () =
   let letters = genChars 10
   let email = sprintf "test_%s@null.dev" letters

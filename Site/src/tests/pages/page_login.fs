@@ -13,3 +13,8 @@ let _register = text "Register"
 
 //validations
 let _invalid = "Invalid email or password"
+
+//helpers
+let logout () =
+  goto (common.baseuri + "logout")
+  on uri
