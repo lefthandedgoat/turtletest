@@ -2,10 +2,12 @@ module canopyExtensions
 
 open canopy
 
-let findByPlaceholder placeholder f =
+let private _placeholder value = sprintf "[placeholder = '%s']" value
+let placeholder value = _placeholder value |> css
+
+let findByPlaceholder value f =
   try
-    let cssSelector = sprintf "[placeholder = '%s']" placeholder
-    f(OpenQA.Selenium.By.CssSelector(cssSelector)) |> List.ofSeq
+    f(OpenQA.Selenium.By.CssSelector(_placeholder value)) |> List.ofSeq
   with | ex -> []
 
 let addFinders () =

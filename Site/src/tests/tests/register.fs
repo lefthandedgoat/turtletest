@@ -11,8 +11,8 @@ let all () =
   before (fun _ -> goto page_register.uri)
 
   "Name required" &&& fun _ ->
-    click "Submit"
-    displayed "Name is required"
+    click _submit
+    displayed _nameRequired
 
   "Name invalid" &&& fun _ ->
     name 65 Invalid
@@ -25,26 +25,26 @@ let all () =
     name 64 Valid
 
   "Email required" &&& fun _ ->
-    click "Submit"
-    displayed "Email not valid"
+    click _submit
+    displayed _emailNotValid
 
   "Email invalid" &&& fun _ ->
-    "Email" << "junk"
-    click "Submit"
+    _email << "junk"
+    click _submit
 
-    displayed "Email not valid"
+    displayed _emailNotValid
 
   "Email valid" &&& fun _ ->
-    click "Submit"
-    displayed "Email not valid"
+    click _submit
+    displayed _emailNotValid
 
-    "Email" << "junk@null.dev"
-    click "Submit"
-    notDisplayed "Email not valid"
+    _email << "junk@null.dev"
+    click _submit
+    notDisplayed _emailNotValid
 
   "Password required" &&& fun _ ->
-    click "Submit"
-    displayed "Password must be between 6 and 100 characters"
+    click _submit
+    displayed _password6to10
 
   "Password invalid" &&& fun _ ->
     password 1 Invalid
@@ -61,19 +61,19 @@ let all () =
     password 100 Valid
 
   "Password mismatch" &&& fun _ ->
-    "Password" << "123456"
-    "Repeat Password" << "654321"
-    click "Submit"
-    displayed "Passwords must match"
+    _password << "123456"
+    _repeat << "654321"
+    click _submit
+    displayed _passwordsMatch
 
   "Can register new unique user" &&& fun _ ->
     let username, email = generateUniqueUser ()
 
-    "Name" << username
-    "Email" << email
-    "Password" << "test1234"
-    "Repeat Password" << "test1234"
-    click "Submit"
+    _name << username
+    _email << email
+    _password << "test1234"
+    _repeat << "test1234"
+    click _submit
 
     on (page_home.uri username)
 
@@ -83,5 +83,5 @@ let all () =
     register username email
     tryRegister username email
 
-    displayed "Name is already taken"
-    displayed "Email is already taken"
+    displayed _nameTaken
+    displayed _emailTaken
