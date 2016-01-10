@@ -34,19 +34,35 @@ let all () =
     _testCases_count == "0"
     _testRuns_count == "0"
 
+  "After adding suite, count increases to 1" &&& fun _ ->
+    page_suiteCreate.createRandom name First
+
+    _applications_count == "1"
+    _suites_count == "1"
+    _testCases_count == "0"
+    _testRuns_count == "0"
+
   "After adding an private application, count increases to 2" &&& fun _ ->
     page_applicationCreate.createRandom name Private
 
     _applications_count == "2"
-    _suites_count == "0"
+    _suites_count == "1"
     _testCases_count == "0"
     _testRuns_count == "0"
 
-  "After logging out, the number of applications should be 1" &&& fun _ ->
+  "After adding suite to private app, count increases to 2" &&& fun _ ->
+    page_suiteCreate.createRandom name Recent
+
+    _applications_count == "2"
+    _suites_count == "2"
+    _testCases_count == "0"
+    _testRuns_count == "0"
+
+  "After logging out, the number of applications and suites should be 1" &&& fun _ ->
     page_login.logout()
     goto (page_home.uri name)
 
     _applications_count == "1"
-    _suites_count == "0"
+    _suites_count == "1"
     _testCases_count == "0"
     _testRuns_count == "0"

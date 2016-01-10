@@ -6,6 +6,8 @@ type Validation = Valid | Invalid
 
 type Privacy = Public | Private
 
+type SelectOption = First | Recent
+
 let random = System.Random()
 let private letters = [ 'a' .. 'z' ]
 

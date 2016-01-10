@@ -8,6 +8,9 @@ let placeholder value = _placeholder value |> css
 let private _name value = sprintf "[name = '%s']" value
 let name value = _name value |> css
 
+let private _options value = sprintf "select[name = '%s'] option" value
+let options value = _options value |> css
+
 let findByPlaceholder value f =
   try
     f(OpenQA.Selenium.By.CssSelector(_placeholder value)) |> List.ofSeq
@@ -17,3 +20,13 @@ let addFinders () =
   addFinder findByPlaceholder
 
 let goto uri = canopy.core.url uri
+
+let optionsToInts selector =
+  elements selector
+  |> List.map(fun element -> element.GetAttribute("value"))
+  |> List.filter (fun value -> value <> "")
+  |> List.map(fun value -> int value)
+  |> List.sort
+
+let firstOption selector = optionsToInts selector |> List.head |> string
+let recentOption selector = optionsToInts selector |> List.rev |> List.head |> string
