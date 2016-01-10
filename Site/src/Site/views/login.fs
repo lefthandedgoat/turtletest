@@ -10,7 +10,7 @@ let empty = ""
 let login_details error email=
   let errorTag =
     if error then
-      stand_alone_error "Invalid username or password"
+      stand_alone_error "Invalid email or password"
     else
       emptyText
 

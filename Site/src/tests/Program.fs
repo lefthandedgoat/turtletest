@@ -3,6 +3,10 @@ open canopyExtensions
 
 [<EntryPoint>]
 let main _ =
+  canopy.configuration.wipSleep <- 0.2
+  canopy.configuration.compareTimeout <- 3.0
+  canopy.configuration.elementTimeout <- 3.0
+  canopy.configuration.pageTimeout <- 3.0
   addFinders ()
 
   start firefox

@@ -2,6 +2,7 @@ module register
 
 open canopy
 open canopyExtensions
+open common
 open runner
 open page_register
 

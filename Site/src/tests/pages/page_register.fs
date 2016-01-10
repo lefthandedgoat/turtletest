@@ -2,10 +2,7 @@ module page_register
 
 open canopy
 open canopyExtensions
-
-type Validation =
-  | Valid
-  | Invalid
+open common
 
 let uri = common.baseuri + "register"
 
@@ -76,8 +73,8 @@ let tryRegister username email =
 
   _name << username
   _email << email
-  _password << "test123"
-  _repeat << "test123"
+  _password << "test1234"
+  _repeat << "test1234"
 
   click _submit
 
