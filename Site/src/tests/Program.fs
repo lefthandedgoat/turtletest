@@ -1,5 +1,6 @@
 ﻿open canopy
 open canopyExtensions
+open types
 
 [<EntryPoint>]
 let main _ =
@@ -10,6 +11,7 @@ let main _ =
   addFinders ()
 
   start firefox
+  pin FullScreen
 
   application.all()
   applications.all()
