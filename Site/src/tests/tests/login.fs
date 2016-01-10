@@ -12,10 +12,7 @@ let all () =
   let mutable name, email = "",""
 
   once (fun _ ->
-    let u, e = page_register.generateUniqueUser()
-    name <- u
-    email <- e
-
+    page_register.generateUniqueUser' &name &email
     page_register.register name email)
 
   before (fun _ -> goto page_login.uri)

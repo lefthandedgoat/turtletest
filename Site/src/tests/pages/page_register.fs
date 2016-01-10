@@ -26,8 +26,14 @@ let _passwordsMatch = text "Passwords must match"
 let generateUniqueUser () =
   let letters = genChars 10
   let email = sprintf "test_%s@null.dev" letters
-  let username = sprintf "test_%s" letters
-  username, email
+  let name = sprintf "test_%s" letters
+  name, email
+
+//this is kinda hacky but it cleans up code well enough
+let generateUniqueUser' (name : byref<string>) (email : byref<string>) =
+  let name', email' = generateUniqueUser ()
+  name <- name'
+  email <- email'
 
 let name length validation =
   goto uri
