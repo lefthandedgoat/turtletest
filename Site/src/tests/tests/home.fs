@@ -96,10 +96,11 @@ let all () =
     _testCases_tileCount == "2"
     _testRuns_tileCount == "0"
 
-  "After logging out, the number of applications and suites should be 1" &&& fun _ ->
-    page_login.logout()
-    goto (page_home.uri name)
+  "Clicking the hi name link in the bottom left logs the user out" &&& fun _ ->
+    click (_hiName name)
+    on page_login.uri
 
+  "After logging out, the number of applications and suites should be 1" &&& fun _ ->
     _applications_count == "1"
     _suites_count == "1"
     _testCases_count == "1"
