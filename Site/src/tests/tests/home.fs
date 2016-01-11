@@ -20,7 +20,23 @@ let all () =
   "After new registration, it shows that the person is logged in" &&& fun _ ->
     displayed (_hiName name)
 
-  "After new registration, counts are all 0" &&& fun _ ->
+  "When the user has a fresh account, applications link leads to create page" &&& fun _ ->
+    click _applications_count
+    on (page_applicationCreate.uri name)
+
+  "When the user has a fresh account, suites link leads to create page" &&& fun _ ->
+    click _suites_count
+    on (page_suiteCreate.uri name)
+
+  "When the user has a fresh account, test cases link leads to create page" &&& fun _ ->
+    click _testCases_count
+    on (page_testcaseCreate.uri name)
+
+  "When the user has a fresh account, test runs link leads to create page" &&& fun _ ->
+    click _testRuns_count
+    on (page_testrunCreate.uri name)
+
+  "When the user has a fresh account, counts are all 0" &&& fun _ ->
     _applications_count == "0"
     _suites_count == "0"
     _testCases_count == "0"
