@@ -42,7 +42,13 @@ SELECT
   WHERE u.name = :name
   AND a.Private = FALSE) as testcases
 
-  ,(SELECT 0) as testruns
+  ,(SELECT COUNT(t.*) FROM turtletest.Applications as a
+  JOIN turtletest.Users as u
+  ON a.user_id = u.user_id
+  JOIN turtletest.TestRuns as t
+  ON t.application_id = a.application_id
+  WHERE u.name = :name
+  AND a.Private = FALSE) as testruns
 """
   use connection = connection connectionString
   use command = command connection sql
@@ -91,7 +97,18 @@ SELECT
       OR (p.Permission = 1 OR p.Permission = 2))
   ) as testcases
 
-  ,(SELECT 0) as testruns
+  ,(SELECT COUNT(t.*) FROM turtletest.Applications as a
+  LEFT JOIN turtletest.Permissions as p
+  ON a.application_id = p.application_id
+  JOIN turtletest.Users as u
+  ON a.user_id = u.user_id
+  JOIN turtletest.TestRuns as t
+  ON t.application_id = a.application_id
+  WHERE u.name = :name
+  AND a.user_id = :user_id
+  AND (a.Private = FALSE
+      OR (p.Permission = 1 OR p.Permission = 2))
+  ) as testruns
 """
   use connection = connection connectionString
   use command = command connection sql
