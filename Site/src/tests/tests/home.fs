@@ -66,13 +66,21 @@ let all () =
     _testCases_count == "1"
     _testRuns_count == "0"
 
+  "After adding test run, count increases to 1" &&& fun _ ->
+    page_testrunCreate.createRandom name First
+
+    _applications_count == "1"
+    _suites_count == "1"
+    _testCases_count == "1"
+    _testRuns_count == "1"
+
   "After adding an private application, count increases to 2" &&& fun _ ->
     page_applicationCreate.createRandom name Private
 
     _applications_count == "2"
     _suites_count == "1"
     _testCases_count == "1"
-    _testRuns_count == "0"
+    _testRuns_count == "1"
 
   "After adding suite to private app, count increases to 2" &&& fun _ ->
     page_suiteCreate.createRandom name Recent
@@ -80,7 +88,7 @@ let all () =
     _applications_count == "2"
     _suites_count == "2"
     _testCases_count == "1"
-    _testRuns_count == "0"
+    _testRuns_count == "1"
 
   "After adding test case to private app, count increases to 2" &&& fun _ ->
     page_testcaseCreate.createRandom name Recent
@@ -88,13 +96,21 @@ let all () =
     _applications_count == "2"
     _suites_count == "2"
     _testCases_count == "2"
-    _testRuns_count == "0"
+    _testRuns_count == "1"
+
+  "After adding test run to private app, count increases to 2" &&& fun _ ->
+    page_testrunCreate.createRandom name Recent
+
+    _applications_count == "2"
+    _suites_count == "2"
+    _testCases_count == "2"
+    _testRuns_count == "2"
 
   "Tile Counts are correct" &&& fun _ ->
     _applications_tileCount == "2"
     _suites_tileCount == "2"
     _testCases_tileCount == "2"
-    _testRuns_tileCount == "0"
+    _testRuns_tileCount == "2"
 
   "Clicking the hi name link in the bottom left logs the user out" &&& fun _ ->
     click (_hiName name)
@@ -104,10 +120,10 @@ let all () =
     _applications_count == "1"
     _suites_count == "1"
     _testCases_count == "1"
-    _testRuns_count == "0"
+    _testRuns_count == "1"
 
   "After logging out, Tile Counts are correct" &&& fun _ ->
     _applications_tileCount == "1"
     _suites_tileCount == "1"
     _testCases_tileCount == "1"
-    _testRuns_tileCount == "0"
+    _testRuns_tileCount == "1"
