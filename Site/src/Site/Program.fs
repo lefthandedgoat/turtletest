@@ -330,7 +330,10 @@ let testruns'' (user : User) session = warbler (fun _ ->
   else
     let counts = data.counts.getCounts user.Name session
     let testruns = data.testruns.getByUserId user.Id
-    OK <| views.testruns.list session permissions user.Name counts testruns)
+    if testruns.Length = 0
+    then FOUND <| paths.testrunCreate_link user.Name
+    else
+      OK <| views.testruns.list session permissions user.Name counts testruns)
 
 let root'' =
   choose [
