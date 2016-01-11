@@ -5,14 +5,15 @@ open types
 [<EntryPoint>]
 let main _ =
   configuration.wipSleep <- 0.2
-  configuration.compareTimeout <- 3.0
-  configuration.elementTimeout <- 3.0
-  configuration.pageTimeout <- 3.0
+  configuration.compareTimeout <- 10.0
+  configuration.elementTimeout <- 10.0
+  configuration.pageTimeout <- 10.0
+  configuration.autoPinBrowserRightOnLaunch <- false
   configuration.failFast := true
 
   addFinders ()
 
-  start firefox
+  start chrome
   pin FullScreen
 
   application.all()

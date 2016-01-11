@@ -19,3 +19,4 @@ let _testCases_count = _count "Test Cases" |> xpath
 let _testRuns_count = _count "Test Runs" |> xpath
 
 let _hiName name = sprintf "Hi %s!" name |> text
+let _login = text "Login"

@@ -112,6 +112,22 @@ let all () =
     _testCases_tileCount == "2"
     _testRuns_tileCount == "2"
 
+  "When the user has an application, applications link leads to list page" &&& fun _ ->
+    click _applications_count
+    on (page_applications.uri name)
+
+  "When the user has a suite, suites link leads to list page" &&& fun _ ->
+    click _suites_count
+    on (page_suites.uri name)
+
+  "When the user has a test case, test cases link leads to list page" &&& fun _ ->
+    click _testCases_count
+    on (page_testcases.uri name)
+
+  "When the user has a test run, test runs link leads to list page" &&& fun _ ->
+    click _testRuns_count
+    on (page_testruns.uri name)
+
   "Clicking the hi name link in the bottom left logs the user out" &&& fun _ ->
     click (_hiName name)
     on page_login.uri
@@ -127,3 +143,9 @@ let all () =
     _suites_tileCount == "1"
     _testCases_tileCount == "1"
     _testRuns_tileCount == "1"
+
+  "In logged out state, clicking the login button takes you to the login screen" &&& fun _ ->
+    click _login
+    on page_login.uri
+
+//todo add some tests for the test runs grid once its implimented
