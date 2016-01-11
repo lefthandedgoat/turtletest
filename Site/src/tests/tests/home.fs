@@ -74,6 +74,12 @@ let all () =
     _testCases_count == "2"
     _testRuns_count == "0"
 
+  "Tile Counts are correct" &&& fun _ ->
+    _applications_tileCount == "2"
+    _suites_tileCount == "2"
+    _testCases_tileCount == "2"
+    _testRuns_tileCount == "0"
+
   "After logging out, the number of applications and suites should be 1" &&& fun _ ->
     page_login.logout()
     goto (page_home.uri name)
@@ -82,3 +88,9 @@ let all () =
     _suites_count == "1"
     _testCases_count == "1"
     _testRuns_count == "0"
+
+  "After logging out, Tile Counts are correct" &&& fun _ ->
+    _applications_tileCount == "1"
+    _suites_tileCount == "1"
+    _testCases_tileCount == "1"
+    _testRuns_tileCount == "0"
