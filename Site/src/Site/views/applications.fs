@@ -59,24 +59,27 @@ let suites_grid user suites applicationId =
   ]
 
 let grid user applications buttons =
+  let toTr (app : Application) inner =
+    trLink (paths.application_link user app.Id) inner
+
   let toTd (app : Application) =
     [
-      td [ aHref (paths.application_link user app.Id) [ text (string app.Id) ] ]
       td [ text (string app.Name) ]
       td [ text (string app.Owners) ]
       td [ text (string app.Developers) ]
+      td [ yesNo app.Private ]
     ]
   block_flat [
     header [ h3Inner "Applications" [ pull_right [ buttons ] ] ]
     content [
-      table_bordered
+      table_bordered_linked_tr
         [
-          "Id"
           "Name"
           "Owners"
           "Developers"
+          "Private"
         ]
-        applications toTd
+        applications toTd toTr
     ]
   ]
 

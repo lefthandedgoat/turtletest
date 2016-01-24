@@ -68,6 +68,7 @@ let thead inner = tag "thead" [] (flatten inner)
 let tbody inner = tag "tbody" [] (flatten inner)
 let tr inner = tag "tr" [] (flatten inner)
 let trClass class' inner = tag "tr" ["class", class'] (flatten inner)
+let trLink link inner = tag "tr" ["data-link", link] (flatten inner)
 let td inner = tag "td" [] (flatten inner)
 let tdAttr attr inner = tag "td" attr (flatten inner)
 let labelClass class' inner = tag "label" ["class", class'] (flatten inner)
@@ -78,6 +79,7 @@ let inputClassPlaceholderNameType class' placeholder name type' value inner =
 let textareaClassPlaceholder class' placeholder text' = tag "textarea" ["class", class'; "placeholder", placeholder; "rows", "4"] (text text')
 let textareaClassPlaceholderName class' name placeholder text' = tag "textarea" ["class", class'; "name", name; "placeholder", placeholder; "rows", "4"] (text text')
 let sectionId id inner = tag "section" ["id", id] (flatten inner)
+let yesNo value = if value = true then text "Yes" else text "No"
 
 let base_head title' =
   head [
