@@ -17,6 +17,9 @@ let applications_datatable = """
     //Search input style
     $('.dataTables_filter input').addClass('form-control').attr('placeholder','Search');
     $('.dataTables_length select').addClass('form-control').attr('size','1');
+
+    //make a tr into a link
+    $('tr[data-link]').on("click", function() { document.location = $(this).data('link'); });
   });
 </script>
 """
