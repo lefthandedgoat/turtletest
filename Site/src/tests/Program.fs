@@ -14,7 +14,7 @@ let main _ =
   addFinders ()
 
   start chrome
-  pin FullScreen
+  resize (1400, 900)
 
   application.all()
   applications.all()
