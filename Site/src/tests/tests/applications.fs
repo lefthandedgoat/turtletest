@@ -23,11 +23,24 @@ let all () =
   "After creating an application, it is in the grid" &&& fun _ ->
     page_applicationCreate.createRandom name Public
     goto (page_applications.uri name)
-    count rows 1
+    count _rows 1
 
-  "Grid has the right columns" &&& fun _ ->
-    count columns 4
-    columns *= "Name"
-    columns *= "Owners"
-    columns *= "Developers"
-    columns *= "Private"
+  "Grid has the right _columns" &&& fun _ ->
+    count _columns 4
+    _columns *= "Name"
+    _columns *= "Owners"
+    _columns *= "Developers"
+    _columns *= "Private"
+
+  "Upon clicking the application, it takes you to the details" &&& fun _ ->
+    click _rows
+    on (page_application.uri name)
+
+  "Clicking the create button takes you the create page" &&& fun _ ->
+    click _create
+    on (page_applicationCreate.uri name)
+
+  "When logged out, there is no Create button" &&& fun _ ->
+    page_login.logout()
+    goto (page_applications.uri name)
+    notDisplayed _create

@@ -21,6 +21,10 @@ let addFinders () =
 
 let goto uri = canopy.core.url uri
 
+let on url =
+  let message = sprintf "Validating on page %s" url
+  canopy.core.waitFor2 message (fun _ -> currentUrl().Contains(url))
+
 let optionsToInts selector =
   elements selector
   |> List.map(fun element -> element.GetAttribute("value"))
