@@ -32,9 +32,11 @@ let testrun_details applications (testrun : TestRun ) buttons =
   ]
 
 let grid user testcases buttons =
+  let toTr (testrun : TestRun) inner =
+    trLink (paths.testrun_link user testrun.Id) inner
+
   let toTd (testrun : TestRun) =
     [
-      td [ aHref (paths.testrun_link user testrun.Id) [ text (string testrun.Id) ] ]
       td [ text (string testrun.Description) ]
       td [ text (string testrun.RunDate) ]
       td [ text (string testrun.PercentRun) ]
@@ -42,14 +44,13 @@ let grid user testcases buttons =
   block_flat [
     header [ h3Inner "Test Runs" [ pull_right buttons ] ]
     content [
-      table_bordered
+      table_bordered_linked_tr
         [
-          "Id"
           "Description"
           "Run Date"
           "Percent Run"
         ]
-        testcases toTd
+        testcases toTd toTr
     ]
   ]
 
