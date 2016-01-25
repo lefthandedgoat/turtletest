@@ -37,9 +37,11 @@ let application_details (application : Application ) buttons =
   ]
 
 let suites_grid user suites applicationId =
+  let toTr (suite : Suite) inner =
+    trLink (paths.suite_link user suite.Id) inner
+
   let toTd (suite : Suite) =
     [
-      td [ aHref (paths.suite_link user suite.Id) [ text (string suite.Id) ] ]
       td [ text (string suite.Name) ]
       td [ text (string suite.Version) ]
       td [ text (string suite.Owners) ]
@@ -47,14 +49,13 @@ let suites_grid user suites applicationId =
   block_flat [
     header [ h3Inner "Suites" [ pull_right [ suite_create_button user (sprintf "applicationId=%i" applicationId) ] ] ]
     content [
-      table_bordered
+      table_bordered_linked_tr
         [
-          "Id"
           "Name"
           "Version"
           "Owners"
         ]
-        suites toTd
+        suites toTd toTr
     ]
   ]
 

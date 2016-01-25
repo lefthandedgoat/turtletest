@@ -42,9 +42,11 @@ let testcase_details applications suites (testcase : TestCase ) buttons =
   ]
 
 let grid user testcases buttons =
+  let toTr (testcase : TestCase) inner =
+    trLink (paths.testcase_link user testcase.Id) inner
+
   let toTd (testcase : TestCase) =
     [
-      td [ aHref (paths.testcase_link user testcase.Id) [ text (string testcase.Id) ] ]
       td [ text (string testcase.Name) ]
       td [ text (string testcase.Version) ]
       td [ text (string testcase.Owners) ]
@@ -52,14 +54,13 @@ let grid user testcases buttons =
   block_flat [
     header [ h3Inner "Test Cases" [ pull_right buttons ] ]
     content [
-      table_bordered
+      table_bordered_linked_tr
         [
-          "Id"
           "Name"
           "Version"
           "Owners"
         ]
-        testcases toTd
+        testcases toTd toTr
     ]
   ]
 
