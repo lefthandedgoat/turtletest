@@ -26,6 +26,7 @@ let create name appName address documentation owners developers notes private' =
   _notes << notes
   _private << private'
   click _save
+  on (page_application.uriRoot name)
 
 let createRandom name privacy =
   create

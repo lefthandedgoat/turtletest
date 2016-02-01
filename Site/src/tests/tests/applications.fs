@@ -34,7 +34,7 @@ let all () =
 
   "Upon clicking the application, it takes you to the details" &&& fun _ ->
     click _rows
-    on (page_application.uri name)
+    on (page_application.uriRoot name)
 
   "Clicking the create button takes you the create page" &&& fun _ ->
     click _create

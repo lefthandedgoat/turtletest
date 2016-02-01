@@ -174,6 +174,11 @@ let label_textarea label' text' = base_label_textarea label' text' []
 let label_select label' options = base_label_select label' options "" []
 let label_select_selected label' options selected = base_label_select label' options selected []
 
+let label_static label' value =
+  form_group_control_label_sm8 label' [
+    static' label' value
+  ]
+
 let table_bordered_linked_tr ths (rows : 'a list) (toTd : 'a -> Xml list) (toTr : 'a -> (Xml list -> Xml)) =
   let table_bordered inner = tableClass "table table-bordered" inner
   table_responsive [

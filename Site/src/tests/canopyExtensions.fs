@@ -11,6 +11,9 @@ let name value = _name value |> css
 let private _options value = sprintf "select[name = '%s'] option" value
 let options value = _options value |> css
 
+let private _data_qa_name value = sprintf "[data-qa-name = '%s']" value
+let data_qa_name value = _data_qa_name value |> css
+
 let findByPlaceholder value f =
   try
     f(OpenQA.Selenium.By.CssSelector(_placeholder value)) |> List.ofSeq

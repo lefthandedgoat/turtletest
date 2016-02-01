@@ -26,12 +26,14 @@ let application_details (application : Application ) buttons =
     header [ h3Inner application.Name [ buttons ] ]
     content [
       form_horizontal [
-        label_text_ahref_button "Address" application.Address "Go!"
-        label_text_ahref_button "Documentation" application.Documentation "Go!"
-        label_text "Owners" application.Owners
-        label_text "Developers" application.Developers
-        label_textarea "Notes" application.Notes
-        label_select_selected "Private" privateOptions (string application.Private)
+        //label_text_ahref_button "Address" application.Address "Go!"
+        label_static "Address" application.Address
+        //label_text_ahref_button "Documentation" application.Documentation "Go!"
+        label_static "Documentation" application.Documentation
+        label_static "Owners" application.Owners
+        label_static "Developers" application.Developers
+        label_static "Notes" application.Notes
+        label_static "Private" (string application.Private)
       ]
     ]
   ]
