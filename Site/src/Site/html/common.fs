@@ -76,6 +76,7 @@ let buttonClass class' inner = tag "button" ["class", class'] (flatten inner)
 let inputAttrInner attr inner = tag "input" attr (flatten inner)
 let inputClassPlaceholderNameType class' placeholder name type' value inner =
   tag "input" ["class", class'; "placeholder", placeholder; "name", name; "value", (string value); "type", type'] (flatten inner)
+let static' name value = tag "p" ["class", "form-control-static"; "data-qa-name", name] (text value)
 let textareaClassPlaceholder class' placeholder text' = tag "textarea" ["class", class'; "placeholder", placeholder; "rows", "4"] (text text')
 let textareaClassPlaceholderName class' name placeholder text' = tag "textarea" ["class", class'; "name", name; "placeholder", placeholder; "rows", "4"] (text text')
 let sectionId id inner = tag "section" ["id", id] (flatten inner)

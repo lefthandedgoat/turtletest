@@ -12,7 +12,7 @@ let home_content user counts testrunRows =
       partial.tile.tileContainer (paths.applications_link user) "Applications" counts.Applications "purple" "desktop"
       partial.tile.tileContainer (paths.suites_link user) "Suites" counts.Suites "green" "sitemap"
       partial.tile.tileContainer (paths.testcases_link user) "Test Cases" counts.TestCases "prusia" "thumbs-up"
-      partial.tile.tileContainer (paths.testruns_link user) "Testruns" counts.TestRuns "red" "toggle-right"
+      partial.tile.tileContainer (paths.testruns_link user) "Test Runs" counts.TestRuns "red" "toggle-right"
     ]
     row [ m12 [ partial.testruns.testrun testrunRows ] ]
   ]

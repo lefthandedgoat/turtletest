@@ -2,6 +2,7 @@ module suiteCreate
 
 open canopy
 open canopyExtensions
+open common
 open runner
 open page_suiteCreate
 
