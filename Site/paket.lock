@@ -1,9 +1,9 @@
 NUGET
   remote: https://www.nuget.org/api/v2
     BCrypt-Official (0.1.109)
-    canopy (1.1.4)
+    canopy (1.5.3)
       FSharp.Core (>= 3.0.2)
-      Selenium.WebDriver (3.0)
+      Selenium.WebDriver (3.5.2)
     FAKE (4.12)
     FSharp.Core (3.1.2.5)
     Microsoft.Bcl (1.1.10) - framework: net10, net11, net20, net30, net35, net40, net40-full
